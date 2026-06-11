@@ -42,19 +42,8 @@ app.use('/api/v1/applicant', applicantRoutes);
 app.use('/api/v1/test', testRoutes);
 app.use('/api/v1/cms', cmsRoutes);
 
-// Serve Frontend in Production
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  const distPath = path.resolve(__dirname, '../../dist');
-  app.use(express.static(distPath));
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
-  });
-} else {
-  // Handle 404
-  app.use(notFoundMiddleware);
-}
+// Handle 404
+app.use(notFoundMiddleware);
 
 // Centralized error handler
 app.use(errorMiddleware);
