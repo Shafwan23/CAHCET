@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -25,7 +25,7 @@ model Department {
   name        String
   code        String   @unique
   hod         String?
-  description String?  @db.Text
+  description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -64,7 +64,7 @@ model ContentPage {
   id          String         @id @default(uuid())
   title       String
   slug        String         @unique
-  description String?        @db.Text
+  description String?
   status      ContentStatus  @default(DRAFT)
   createdBy   String?
   updatedBy   String?
@@ -82,7 +82,7 @@ model ContentSection {
   pageId      String
   sectionKey  String
   title       String?
-  content     String?      @db.LongText
+  content     String?
   sortOrder   Int          @default(0)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt

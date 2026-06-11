@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_APPLICANT_API_URL || 'http://localhost:5000/api/v1/applicant';
+const isDev = import.meta.env.MODE === 'development';
+const API_URL = import.meta.env.VITE_APPLICANT_API_URL || (isDev ? 'http://localhost:5000/api/v1/applicant' : '/api/v1/applicant');
 
 const register = async (applicantData) => {
   const response = await axios.post(`${API_URL}/register`, applicantData);
