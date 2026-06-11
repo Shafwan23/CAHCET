@@ -1,0 +1,135 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  DEPARTMENT_ADMIN
+  FACULTY_EDITOR
+  PLACEMENT_CELL
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String
+  code        String   @unique
+  hod         String?
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       User[]
+
+  @@index([code])
+}
+
+model User {
+  id           String     @id @default(uuid())
+  name         String
+  username     String     @unique
+  email        String     @unique
+  passwordHash String
+  role         Role
+  departmentId String?
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  department   Department? @relation(fields: [departmentId], references: [id])
+
+  @@index([role])
+  @@index([departmentId])
+  @@index([username])
+  @@index([email])
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model ContentPage {
+  id          String         @id @default(uuid())
+  title       String
+  slug        String         @unique
+  description String?        @db.Text
+  status      ContentStatus  @default(DRAFT)
+  createdBy   String?
+  updatedBy   String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  sections    ContentSection[]
+
+  @@index([slug])
+  @@index([status])
+}
+
+model ContentSection {
+  id          String       @id @default(uuid())
+  pageId      String
+  sectionKey  String
+  title       String?
+  content     String?      @db.LongText
+  sortOrder   Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  page        ContentPage  @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, sectionKey])
+  @@index([pageId])
+}
+
+model Applicant {
+  id                String    @id @default(uuid())
+  fullName          String
+  email             String    @unique
+  phone             String
+  passwordHash      String
+  
+  resetOtp          String?
+  resetOtpExpiry    DateTime?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  applications      Application[]
+
+  @@index([email])
+}
+
+model Application {
+  id                String    @id @default(uuid())
+  applicantId       String
+  applicant         Applicant @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  
+  studentName       String?
+  applicationStatus String    @default("REGISTERED") // REGISTERED, PERSONAL_DONE, ACADEMIC_DONE, COURSE_SELECTED, COMPLETED
+  
+  personalDetails   Json?
+  academicInfo      Json?
+  courseChoice      String?
+  
+  transactionId     String?
+  paymentMethod     String?
+  paymentDate       DateTime?
+  amountPaid        Float?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([applicantId])
+}

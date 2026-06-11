@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-white text-primary-900 antialiased overflow-x-hidden font-sans;
+  }
+  
+  /* Strict selection coloring */
+  ::selection {
+    @apply bg-accent-gold text-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  /* Prevent images from overflowing containers */
+  img, video, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+  /* Ensure minimum tap target size on mobile */
+  @media (max-width: 768px) {
+    button, a, input, select, textarea {
+      min-height: 44px;
+    }
+    /* Prevent horizontal overflow from decorative elements */
+    .overflow-hidden {
+      overflow: hidden;
+    }
+  }
+}
+
+@layer components {
+  .glass-nav {
+    @apply bg-white/80 backdrop-blur-md border-b border-white/20;
+  }
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-sm border border-white/20 shadow-xl;
+  }
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+  /* Button System Standardization */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full bg-accent-gold text-primary-950 font-bold transition-all shadow-md hover:bg-amber-400 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] active:scale-95;
+  }
+  .btn-secondary, .btn-accent {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full bg-primary-900 text-white font-semibold transition-all hover:bg-primary-800 hover:shadow-lg active:scale-95;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-full border-2 border-primary-900 text-primary-900 font-semibold transition-all hover:bg-primary-50 active:scale-95 bg-white;
+  }
+  
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  }
+  .glow-gold-hover:hover {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+  }
+  
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-on-scroll.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-primary-50;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-300 rounded-full hover:bg-primary-400 transition-colors;
+}
+
+/* Swiper overrides */
+.swiper-pagination-bullet-active {
+  @apply !bg-accent-gold;
+}
