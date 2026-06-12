@@ -1,7 +1,20 @@
 import axios from 'axios';
 
 const isDev = import.meta.env.MODE === 'development';
-const API_URL = import.meta.env.VITE_APPLICANT_API_URL || (isDev ? 'http://localhost:5000/api/v1/applicant' : '/api/v1/applicant');
+let API_URL = import.meta.env.VITE_APPLICANT_API_URL;
+
+if (!API_URL) {
+  // Fallback to the main API URL if applicant URL isn't explicitly set
+  let baseApiUrl = import.meta.env.VITE_API_URL;
+  if (baseApiUrl && !baseApiUrl.endsWith('/api/v1')) {
+    baseApiUrl = `${baseApiUrl.replace(/\/$/, '')}/api/v1`;
+  }
+  
+  API_URL = baseApiUrl ? `${baseApiUrl}/applicant` : (isDev ? 'http://localhost:5000/api/v1/applicant' : '/api/v1/applicant');
+} else if (!API_URL.endsWith('/api/v1/applicant')) {
+  // If explicitly set but missing the path
+  API_URL = `${API_URL.replace(/\/$/, '')}/api/v1/applicant`;
+}
 
 const register = async (applicantData) => {
   const response = await axios.post(`${API_URL}/register`, applicantData);
