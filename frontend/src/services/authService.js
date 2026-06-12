@@ -1,7 +1,12 @@
 import axios from 'axios';
 
 const isDev = import.meta.env.MODE === 'development';
-const API_URL = import.meta.env.VITE_API_URL || (isDev ? 'http://localhost:5000/api/v1' : '/api/v1');
+let API_URL = import.meta.env.VITE_API_URL || (isDev ? 'http://localhost:5000/api/v1' : '/api/v1');
+
+// Ensure VITE_API_URL includes /api/v1 if it was only provided as the base domain
+if (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.endsWith('/api/v1')) {
+  API_URL = `${import.meta.env.VITE_API_URL.replace(/\/$/, '')}/api/v1`;
+}
 
 // Create an Axios instance
 const apiClient = axios.create({
