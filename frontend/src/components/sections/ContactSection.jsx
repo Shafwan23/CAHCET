@@ -4,7 +4,15 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Section, Container } from '../ui/Layout';
 import { slideUp } from '../../animations/variants';
 
-const ContactSection = () => {
+const ContactSection = ({ data }) => {
+  const visible = data?.visible ?? true;
+  if (!visible) return null;
+
+  const title = data?.title || "We're Here to Help You Grow";
+  const address = data?.address || "Hakeem Nagar, Melvisharam - 632 509, Ranipet District, Tamil Nadu, India.";
+  const phone = data?.phone || "+91 4172 267387 / 266487";
+  const email = data?.email || "info@cahcet.in";
+
   return (
     <Section id="contact" className="bg-primary-50">
       <Container>
@@ -18,12 +26,12 @@ const ContactSection = () => {
           >
             <span className="text-accent-gold font-bold tracking-widest uppercase text-sm mb-4 block">Get In Touch</span>
             <h2 className="text-4xl md:text-5xl font-display font-bold text-primary-900 mb-8 leading-tight">
-              We're Here to <span className="text-accent-gold">Help You</span> Grow
+              {title}
             </h2>
             <p className="text-lg text-primary-600 mb-12">
               Have questions about admissions, programs, or campus life? Reach out to us, and our team will get back to you within 24 hours.
             </p>
-
+ 
             <div className="space-y-8">
               <div className="flex gap-6">
                 <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shrink-0">
@@ -31,7 +39,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-primary-900 mb-1">Visit Us</h4>
-                  <p className="text-primary-500">Hakeem Nagar, Melvisharam - 632 509, <br />Ranipet District, Tamil Nadu, India.</p>
+                  <p className="text-primary-500">{address}</p>
                 </div>
               </div>
               <div className="flex gap-6">
@@ -40,7 +48,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-primary-900 mb-1">Call Us</h4>
-                  <p className="text-primary-500">+91 4172 267387 / 266487</p>
+                  <p className="text-primary-500">{phone}</p>
                 </div>
               </div>
               <div className="flex gap-6">
@@ -49,7 +57,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-primary-900 mb-1">Email Us</h4>
-                  <p className="text-primary-500">info@cahcet.in</p>
+                  <p className="text-primary-500">{email}</p>
                 </div>
               </div>
             </div>

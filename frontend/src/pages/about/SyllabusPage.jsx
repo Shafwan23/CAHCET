@@ -25,7 +25,7 @@ const SyllabusPage = () => {
         const pageData = await cmsService.getPage('academics');
         const section = pageData?.sections?.find(s => s.sectionKey === 'academics.syllabus');
         if (section && section.content) {
-          setData(section.content);
+          setData(typeof section.content === 'string' ? JSON.parse(section.content) : section.content);
         }
       } catch (error) {
         console.error('Error fetching syllabus data:', error);
@@ -44,8 +44,42 @@ const SyllabusPage = () => {
     );
   }
 
-  const departments = data?.departments || DEPARTMENTS;
-  
+  // Group syllabus items by department
+  const departments = [];
+  if (data?.items) {
+    const deptGroups = {};
+    data.items.forEach(item => {
+      const deptKey = (item.department || 'GEN').toLowerCase();
+      if (!deptGroups[deptKey]) {
+        const matched = DEPARTMENTS.find(d => d.id === deptKey || d.name.toLowerCase().includes(deptKey));
+        deptGroups[deptKey] = {
+          id: deptKey,
+          name: matched ? matched.name : `${item.department} Department`,
+          regulationsSet: new Set(),
+          courses: []
+        };
+      }
+      deptGroups[deptKey].courses.push(item);
+      if (item.regulation) {
+        const regStr = item.regulation.startsWith('R') ? item.regulation : `R${item.regulation}`;
+        deptGroups[deptKey].regulationsSet.add(regStr);
+      }
+    });
+
+    Object.keys(deptGroups).forEach(k => {
+      const g = deptGroups[k];
+      departments.push({
+        id: g.id,
+        name: g.name,
+        regulations: Array.from(g.regulationsSet),
+        pdfUrl: g.courses[0]?.pdfUrl || '#',
+        courses: g.courses
+      });
+    });
+  } else {
+    departments.push(...DEPARTMENTS);
+  }
+
   // Extract all unique regulations from departments for the filter
   const allRegs = new Set(['All']);
   departments.forEach(dept => {
@@ -126,7 +160,7 @@ const SyllabusPage = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl border border-primary-100 shadow-luxury hover:shadow-luxury-hover transition-all duration-500 group flex flex-col justify-between h-56 relative overflow-hidden hover:border-accent-gold/20"
+              className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl border border-primary-100 shadow-luxury hover:shadow-luxury-hover transition-all duration-500 group flex flex-col justify-between min-h-[14rem] h-auto relative overflow-hidden hover:border-accent-gold/20"
             >
               {/* Decorative background shape */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent-gold/5 rounded-full blur-2xl group-hover:bg-accent-gold/10 transition-colors duration-500" />
@@ -145,12 +179,25 @@ const SyllabusPage = () => {
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-primary-900 group-hover:text-accent-gold transition-colors">{dept.name}</h3>
+                
+                {dept.courses && dept.courses.length > 0 && (
+                  <div className="mt-4 max-h-40 overflow-y-auto space-y-2 pr-2 scrollbar-thin">
+                    {dept.courses.map(c => (
+                      <div key={c.id} className="flex justify-between items-center text-xs border-b border-primary-50 pb-1.5 last:border-b-0">
+                        <span className="text-primary-800 font-medium">{c.course} <span className="text-primary-400 font-light">(Sem {c.semester})</span></span>
+                        <a href={c.pdfUrl || '#'} target="_blank" rel="noreferrer" className="text-accent-gold hover:underline font-bold flex items-center gap-0.5 ml-2">
+                          PDF <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              <div className="flex justify-between items-center mt-auto pt-4 border-t border-primary-50">
+              <div className="flex justify-between items-center mt-6 pt-4 border-t border-primary-50">
                 <a href={dept.pdfUrl || '#'} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-sm font-bold text-primary-500 hover:text-accent-gold transition-colors">
                   <ExternalLink className="w-4 h-4" />
-                  <span>Open PDF</span>
+                  <span>Open Program PDF</span>
                 </a>
                 <a href={dept.pdfUrl || '#'} download className="flex items-center gap-2 px-5 py-2.5 bg-primary-50 text-primary-700 rounded-lg text-xs font-bold hover:bg-primary-900 hover:text-white hover:shadow-md transition-all duration-300 border border-primary-100 hover:border-transparent">
                   <Download className="w-4 h-4" />

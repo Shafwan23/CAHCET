@@ -139,25 +139,43 @@ const PlacementsSection = ({ data, liveData }) => {
             whileHover={{ y: -10 }}
             className="bg-white p-8 rounded-2xl border border-primary-100 shadow-sm"
           >
-            <h4 className="text-accent-gold text-4xl font-bold mb-2">{highestPackage} LPA</h4>
-            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">Highest Package</p>
-            <p className="text-primary-600 text-sm">Secured by our top students at global tech giants.</p>
+            <h4 className="text-accent-gold text-4xl font-bold mb-2">
+              {data?.highestPackage || highestPackage} LPA
+            </h4>
+            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">
+              {data?.highestPackageLabel || 'Highest Package'}
+            </p>
+            <p className="text-primary-600 text-sm">
+              {data?.highestPackageDesc || 'Secured by our top students at global tech giants.'}
+            </p>
           </motion.div>
           <motion.div
             whileHover={{ y: -10 }}
             className="bg-white p-8 rounded-2xl border border-primary-100 shadow-sm"
           >
-            <h4 className="text-accent-gold text-4xl font-bold mb-2">95%</h4>
-            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">Placement Rate</p>
-            <p className="text-primary-600 text-sm">Consistent track record of placement excellence across departments.</p>
+            <h4 className="text-accent-gold text-4xl font-bold mb-2">
+              {data?.placementRate || '95%'}
+            </h4>
+            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">
+              {data?.placementRateLabel || 'Placement Rate'}
+            </p>
+            <p className="text-primary-600 text-sm">
+              {data?.placementRateDesc || 'Consistent track record of placement excellence across departments.'}
+            </p>
           </motion.div>
           <motion.div
             whileHover={{ y: -10 }}
             className="bg-white p-8 rounded-2xl border border-primary-100 shadow-sm"
           >
-            <h4 className="text-accent-gold text-4xl font-bold mb-2">{totalOffers}+</h4>
-            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">Offers in 2026</p>
-            <p className="text-primary-600 text-sm">A new milestone achieved by our students this academic year.</p>
+            <h4 className="text-accent-gold text-4xl font-bold mb-2">
+              {data?.totalOffers ? (data.totalOffers.endsWith('+') ? data.totalOffers : `${data.totalOffers}+`) : `${totalOffers}+`}
+            </h4>
+            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">
+              {data?.totalOffersLabel || 'Offers in 2026'}
+            </p>
+            <p className="text-primary-600 text-sm">
+              {data?.totalOffersDesc || 'A new milestone achieved by our students this academic year.'}
+            </p>
           </motion.div>
         </div>
       </Container>

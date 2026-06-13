@@ -36,16 +36,16 @@ import cahcetHeroImg from '../../assets/images/cahcet.webp';
 
 const getDepartmentPath = (abbr) => {
   switch (abbr.toUpperCase()) {
-    case 'CSE': return '/departments/cse/department';
-    case 'AI & DS': return '/departments/aids/department';
-    case 'AI & ML': return '/departments/aiml/department';
-    case 'IT': return '/departments/it/department';
-    case 'ECE': return '/departments/ece/department';
-    case 'EEE': return '/departments/eee/department';
-    case 'MECH': return '/departments/mech/department';
-    case 'CIVIL': return '/departments/civil/department';
-    case 'MCA': return '/departments/mca/department';
-    case 'MBA': return '/departments/management/department';
+    case 'CSE': return '/departments/cse';
+    case 'AI & DS': return '/departments/aids';
+    case 'AI & ML': return '/departments/aiml';
+    case 'IT': return '/departments/it';
+    case 'ECE': return '/departments/ece';
+    case 'EEE': return '/departments/eee';
+    case 'MECH': return '/departments/mech';
+    case 'CIVIL': return '/departments/civil';
+    case 'MCA': return '/departments/mca';
+    case 'MBA': return '/departments/management';
     default: return '/departments';
   }
 };

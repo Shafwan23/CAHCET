@@ -86,6 +86,10 @@ const AcademicDeptEditor = lazy(() => import('./admin/components/editors/homepag
 const PlacementExcellenceEditor = lazy(() => import('./admin/components/editors/homepage/PlacementExcellenceEditor'));
 const ContactSectionEditor = lazy(() => import('./admin/components/editors/homepage/ContactSectionEditor'));
 const FooterEditor = lazy(() => import('./admin/components/editors/homepage/FooterEditor'));
+const HomeGalleryEditor = lazy(() => import('./admin/components/editors/homepage/HomeGalleryEditor'));
+const VideoShowcaseEditor = lazy(() => import('./admin/components/editors/homepage/VideoShowcaseEditor'));
+const FacilitiesEditor = lazy(() => import('./admin/components/editors/homepage/FacilitiesEditor'));
+const DepartmentsOverviewEditor = lazy(() => import('./admin/components/editors/departments/DepartmentsOverviewEditor'));
 
 // Content & Admin (Placeholders)
 
@@ -180,7 +184,7 @@ function App() {
           
           {/* Unified Department Routing */}
           <Route path="/departments/:deptKey/:section" element={<DepartmentPage />} />
-          <Route path="/departments/:deptKey" element={<Navigate to="department" replace />} />
+          <Route path="/departments/:deptKey" element={<DepartmentPage />} />
 
           {/* About Module Routes */}
           <Route path="/about/institution" element={<AboutLayout hero={<InstitutionHero />}><InstitutionPage /></AboutLayout>} />
@@ -265,6 +269,9 @@ function App() {
             <Route path="homepage/placement-excellence" element={<PlacementExcellenceEditor />} />
             <Route path="homepage/contact" element={<ContactSectionEditor />} />
             <Route path="homepage/footer" element={<FooterEditor />} />
+            <Route path="homepage/gallery" element={<HomeGalleryEditor />} />
+            <Route path="homepage/videos" element={<VideoShowcaseEditor />} />
+            <Route path="homepage/facilities" element={<FacilitiesEditor />} />
 
             {/* Updates */}
             <Route path="updates/events" element={<LatestEventsEditor />} />
@@ -320,6 +327,7 @@ function App() {
             <Route path="chatbot/leads" element={<AdmissionLeadsPage />} />
             
             {/* Departments */}
+            <Route path="departments/overview" element={<DepartmentsOverviewEditor />} />
             <Route path="departments/:deptKey/:section" element={<DepartmentCMSEditor />} />
             <Route path="departments/:deptKey" element={<DepartmentCMSEditor />} />
           </Route>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, BookOpen, GraduationCap, Award, Briefcase } from 'lucide-react';
+import { X, Mail, BookOpen, GraduationCap, Award, Briefcase, Phone, Linkedin } from 'lucide-react';
 import OptimizedImage from '../ui/OptimizedImage';
 import { departmentAnimations } from '../../animations/departmentAnimations';
 
@@ -20,6 +20,8 @@ const FacultyProfileModal = ({ faculty, isOpen, onClose }) => {
   }, [isOpen, onClose]);
 
   if (!faculty) return null;
+
+  const photoSrc = faculty.photo || faculty.image || faculty.photoUrl;
 
   return (
     <AnimatePresence>
@@ -53,7 +55,7 @@ const FacultyProfileModal = ({ faculty, isOpen, onClose }) => {
               </button>
               
               <OptimizedImage
-                src={faculty.photo}
+                src={photoSrc}
                 alt={faculty.name}
                 containerClassName="w-40 h-40 rounded-full border-4 border-accent-gold/50 shadow-xl mb-6 shadow-black/50"
               />
@@ -62,13 +64,42 @@ const FacultyProfileModal = ({ faculty, isOpen, onClose }) => {
               
               <div className="w-full h-px bg-white/10 mb-6" />
               
-              <a 
-                href={`mailto:${faculty.email}`}
-                className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-white/10 hover:bg-accent-gold hover:text-primary-900 transition-colors border border-white/10 hover:border-transparent font-medium"
-              >
-                <Mail className="w-4 h-4" />
-                Contact Faculty
-              </a>
+              <div className="w-full space-y-3">
+                {faculty.email && (
+                  <a 
+                    href={`mailto:${faculty.email}`}
+                    className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-accent-gold hover:text-primary-900 transition-colors border border-white/10 hover:border-transparent font-medium text-sm truncate"
+                    title={faculty.email}
+                  >
+                    <Mail className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-left">{faculty.email}</span>
+                  </a>
+                )}
+                
+                {faculty.phone && (
+                  <a 
+                    href={`tel:${faculty.phone}`}
+                    className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-accent-gold hover:text-primary-900 transition-colors border border-white/10 hover:border-transparent font-medium text-sm truncate"
+                    title={faculty.phone}
+                  >
+                    <Phone className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-left">{faculty.phone}</span>
+                  </a>
+                )}
+
+                {faculty.linkedin && (
+                  <a 
+                    href={faculty.linkedin.startsWith('http') ? faculty.linkedin : `https://${faculty.linkedin}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-accent-gold hover:text-primary-900 transition-colors border border-white/10 hover:border-transparent font-medium text-sm truncate"
+                    title="LinkedIn Profile"
+                  >
+                    <Linkedin className="w-4 h-4 shrink-0" />
+                    <span className="truncate text-left">LinkedIn Profile</span>
+                  </a>
+                )}
+              </div>
             </div>
 
             {/* Right/Bottom Content (Details) */}
@@ -110,7 +141,9 @@ const FacultyProfileModal = ({ faculty, isOpen, onClose }) => {
                     <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-primary-400 mb-2">Specialization & Research</h4>
                     <div className="space-y-2">
                       <p className="text-primary-900 font-medium"><span className="text-primary-500 font-normal">Core:</span> {faculty.specialization}</p>
-                      <p className="text-primary-900 font-medium"><span className="text-primary-500 font-normal">Interests:</span> {faculty.researchInterests}</p>
+                      {faculty.researchInterests && (
+                        <p className="text-primary-900 font-medium"><span className="text-primary-500 font-normal">Interests:</span> {faculty.researchInterests}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -120,11 +153,23 @@ const FacultyProfileModal = ({ faculty, isOpen, onClose }) => {
                     <BookOpen className="text-primary-600 w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-primary-400 mb-2">Publications</h4>
-                    <div className="flex items-end gap-2">
-                      <span className="text-3xl font-display font-bold text-primary-900 leading-none">{faculty.publications}</span>
-                      <span className="text-primary-500 text-sm pb-1">Papers Published</span>
-                    </div>
+                    <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-primary-400 mb-2">Publications & Research</h4>
+                    {(() => {
+                      const pub = faculty.publications;
+                      if (!pub) return <p className="text-primary-900/50 italic text-sm">No publications listed yet.</p>;
+                      const isNumeric = !isNaN(pub) && !isNaN(parseFloat(pub));
+                      if (isNumeric) {
+                        return (
+                          <div className="flex items-end gap-2">
+                            <span className="text-3xl font-display font-bold text-primary-900 leading-none">{pub}</span>
+                            <span className="text-primary-500 text-sm pb-1">Papers Published</span>
+                          </div>
+                        );
+                      }
+                      return (
+                        <p className="text-primary-900 text-sm whitespace-pre-wrap leading-relaxed">{pub}</p>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>

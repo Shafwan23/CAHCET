@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Trophy, Medal, Users, Star, ChevronRight } from 'lucide-react';
+import { cmsService } from '../../services/cmsService';
 
 // ── Sports data ───────────────────────────────────────────────────────────────
 const SPORTS = [
@@ -120,6 +121,62 @@ function SportCard({ sport, index }) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function SportsPage() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const pageData = await cmsService.getPage('academics');
+        const section = pageData?.sections?.find(s => s.sectionKey === 'academics.sports');
+        if (section && section.content) {
+          setData(typeof section.content === 'string' ? JSON.parse(section.content) : section.content);
+        }
+      } catch (error) {
+        console.error('Error fetching sports data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="w-16 h-16 border-4 border-primary-800 border-t-accent-gold rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  const sports = data?.sports || SPORTS;
+  const stats = data?.stats || STATS;
+
+  const getStatLabel = (key) => {
+    switch (key) {
+      case 'grounds': return 'Total Grounds';
+      case 'players': return 'Active Players';
+      case 'tournaments': return 'Tournaments Won';
+      case 'medals': return 'Medals Achieved';
+      default: return key;
+    }
+  };
+  const getStatIcon = (key) => {
+    switch (key) {
+      case 'grounds': return Trophy;
+      case 'players': return Users;
+      case 'tournaments': return Medal;
+      case 'medals': return Star;
+      default: return Trophy;
+    }
+  };
+  
+  const statsArray = Array.isArray(stats) ? stats : (
+    stats && typeof stats === 'object' 
+      ? Object.entries(stats).map(([k, v]) => ({ label: getStatLabel(k), value: v, icon: getStatIcon(k) }))
+      : STATS
+  );
+
   return (
     <div className="pb-24">
 
@@ -131,19 +188,18 @@ export default function SportsPage() {
           <span className="w-10 h-[2px] bg-accent-gold" />
         </div>
         <h1 className="text-4xl md:text-5xl font-display font-bold text-primary-900 mb-5">
-          Sports at CAHCET
+          {data?.title || 'Sports at CAHCET'}
         </h1>
         <p className="text-lg text-slate-500 leading-relaxed font-light max-w-3xl mx-auto">
-          We believe in nurturing well-rounded individuals. Our world-class sports facilities and dedicated coaching
-          staff empower students to excel both on the field and in the classroom.
+          {data?.description || 'We believe in nurturing well-rounded individuals. Our world-class sports facilities and dedicated coaching staff empower students to excel both on the field and in the classroom.'}
         </p>
       </section>
 
       {/* ── STATS ───────────────────────────────────────────────────────────── */}
       <section className="container mx-auto px-4 md:px-8 max-w-5xl mb-20">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {STATS.map((s) => (
-            <StatCard key={s.label} {...s} />
+          {statsArray.map((s, i) => (
+            <StatCard key={s.label || i} icon={s.icon || Trophy} value={s.value} label={s.label} />
           ))}
         </div>
       </section>
@@ -155,8 +211,8 @@ export default function SportsPage() {
           <h2 className="text-3xl font-bold text-primary-900">Featured Sports & Achievements</h2>
         </div>
 
-        {SPORTS.map((sport, i) => (
-          <SportCard key={sport.id} sport={sport} index={i} />
+        {sports.map((sport, i) => (
+          <SportCard key={sport.id || i} sport={sport} index={i} />
         ))}
       </section>
 

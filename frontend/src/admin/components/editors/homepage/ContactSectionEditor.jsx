@@ -7,14 +7,16 @@ import { cmsService } from '../../../../services/cmsService';
 
 const ContactSectionEditor = () => {
   const toast = useToast();
-  const [form, setForm] = useState({ visible: true, title: 'Get in Touch', address: '', phone: '', email: '', mapEmbedUrl: '' });
+  const [form, setForm] = useState({ visible: true, title: "We're Here to Help You Grow", address: 'Hakeem Nagar, Melvisharam - 632 509, Ranipet District, Tamil Nadu, India.', phone: '+91 4172 267387 / 266487', email: 'info@cahcet.in', mapEmbedUrl: '' });
   const [loading, setLoading] = useState(true);
   const [sectionsMap, setSectionsMap] = useState({});
+  const [pageId, setPageId] = useState(null);
 
   useEffect(() => {
     const fetchPage = async () => {
       try {
         const res = await cmsService.getPage('home');
+        setPageId(res.data?.id);
         const sections = res.data?.sections || [];
         const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
         setSectionsMap(map);
@@ -36,8 +38,17 @@ const ContactSectionEditor = () => {
   const handleSave = async (publish = false) => {
     setLoading(true);
     try {
+      const content = JSON.stringify(form);
       if (sectionsMap['home.contact']) {
-        await cmsService.updateSection(sectionsMap['home.contact'].id, { content: JSON.stringify(form) });
+        await cmsService.updateSection(sectionsMap['home.contact'].id, { content });
+      } else {
+        const newSec = await cmsService.createSection({
+          pageId,
+          sectionKey: 'home.contact',
+          title: 'Contact Section',
+          content
+        });
+        setSectionsMap(prev => ({ ...prev, 'home.contact': newSec.data }));
       }
       toast({ type: 'success', title: publish ? 'Published!' : 'Draft saved', message: `Contact changes ${publish ? 'are now live' : 'saved'}.` });
     } catch (err) {
@@ -48,7 +59,7 @@ const ContactSectionEditor = () => {
   };
 
   const handleReset = () => {
-    setForm({ visible: true, title: 'Get in Touch', address: 'C. Abdul Hakeem College of Engineering & Technology, Melvisharam, Ranipet District, Tamil Nadu 632509', phone: '+91 4172 267 387', email: 'info@cahcet.edu.in', mapEmbedUrl: '' });
+    setForm({ visible: true, title: "We're Here to Help You Grow", address: 'Hakeem Nagar, Melvisharam - 632 509, Ranipet District, Tamil Nadu, India.', phone: '+91 4172 267387 / 266487', email: 'info@cahcet.in', mapEmbedUrl: '' });
     toast({ type: 'info', title: 'Reset', message: 'Contact section reverted to defaults.' });
   };
 

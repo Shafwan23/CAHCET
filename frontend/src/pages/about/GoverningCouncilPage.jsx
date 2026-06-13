@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { governingCouncilData } from '../../data/governingCouncil';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import { Home, ChevronRight, User, Shield, Briefcase, GraduationCap } from 'lucide-react';
+import { cmsService } from '../../services/cmsService';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 15 },
@@ -29,6 +30,37 @@ const itemAnim = {
 };
 
 export default function GoverningCouncilPage() {
+  const [data, setData] = useState({ members: governingCouncilData });
+
+  useEffect(() => {
+    const fetchCMS = async () => {
+      try {
+        const res = await cmsService.getPage('about');
+        const sections = res.data?.sections || [];
+        const sec = sections.find(s => s.sectionKey === 'about.governing_policy');
+        if (sec) {
+          const parsed = JSON.parse(sec.content);
+          if (parsed.members && parsed.members.length > 0) {
+            setData({ members: parsed.members });
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load Governing Council CMS data:', err);
+      }
+    };
+    fetchCMS();
+  }, []);
+
+  const membersList = (data.members || []).map((m, idx) => ({
+    sno: idx + 1,
+    name: m.name || '',
+    qualification: m.qualification || '',
+    designation: m.designation || '',
+    position: m.position || '',
+    category: m.category || 'Member',
+    photoUrl: m.photoUrl || ''
+  }));
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
       <Navbar />
@@ -72,7 +104,7 @@ export default function GoverningCouncilPage() {
             animate="show"
             className="space-y-4"
           >
-            {governingCouncilData.map((member) => (
+            {membersList.map((member) => (
               <motion.div
                 key={member.sno}
                 variants={itemAnim}
@@ -88,8 +120,12 @@ export default function GoverningCouncilPage() {
                     <span className="text-xs font-bold text-slate-300 group-hover:text-primary-400 transition-colors">
                       {String(member.sno).padStart(2, '0')}
                     </span>
-                    <div className="w-10 h-10 rounded-full bg-slate-50 group-hover:bg-primary-50 flex items-center justify-center text-slate-400 group-hover:text-primary-600 transition-colors">
-                      <User className="w-5 h-5" />
+                    <div className="w-10 h-10 rounded-full bg-slate-50 group-hover:bg-primary-50 flex items-center justify-center text-slate-400 group-hover:text-primary-600 transition-colors overflow-hidden">
+                      {member.photoUrl ? (
+                        <img src={member.photoUrl} alt={member.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <User className="w-5 h-5" />
+                      )}
                     </div>
                   </div>
 

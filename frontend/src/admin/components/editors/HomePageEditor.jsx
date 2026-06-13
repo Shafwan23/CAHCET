@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Monitor, Save, RefreshCw, Layers } from 'lucide-react';
+import { Monitor, Save, RefreshCw, Layers, Upload } from 'lucide-react';
 import { useToast } from '../ui/Toast';
 import EditorPage, { EditorCard } from '../ui/EditorPage';
 import { AdminInput, AdminTextarea, AdminToggle } from '../ui/AdminInput';
 import { cmsService } from '../../../services/cmsService';
+import { fileService } from '../../services/fileService';
 
 const HomePageEditor = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingPrincipal, setUploadingPrincipal] = useState(false);
 
   const [sectionsMap, setSectionsMap] = useState({});
   const [formHero, setFormHero] = useState({});
@@ -70,6 +72,19 @@ const HomePageEditor = () => {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handlePrincipalUpload = async (e) => {
+    const file = e.target.files?.[0]; if (!file) return;
+    setUploadingPrincipal(true);
+    try {
+      const rec = await fileService.upload(file, 'homepage', 'principal');
+      setFormWelcome(p => ({ ...p, principalImage: rec.url }));
+      toast({ type: 'success', title: 'Image Uploaded', message: 'Principal photo uploaded successfully.' });
+    } catch {
+      toast({ type: 'error', title: 'Upload Failed', message: 'Failed to upload principal photo.' });
+    }
+    setUploadingPrincipal(false);
   };
 
   const updateStat = (index, field, value) => {
@@ -142,24 +157,115 @@ const HomePageEditor = () => {
             label="Welcome Subtitle"
             value={formWelcome.title || ''}
             onChange={e => setFormWelcome(p => ({ ...p, title: e.target.value }))}
+            placeholder="Welcome to CAHCET"
           />
           <AdminInput
             label="Welcome Title"
             value={formWelcome.subtitle || ''}
             onChange={e => setFormWelcome(p => ({ ...p, subtitle: e.target.value }))}
+            placeholder="A Legacy of Engineering Excellence Since 1998"
           />
           <AdminTextarea
             label="Main Description"
             value={formWelcome.description || ''}
             onChange={e => setFormWelcome(p => ({ ...p, description: e.target.value }))}
             rows={4}
+            placeholder="C. Abdul Hakeem College of Engineering and Technology..."
           />
           <AdminTextarea
             label="Principal's Mission/Quote"
             value={formWelcome.mission || ''}
             onChange={e => setFormWelcome(p => ({ ...p, mission: e.target.value }))}
             rows={2}
+            placeholder="Our mission is to nurture engineers..."
           />
+
+          <div className="pt-4 border-t border-slate-100">
+            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Principal Information</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <AdminInput
+                label="Principal Name"
+                value={formWelcome.principalName || ''}
+                onChange={e => setFormWelcome(p => ({ ...p, principalName: e.target.value }))}
+                placeholder="Dr. M. Sasikumar"
+              />
+              <AdminInput
+                label="Principal Designation"
+                value={formWelcome.principalDesignation || ''}
+                onChange={e => setFormWelcome(p => ({ ...p, principalDesignation: e.target.value }))}
+                placeholder="Principal, CAHCET"
+              />
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-slate-600 mb-1.5">Principal Photo</label>
+                <div className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <input 
+                      type="text" 
+                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white text-slate-800"
+                      value={formWelcome.principalImage || ''}
+                      onChange={e => setFormWelcome(p => ({ ...p, principalImage: e.target.value }))}
+                      placeholder="URL to principal image..."
+                    />
+                  </div>
+                  <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl cursor-pointer hover:bg-slate-200 transition-colors shrink-0 border border-slate-200">
+                    <Upload className="w-4 h-4" /> {uploadingPrincipal ? 'Uploading...' : 'Upload Photo'}
+                    <input type="file" accept="image/*" className="hidden" onChange={handlePrincipalUpload} disabled={uploadingPrincipal} />
+                  </label>
+                </div>
+                {formWelcome.principalImage && (
+                  <div className="mt-3 w-32 h-32 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
+                     <img src={formWelcome.principalImage} alt="Principal Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Legacy Stat 1</h4>
+              <AdminInput
+                label="Value"
+                value={formWelcome.stat1Value || ''}
+                onChange={e => setFormWelcome(p => ({ ...p, stat1Value: e.target.value }))}
+                placeholder="25+"
+              />
+              <AdminInput
+                label="Label"
+                value={formWelcome.stat1Label || ''}
+                onChange={e => setFormWelcome(p => ({ ...p, stat1Label: e.target.value }))}
+                placeholder="Years of Legacy"
+              />
+              <AdminInput
+                label="Description"
+                value={formWelcome.stat1Desc || ''}
+                onChange={e => setFormWelcome(p => ({ ...p, stat1Desc: e.target.value }))}
+                placeholder="Excellence in education"
+              />
+            </div>
+
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Legacy Stat 2</h4>
+              <AdminInput
+                label="Value"
+                value={formWelcome.stat2Value || ''}
+                onChange={e => setFormWelcome(p => ({ ...p, stat2Value: e.target.value }))}
+                placeholder="15k+"
+              />
+              <AdminInput
+                label="Label"
+                value={formWelcome.stat2Label || ''}
+                onChange={e => setFormWelcome(p => ({ ...p, stat2Label: e.target.value }))}
+                placeholder="Alumni Globally"
+              />
+              <AdminInput
+                label="Description"
+                value={formWelcome.stat2Desc || ''}
+                onChange={e => setFormWelcome(p => ({ ...p, stat2Desc: e.target.value }))}
+                placeholder="Shaping the future"
+              />
+            </div>
+          </div>
         </div>
       </EditorCard>
 

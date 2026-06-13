@@ -1,12 +1,20 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, ExternalLink, ChevronRight } from 'lucide-react';
+import { Search, ExternalLink, ChevronRight, BookOpen } from 'lucide-react';
 import { departmentAnimations } from '../../../animations/departmentAnimations';
 import OptimizedImage from '../../ui/OptimizedImage';
 import FacultyProfileModal from '../FacultyProfileModal';
 import PremiumEmptyState from '../../ui/PremiumEmptyState';
 
 const FacultyCard = ({ faculty, onClick }) => {
+  const isNumeric = (val) => {
+    if (typeof val === 'number') return true;
+    if (typeof val !== 'string') return false;
+    return !isNaN(val) && !isNaN(parseFloat(val));
+  };
+
+  const hasPublicationsBadge = faculty.publications && (isNumeric(faculty.publications) ? parseInt(faculty.publications) > 0 : true);
+
   return (
     <motion.div 
       variants={departmentAnimations.fadeUp}
@@ -18,12 +26,21 @@ const FacultyCard = ({ faculty, onClick }) => {
       <div className="relative bg-white rounded-[1.8rem] overflow-hidden flex flex-col h-full z-10 border border-white/60">
         <div className="h-56 overflow-hidden relative">
           <OptimizedImage
-            src={faculty.photo}
+            src={faculty.photo || faculty.image || faculty.photoUrl}
             alt={faculty.name}
             className="w-full h-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-primary-950/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
           
+          {hasPublicationsBadge && (
+            <div className="absolute top-4 right-4 bg-primary-900/90 text-accent-gold border border-accent-gold/30 px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm shadow-md flex items-center gap-1 z-20">
+              <BookOpen className="w-3 h-3" />
+              <span>
+                {isNumeric(faculty.publications) ? `${faculty.publications} Pubs` : 'Research'}
+              </span>
+            </div>
+          )}
+
           <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-luxury">
             <button onClick={onClick} className="w-full py-3 bg-white/10 hover:bg-accent-gold backdrop-blur-md text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-colors border border-white/20 hover:border-accent-gold">
               View Full Profile
@@ -36,9 +53,16 @@ const FacultyCard = ({ faculty, onClick }) => {
             {faculty.designation}
           </span>
           <h3 className="font-display font-bold text-xl text-primary-900 mb-1 group-hover:text-accent-gold transition-colors">{faculty.name}</h3>
-          <p className="text-primary-500 text-sm font-medium mb-4 flex-1">
+          <p className="text-primary-500 text-sm font-medium mb-2">
             {faculty.qualification}
           </p>
+          
+          {faculty.researchInterests && (
+            <p className="text-xs text-primary-400 font-normal line-clamp-2 italic mb-4 flex-1">
+              Interests: {faculty.researchInterests}
+            </p>
+          )}
+          {!faculty.researchInterests && <div className="flex-1 mb-4" />}
           
           <div className="pt-4 border-t border-primary-50 mt-auto">
             <button 

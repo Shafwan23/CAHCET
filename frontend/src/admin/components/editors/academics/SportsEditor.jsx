@@ -11,6 +11,8 @@ const SportsEditor = () => {
   const [form, setForm] = useState({ title: '', description: '', stats: {}, achievements: [], gallery: [] });
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+  const [sectionId, setSectionId] = useState(null);
+  const [pageId, setPageId] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -19,9 +21,13 @@ const SportsEditor = () => {
   const loadData = async () => {
     try {
       const page = await cmsService.getPage('academics');
-      const section = page.sections?.find(s => s.sectionKey === 'academics.sports');
-      if (section && section.content) {
-        setForm(section.content);
+      setPageId(page.data?.id);
+      const section = page.data?.sections?.find(s => s.sectionKey === 'academics.sports');
+      if (section) {
+        setSectionId(section.id);
+        if (section.content) {
+          setForm(typeof section.content === 'string' ? JSON.parse(section.content) : section.content);
+        }
       }
     } catch (err) {
       toast({ type: 'error', title: 'Failed to load data' });
@@ -36,7 +42,18 @@ const SportsEditor = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await cmsService.updateSection('academics.sports', form);
+      const content = JSON.stringify(form);
+      if (sectionId) {
+        await cmsService.updateSection(sectionId, { content });
+      } else {
+        const newSec = await cmsService.createSection({
+          pageId,
+          sectionKey: 'academics.sports',
+          title: 'Sports & Athletics',
+          content
+        });
+        setSectionId(newSec.data?.id);
+      }
       toast({ type: 'success', title: 'Changes published' });
     } catch (err) {
       toast({ type: 'error', title: 'Failed to save' });

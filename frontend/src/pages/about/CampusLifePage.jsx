@@ -59,7 +59,7 @@ const CampusLifePage = () => {
         const pageData = await cmsService.getPage('academics');
         const section = pageData?.sections?.find(s => s.sectionKey === 'academics.campusLife');
         if (section && section.content) {
-          setData(section.content);
+          setData(typeof section.content === 'string' ? JSON.parse(section.content) : section.content);
         }
       } catch (error) {
         console.error('Error fetching campus life data:', error);

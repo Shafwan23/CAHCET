@@ -47,14 +47,14 @@ const AdmissionsCTA = ({ data }) => {
                 </button>
                 <button className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-full transition-all">
                   <Phone className="w-5 h-5" />
-                  Counseling: 1800-XXX-XXXX
+                  Counseling: {data?.phone || '1800-XXX-XXXX'}
                 </button>
               </div>
 
               <div className="flex items-center gap-8 text-primary-300">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-5 h-5 text-accent-gold" />
-                  <span className="text-sm font-medium">Last Date: 15 July 2026</span>
+                  <span className="text-sm font-medium">Last Date: {data?.lastDate || '15 July 2026'}</span>
                 </div>
               </div>
             </div>
@@ -63,13 +63,13 @@ const AdmissionsCTA = ({ data }) => {
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl">
                 <h4 className="text-white font-bold text-xl mb-6">Why Choose CAHCET?</h4>
                 <ul className="grid gap-4">
-                  {[
+                  {(data?.whyChooseList || [
                     '100% Placement Assistance',
                     'Industry 4.0 Oriented Labs',
                     'Merit Scholarships Available',
                     'Strong Alumni Network (15k+)',
                     'Eco-friendly 100 Acre Campus'
-                  ].map((item, i) => (
+                  ]).map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-primary-100">
                       <div className="w-6 h-6 rounded-full bg-accent-gold/20 flex items-center justify-center">
                         <div className="w-2 h-2 bg-accent-gold rounded-full" />

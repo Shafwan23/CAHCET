@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Award, BookOpen, Calendar, Users, ChevronRight } from 'lucide-react';
+import { Award, BookOpen, Calendar, Users, ChevronRight, Trophy } from 'lucide-react';
 import { departmentAnimations } from '../../../animations/departmentAnimations';
 import { cn } from '../../../utils/cn';
 import PremiumEmptyState from '../../ui/PremiumEmptyState';
 
 const TABS = [
-  { id: 'journals', label: 'International Journals', icon: BookOpen },
-  { id: 'conferences', label: 'Conferences', icon: Users },
-  { id: 'training', label: 'Training & Workshops', icon: Calendar }
+  { id: 'Student', label: 'Student Achievements', icon: Award },
+  { id: 'Faculty', label: 'Faculty Achievements', icon: Users },
+  { id: 'Placement', label: 'Placement Achievements', icon: Award },
+  { id: 'Research', label: 'Research Publications', icon: BookOpen },
+  { id: 'Award', label: 'Awards & Honors', icon: Award },
+  { id: 'Competition', label: 'Competitions & Hackathons', icon: Trophy },
+  { id: 'Certification', label: 'Certifications', icon: BookOpen }
 ];
 
-const AchievementCard = ({ item, type }) => {
+const AchievementCard = ({ item }) => {
   return (
     <motion.div 
       variants={departmentAnimations.fadeUp}
@@ -23,29 +27,46 @@ const AchievementCard = ({ item, type }) => {
         <Award className="w-8 h-8" />
       </div>
 
-      <h3 className="font-display font-bold text-xl text-primary-900 pr-12 mb-4 leading-snug group-hover:text-accent-gold transition-colors">{item.title}</h3>
-      
-      <div className="space-y-3 text-sm text-primary-600 relative z-10">
-        {type === 'journals' && (
-          <>
-            <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Author(s)</span> <span>{item.author}</span></p>
-            <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Journal</span> <span>{item.journal}</span></p>
-            <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Year</span> <span className="bg-primary-50 px-2 py-0.5 rounded-md font-bold text-primary-900">{item.year}</span></p>
-          </>
+      <div className="flex gap-4 items-start relative z-10">
+        {item.image && (
+          <img 
+            src={item.image} 
+            alt={item.title} 
+            className="w-20 h-20 rounded-2xl object-cover shrink-0 border border-primary-100 shadow-sm"
+          />
         )}
-        {type === 'conferences' && (
-          <>
-            <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Conference</span> <span>{item.conference}</span></p>
-            <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Location</span> <span>{item.location}</span></p>
-            <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Year</span> <span className="bg-primary-50 px-2 py-0.5 rounded-md font-bold text-primary-900">{item.year}</span></p>
-          </>
-        )}
-        {type === 'training' && (
-          <>
-            <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Organizer</span> <span>{item.organizer}</span></p>
-            <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Date</span> <span className="bg-primary-50 px-2 py-0.5 rounded-md font-bold text-primary-900">{item.date}</span></p>
-          </>
-        )}
+        <div className="flex-1 min-w-0">
+          <h3 className="font-display font-bold text-xl text-primary-900 pr-12 mb-4 leading-snug group-hover:text-accent-gold transition-colors">
+            {item.title}
+          </h3>
+          
+          <div className="space-y-3 text-sm text-primary-600">
+            {item.author && (
+              <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Author(s)</span> <span>{item.author}</span></p>
+            )}
+            {item.journal && (
+              <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Journal</span> <span>{item.journal}</span></p>
+            )}
+            {item.conference && (
+              <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Conference</span> <span>{item.conference}</span></p>
+            )}
+            {item.location && (
+              <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Location</span> <span>{item.location}</span></p>
+            )}
+            {item.organizer && (
+              <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Organizer</span> <span>{item.organizer}</span></p>
+            )}
+            {item.date && (
+              <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Date</span> <span className="bg-primary-50 px-2 py-0.5 rounded-md font-bold text-primary-900">{item.date}</span></p>
+            )}
+            {item.year && (
+              <p className="flex items-start gap-2"><span className="font-bold text-primary-900 uppercase tracking-widest text-[10px] mt-1 shrink-0 w-20">Year</span> <span className="bg-primary-50 px-2 py-0.5 rounded-md font-bold text-primary-900">{item.year}</span></p>
+            )}
+            {item.description && (
+              <p className="text-sm text-primary-600 mt-2">{item.description}</p>
+            )}
+          </div>
+        </div>
       </div>
       
       {/* Animated Bottom Border Glow */}
@@ -59,7 +80,19 @@ const AchievementsSection = ({ data }) => {
 
   if (!data) return <PremiumEmptyState title="Achievements Updating" message="We are currently compiling recent department achievements." />;
 
-  const currentData = data[activeTab] || [];
+  let currentData = [];
+  if (Array.isArray(data)) {
+    currentData = data.filter(item => item.category === activeTab);
+  } else if (data && typeof data === 'object') {
+    // Map old categories (journals, conferences, training) to the new categories
+    if (activeTab === 'Research') {
+      currentData = [...(data.journals || []), ...(data.conferences || [])];
+    } else if (activeTab === 'Faculty') {
+      currentData = data.training || [];
+    } else {
+      currentData = data[activeTab.toLowerCase()] || [];
+    }
+  }
 
   return (
     <div>
@@ -112,7 +145,7 @@ const AchievementsSection = ({ data }) => {
         >
           {currentData.length > 0 ? (
             currentData.map((item) => (
-              <AchievementCard key={item.id} item={item} type={activeTab} />
+              <AchievementCard key={item.id} item={item} />
             ))
           ) : (
             <div className="col-span-full">

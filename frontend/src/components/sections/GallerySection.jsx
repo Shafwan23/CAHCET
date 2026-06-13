@@ -3,16 +3,20 @@ import { motion } from 'framer-motion';
 import { Section, Container } from '../ui/Layout';
 import { fadeIn, slideUp } from '../../animations/variants';
 
-const images = [
-  { url: 'https://images.unsplash.com/photo-1523050338691-c1e53d076efd?auto=format&fit=crop&q=80&w=800', title: 'Main Block', size: 'large' },
-  { url: 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=800', title: 'Campus View', size: 'small' },
-  { url: 'https://images.unsplash.com/photo-1498243639359-2ceeae4b0c67?auto=format&fit=crop&q=80&w=800', title: 'Library', size: 'small' },
-  { url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800', title: 'Workshop', size: 'medium' },
-  { url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800', title: 'Graduation Day', size: 'medium' },
-  { url: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800', title: 'Smart Class', size: 'small' },
+const defaultImages = [
+  { url: 'https://images.unsplash.com/photo-1523050338691-c1e53d076efd?auto=format&fit=crop&w=800', title: 'Main Block', size: 'large' },
+  { url: 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&w=800', title: 'Campus View', size: 'small' },
+  { url: 'https://images.unsplash.com/photo-1498243639359-2ceeae4b0c67?auto=format&fit=crop&w=800', title: 'Library', size: 'small' },
+  { url: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800', title: 'Workshop', size: 'medium' },
+  { url: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800', title: 'Graduation Day', size: 'medium' },
+  { url: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800', title: 'Smart Class', size: 'small' },
 ];
 
-const GallerySection = () => {
+const GallerySection = ({ data }) => {
+  const title = data?.title || 'Life at CAHCET';
+  const subtitle = data?.subtitle || 'Visual Tour';
+  const images = data?.images || defaultImages;
+
   return (
     <Section id="gallery" className="bg-white">
       <Container>
@@ -23,9 +27,9 @@ const GallerySection = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <span className="text-accent-gold font-bold tracking-widest uppercase text-sm mb-4 block">Visual Tour</span>
+          <span className="text-accent-gold font-bold tracking-widest uppercase text-sm mb-4 block">{subtitle}</span>
           <h2 className="text-4xl md:text-5xl font-display font-bold text-primary-900 mb-6">
-            Life at CAHCET
+            {title}
           </h2>
         </motion.div>
 

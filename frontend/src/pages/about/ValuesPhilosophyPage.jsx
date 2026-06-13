@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { valuesPhilosophyData } from '../../data/valuesPhilosophy';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
-import { Home, ChevronRight, Quote, CheckCircle2, Target } from 'lucide-react';
+import { Home, ChevronRight, Quote, CheckCircle2, Target, Shield, Star, Lightbulb, Users, Heart, Award } from 'lucide-react';
 import { cmsService } from '../../services/cmsService';
 
 const fadeUp = (delay = 0) => ({
@@ -12,6 +12,13 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true, margin: '-40px' },
   transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] },
 });
+
+const iconMap = { Shield, Star, Lightbulb, Users, Heart, Target, Award };
+const getIcon = (iconName, fallback) => {
+  if (!iconName) return fallback;
+  if (typeof iconName !== 'string') return iconName;
+  return iconMap[iconName] || fallback;
+};
 
 export default function ValuesPhilosophyPage() {
   const [data, setData] = useState(valuesPhilosophyData);
@@ -28,10 +35,17 @@ export default function ValuesPhilosophyPage() {
         
         const missionSec = sections.find(s => s.sectionKey === 'about.mission');
         if (missionSec) {
-          const m = JSON.parse(missionSec.content);
-          // Restore icon components from strings if possible, though they might not be easily restored.
-          // In the data file, they are actual Lucide icons. For now, we will map them by name.
-          newState.mission = m;
+          newState.mission = JSON.parse(missionSec.content);
+        }
+
+        const valuesSec = sections.find(s => s.sectionKey === 'about.values');
+        if (valuesSec) {
+          const v = JSON.parse(valuesSec.content);
+          if (v.qualityPolicy) newState.qualityPolicy = v.qualityPolicy;
+          if (v.coreValues) newState.coreValues = v.coreValues;
+          if (v.philosophy) newState.philosophy = v.philosophy;
+          if (v.studentCentric) newState.studentCentric = v.studentCentric;
+          if (v.ethics) newState.ethics = v.ethics;
         }
         
         setData(newState);
@@ -102,19 +116,11 @@ export default function ValuesPhilosophyPage() {
             
             <div className="grid md:grid-cols-2 gap-6">
               {data.mission.statements.map((item, i) => {
-                // If icon is a string, we might want to map it to an actual component if needed,
-                // but since we only have the component reference in valuesPhilosophyData,
-                // we'll just fall back to a default or skip rendering icon if it's a string that we can't map here easily.
-                // For simplicity, we just use the original icon from valuesPhilosophyData if item.icon is string
-                let Icon = item.icon;
-                if (typeof Icon === 'string') {
-                  const origItem = valuesPhilosophyData.mission.statements.find(s => s.id === item.id);
-                  Icon = origItem ? origItem.icon : Target;
-                }
+                const Icon = getIcon(item.icon, Target);
                 
                 return (
                   <motion.div
-                    key={item.id}
+                    key={item.id || i}
                     {...fadeUp(i * 0.1)}
                     className="bg-slate-50 border border-slate-100 rounded-2xl p-6 hover:border-primary-100 hover:shadow-sm transition-all"
                   >
@@ -162,7 +168,7 @@ export default function ValuesPhilosophyPage() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
               {data.coreValues.map((val, i) => {
-                const Icon = val.icon;
+                const Icon = getIcon(val.icon, Shield);
                 return (
                   <motion.div
                     key={val.title}
@@ -210,7 +216,7 @@ export default function ValuesPhilosophyPage() {
 
             <div className="grid md:grid-cols-3 gap-6">
               {data.studentCentric.map((item, i) => {
-                const Icon = item.icon;
+                const Icon = getIcon(item.icon, Users);
                 return (
                   <motion.div
                     key={item.title}

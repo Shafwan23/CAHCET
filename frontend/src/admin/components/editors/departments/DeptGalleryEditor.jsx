@@ -58,7 +58,7 @@ function useKeyDown(key, fn) {
 
 /* ─── Album Modal ─── */
 const AlbumModal = ({ initial, deptKey, onSave, onClose }) => {
-  const [form, setForm] = useState({ ...emptyAlbum, ...initial });
+  const [form, setForm] = useState({ ...emptyAlbum, category: 'Other', ...initial });
   const [uploading, setUploading] = useState(false);
   const [lightbox, setLightbox] = useState(null);
   const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
@@ -67,19 +67,22 @@ const AlbumModal = ({ initial, deptKey, onSave, onClose }) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
     setUploading(true);
-    const urls = [];
+    const newImages = [];
     for (const file of files) {
       try {
         const compressed = await fileService.compressImage(file, 1200, 0.85);
         const rec = await fileService.upload(compressed, deptKey, 'gallery');
-        urls.push(rec.url);
+        newImages.push({ url: rec.url, caption: '' });
       } catch {}
     }
-    update('images', [...form.images, ...urls]);
+    const currentImages = (form.images || []).map(img => typeof img === 'string' ? { url: img, caption: '' } : img);
+    update('images', [...currentImages, ...newImages]);
     setUploading(false);
   };
 
   const removeImage = (idx) => update('images', form.images.filter((_, i) => i !== idx));
+
+  const ALBUM_CATEGORIES = ['Symposium', 'Workshop', 'Industrial Visit', 'Hackathon', 'Placement Training', 'Cultural Events', 'Student Projects', 'Other'];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -90,10 +93,16 @@ const AlbumModal = ({ initial, deptKey, onSave, onClose }) => {
           <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:bg-slate-100"><X className="w-4 h-4" /></button>
         </div>
         <div className="p-5 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1.5">Album Name *</label>
               <input className={inputCls} value={form.albumName} onChange={e => update('albumName', e.target.value)} placeholder="e.g. Tech Fest 2025" />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Category *</label>
+              <select className={inputCls} value={form.category || 'Other'} onChange={e => update('category', e.target.value)}>
+                {ALBUM_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1.5">Event Date</label>
@@ -120,16 +129,34 @@ const AlbumModal = ({ initial, deptKey, onSave, onClose }) => {
             )}
 
             {form.images.length > 0 && (
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 mt-3">
-                {form.images.map((url, i) => (
-                  <div key={i} className="relative group aspect-square">
-                    <img src={url} alt="" className="w-full h-full object-cover rounded-xl border border-slate-200 cursor-pointer" onClick={() => setLightbox(i)} />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 rounded-xl transition-all flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
-                      <button onClick={() => setLightbox(i)} className="p-1 bg-white/90 rounded-lg"><Expand className="w-3 h-3 text-slate-700" /></button>
-                      <button onClick={() => removeImage(i)} className="p-1 bg-amber-500 rounded-lg"><X className="w-3 h-3 text-white" /></button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+                {form.images.map((imgObj, i) => {
+                  const img = typeof imgObj === 'string' ? { url: imgObj, caption: '' } : imgObj;
+                  return (
+                    <div key={i} className="p-3 bg-slate-50 border border-slate-100 rounded-xl flex gap-3 items-center">
+                      <div className="relative group w-16 h-16 shrink-0">
+                        <img src={img.url} alt="" className="w-full h-full object-cover rounded-lg border border-slate-200 cursor-pointer" onClick={() => setLightbox(i)} />
+                        <div className="absolute inset-0 bg-black/40 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                          <button onClick={() => setLightbox(i)} className="p-1 bg-white/95 rounded-lg"><Expand className="w-3 h-3 text-slate-700" /></button>
+                          <button onClick={() => removeImage(i)} className="p-1 bg-amber-500 rounded-lg"><X className="w-3 h-3 text-white" /></button>
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs"
+                          placeholder="Image caption..."
+                          value={img.caption || ''}
+                          onChange={e => {
+                            const list = [...form.images];
+                            list[i] = { url: img.url, caption: e.target.value };
+                            update('images', list);
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -142,7 +169,7 @@ const AlbumModal = ({ initial, deptKey, onSave, onClose }) => {
           </button>
         </div>
       </motion.div>
-      {lightbox !== null && <Lightbox images={form.images} startIdx={lightbox} onClose={() => setLightbox(null)} />}
+      {lightbox !== null && <Lightbox images={form.images.map(img => typeof img === 'string' ? img : img.url)} startIdx={lightbox} onClose={() => setLightbox(null)} />}
     </div>
   );
 };

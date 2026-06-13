@@ -3,6 +3,7 @@ import { Plus, Trash2, Search } from 'lucide-react';
 import { useToast } from '../../ui/Toast';
 import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { cmsService } from '../../../../services/cmsService';
+import { antiRaggingData } from '../../../../data/antiRagging';
 
 const AntiRaggingTable = ({ title, data, onUpdate }) => {
   const [items, setItems] = useState(data || []);
@@ -93,14 +94,23 @@ const AntiRaggingTable = ({ title, data, onUpdate }) => {
 
 const AntiRaggingEditor = () => {
   const toast = useToast();
-  const [form, setForm] = useState({ committee: [], squads: [], members: [] });
+  const [form, setForm] = useState({
+    committee: antiRaggingData.committee.map(c => ({ id: Date.now() + Math.random(), ...c })),
+    squads: antiRaggingData.squads.map(s => ({ id: Date.now() + Math.random(), ...s })),
+    members: antiRaggingData.generalCommittee.map(m => ({ id: Date.now() + Math.random(), ...m })),
+    instructions: antiRaggingData.instructions,
+    objectives: antiRaggingData.objectives,
+    functions: antiRaggingData.functions
+  });
   const [loading, setLoading] = useState(true);
   const [sectionsMap, setSectionsMap] = useState({});
+  const [pageId, setPageId] = useState(null);
 
   useEffect(() => {
     const fetchPage = async () => {
       try {
         const res = await cmsService.getPage('about');
+        setPageId(res.data?.id);
         const sections = res.data?.sections || [];
         const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
         setSectionsMap(map);
@@ -120,8 +130,17 @@ const AntiRaggingEditor = () => {
   const handleSave = async (publish = false) => {
     setLoading(true);
     try {
+      const content = JSON.stringify(form);
       if (sectionsMap['about.anti_ragging']) {
-        await cmsService.updateSection(sectionsMap['about.anti_ragging'].id, { content: JSON.stringify(form) });
+        await cmsService.updateSection(sectionsMap['about.anti_ragging'].id, { content });
+      } else {
+        const newSec = await cmsService.createSection({
+          pageId,
+          sectionKey: 'about.anti_ragging',
+          title: 'Anti Ragging Policy',
+          content
+        });
+        setSectionsMap(prev => ({ ...prev, 'about.anti_ragging': newSec.data }));
       }
       toast({ type: 'success', title: publish ? 'Published!' : 'Draft saved' });
     } catch (err) {
@@ -132,11 +151,18 @@ const AntiRaggingEditor = () => {
   };
 
   const handleReset = () => {
-    setForm({ committee: [], squads: [], members: [] });
+    setForm({
+      committee: antiRaggingData.committee.map(c => ({ id: Date.now() + Math.random(), ...c })),
+      squads: antiRaggingData.squads.map(s => ({ id: Date.now() + Math.random(), ...s })),
+      members: antiRaggingData.generalCommittee.map(m => ({ id: Date.now() + Math.random(), ...m })),
+      instructions: antiRaggingData.instructions,
+      objectives: antiRaggingData.objectives,
+      functions: antiRaggingData.functions
+    });
     toast({ type: 'info', title: 'Reset', message: 'Reverted to defaults.' });
   };
 
-  if (loading && !Object.keys(sectionsMap).length) return <div>Loading...</div>;
+  if (loading && !pageId) return <div>Loading...</div>;
 
   return (
     <EditorPage

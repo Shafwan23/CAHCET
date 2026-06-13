@@ -22,22 +22,22 @@ export const navigationLinks = [
       {
         title: 'Engineering',
         links: [
-          { name: 'CSE', href: '/departments/cse/department' },
-          { name: 'AIDS', href: '/departments/aids/department' },
-          { name: 'IT', href: '/departments/it/department' },
-          { name: 'Mechanical', href: '/departments/mech/department' },
-          { name: 'ECE', href: '/departments/ece/department' },
-          { name: 'EEE', href: '/departments/eee/department' },
-          { name: 'AIML', href: '/departments/aiml/department' },
-          { name: 'Civil', href: '/departments/civil/department' },
+          { name: 'CSE', href: '/departments/cse' },
+          { name: 'AIDS', href: '/departments/aids' },
+          { name: 'IT', href: '/departments/it' },
+          { name: 'Mechanical', href: '/departments/mech' },
+          { name: 'ECE', href: '/departments/ece' },
+          { name: 'EEE', href: '/departments/eee' },
+          { name: 'AIML', href: '/departments/aiml' },
+          { name: 'Civil', href: '/departments/civil' },
         ]
       },
       {
         title: 'Standalone',
         links: [
-          { name: 'MCA', href: '/departments/mca/department' },
-          { name: 'Management', href: '/departments/management/department' },
-          { name: 'Science & Humanities', href: '/departments/sh/department' },
+          { name: 'MCA', href: '/departments/mca' },
+          { name: 'Management', href: '/departments/management' },
+          { name: 'Science & Humanities', href: '/departments/sh' },
         ]
       }
     ]
@@ -86,10 +86,10 @@ export const footerLinks = {
     { name: 'Academic Calendar', href: '/academics/academic-calendar' },
   ],
   departments: [
-    { name: 'Computer Science', href: '/departments/cse/department' },
-    { name: 'Information Technology', href: '/departments/it/department' },
-    { name: 'Electronics & Communication', href: '/departments/ece/department' },
-    { name: 'Mechanical Engineering', href: '/departments/mech/department' },
+    { name: 'Computer Science', href: '/departments/cse' },
+    { name: 'Information Technology', href: '/departments/it' },
+    { name: 'Electronics & Communication', href: '/departments/ece' },
+    { name: 'Mechanical Engineering', href: '/departments/mech' },
   ],
   legal: [
     { name: 'Privacy Policy', href: '/about/privacy-policy' },

@@ -8,15 +8,31 @@ import { cmsService } from '../../../../services/cmsService';
 
 const PlacementExcellenceEditor = () => {
   const toast = useToast();
-  const [form, setForm] = useState({ title: 'Placement Excellence', subtitle: '', highestPackage: '', companiesVisited: '', featuredLogos: [] });
+  const [form, setForm] = useState({
+    title: 'Placement Excellence',
+    subtitle: '',
+    highestPackage: '',
+    highestPackageLabel: 'Highest Package',
+    highestPackageDesc: 'Secured by our top students at global tech giants.',
+    placementRate: '95%',
+    placementRateLabel: 'Placement Rate',
+    placementRateDesc: 'Consistent track record of placement excellence across departments.',
+    totalOffers: '500',
+    totalOffersLabel: 'Offers in 2026',
+    totalOffersDesc: 'A new milestone achieved by our students this academic year.',
+    companiesVisited: '',
+    featuredLogos: []
+  });
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [sectionsMap, setSectionsMap] = useState({});
+  const [pageId, setPageId] = useState(null);
 
   useEffect(() => {
     const fetchPage = async () => {
       try {
         const res = await cmsService.getPage('home');
+        setPageId(res.data?.id);
         const sections = res.data?.sections || [];
         const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
         setSectionsMap(map);
@@ -41,7 +57,13 @@ const PlacementExcellenceEditor = () => {
       if (sectionsMap['home.placements']) {
         await cmsService.updateSection(sectionsMap['home.placements'].id, { content: JSON.stringify(form) });
       } else {
-        // If not seeded, we could use a direct update by key if the API supported it
+        const newSec = await cmsService.createSection({
+          pageId,
+          sectionKey: 'home.placements',
+          title: 'Placement Excellence',
+          content: JSON.stringify(form)
+        });
+        setSectionsMap(prev => ({ ...prev, 'home.placements': newSec.data }));
       }
       toast({ type: 'success', title: publish ? 'Published!' : 'Draft saved', message: `Placement changes ${publish ? 'are now live' : 'saved'}.` });
     } catch (err) {
@@ -52,7 +74,21 @@ const PlacementExcellenceEditor = () => {
   };
 
   const handleReset = () => {
-    setForm({ title: 'Placement Excellence', subtitle: 'Our graduates are recruited by top global companies.', highestPackage: '24', companiesVisited: '200+', featuredLogos: [] });
+    setForm({
+      title: 'Placement Excellence',
+      subtitle: 'Our graduates are recruited by top global companies.',
+      highestPackage: '24',
+      highestPackageLabel: 'Highest Package',
+      highestPackageDesc: 'Secured by our top students at global tech giants.',
+      placementRate: '95%',
+      placementRateLabel: 'Placement Rate',
+      placementRateDesc: 'Consistent track record of placement excellence across departments.',
+      totalOffers: '500',
+      totalOffersLabel: 'Offers in 2026',
+      totalOffersDesc: 'A new milestone achieved by our students this academic year.',
+      companiesVisited: '200+',
+      featuredLogos: []
+    });
     toast({ type: 'info', title: 'Reset', message: 'Section reverted to defaults.' });
   };
 
@@ -107,20 +143,81 @@ const PlacementExcellenceEditor = () => {
         </div>
       </EditorCard>
 
-      <EditorCard title="Highlight Statistics" description="The two massive callout stats shown in this section.">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <EditorCard title="Card 1: Highest Package Card" description="Configure the Highest Package stat card.">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <AdminInput
-            label="Highest Package (LPA)"
+            label="Highest Package Value (LPA)"
             value={form.highestPackage || ''}
             onChange={e => change('highestPackage', e.target.value)}
             placeholder="e.g. 24"
           />
           <AdminInput
-            label="Companies Visited"
-            value={form.companiesVisited || ''}
-            onChange={e => change('companiesVisited', e.target.value)}
-            placeholder="e.g. 200+"
+            label="Card Label"
+            value={form.highestPackageLabel || ''}
+            onChange={e => change('highestPackageLabel', e.target.value)}
+            placeholder="Highest Package"
           />
+          <div className="sm:col-span-2">
+            <AdminTextarea
+              label="Card Description"
+              value={form.highestPackageDesc || ''}
+              onChange={e => change('highestPackageDesc', e.target.value)}
+              placeholder="Secured by our top students..."
+              rows={2}
+            />
+          </div>
+        </div>
+      </EditorCard>
+
+      <EditorCard title="Card 2: Placement Rate Card" description="Configure the Placement Rate stat card.">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <AdminInput
+            label="Placement Rate Value"
+            value={form.placementRate || ''}
+            onChange={e => change('placementRate', e.target.value)}
+            placeholder="e.g. 95%"
+          />
+          <AdminInput
+            label="Card Label"
+            value={form.placementRateLabel || ''}
+            onChange={e => change('placementRateLabel', e.target.value)}
+            placeholder="Placement Rate"
+          />
+          <div className="sm:col-span-2">
+            <AdminTextarea
+              label="Card Description"
+              value={form.placementRateDesc || ''}
+              onChange={e => change('placementRateDesc', e.target.value)}
+              placeholder="Consistent track record..."
+              rows={2}
+            />
+          </div>
+        </div>
+      </EditorCard>
+
+      <EditorCard title="Card 3: Offers Card" description="Configure the Offers stat card.">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <AdminInput
+            label="Offers Value"
+            value={form.totalOffers || ''}
+            onChange={e => change('totalOffers', e.target.value)}
+            placeholder="e.g. 500"
+          />
+          <AdminInput
+            label="Card Label"
+            value={form.totalOffersLabel || ''}
+            onChange={e => change('totalOffersLabel', e.target.value)}
+            placeholder="Offers in 2026"
+          />
+          <div className="sm:col-span-2">
+            <AdminTextarea
+              label="Card Description"
+              value={form.totalOffersDesc || ''}
+              onChange={e => change('totalOffersDesc', e.target.value)}
+              placeholder="A new milestone achieved..."
+              rows={2}
+            />
+          </div>
         </div>
       </EditorCard>
 

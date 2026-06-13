@@ -7,6 +7,7 @@ import WelcomeSection from '../components/sections/WelcomeSection';
 import StatsSection from '../components/sections/StatsSection';
 import DepartmentsSection from '../components/sections/DepartmentsSection';
 import FacilitiesSection from '../components/sections/FacilitiesSection';
+import GallerySection from '../components/sections/GallerySection';
 import PlacementsSection from '../components/sections/PlacementsSection';
 import DynamicInfoSection from '../components/sections/DynamicInfoSection';
 import VideoShowcaseSection from '../components/sections/VideoShowcaseSection';
@@ -111,10 +112,11 @@ const Home = () => {
           <DynamicInfoSection data={data['home.dynamicinfo']} />
           <DepartmentsSection data={data['home.departments']} />
           <FacilitiesSection data={data['home.facilities']} />
+          <GallerySection data={data['home.gallery']} />
           <PlacementsSection data={data['home.placements']} liveData={data['placements_live']} />
-          <VideoShowcaseSection />
+          <VideoShowcaseSection data={data['home.videos']} />
           <AdmissionsCTA data={data['home.cta']} />
-          <ContactSection />
+          <ContactSection data={data['home.contact']} />
         </main>
 
         <Footer />

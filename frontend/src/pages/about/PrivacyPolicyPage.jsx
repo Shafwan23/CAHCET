@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { privacyPolicyData } from '../../data/legalPolicies';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import { Home, ChevronRight, Lock, Eye, CheckCircle2, Shield, Cookie, Share2, UserCheck, HardDrive, RefreshCw, Mail } from 'lucide-react';
+import { cmsService } from '../../services/cmsService';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 15 },
@@ -13,7 +14,27 @@ const fadeUp = (delay = 0) => ({
 });
 
 export default function PrivacyPolicyPage() {
-  const data = privacyPolicyData;
+  const [data, setData] = useState(privacyPolicyData);
+  const [cmsContent, setCmsContent] = useState(null);
+
+  useEffect(() => {
+    const fetchCMS = async () => {
+      try {
+        const res = await cmsService.getPage('about');
+        const sections = res.data?.sections || [];
+        const sec = sections.find(s => s.sectionKey === 'about.privacy');
+        if (sec) {
+          const parsed = JSON.parse(sec.content);
+          if (parsed.content) {
+            setCmsContent(parsed.content);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load Privacy Policy CMS data:', err);
+      }
+    };
+    fetchCMS();
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
@@ -60,134 +81,141 @@ export default function PrivacyPolicyPage() {
           </div>
         </header>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
-          
-          {/* ── 2. INTRODUCTION ────────────────────────────────────────────── */}
-          <motion.section {...fadeUp(0)} className="prose prose-slate max-w-none">
-            <p className="text-sm text-slate-600 leading-relaxed font-light">
-              {data.intro}
-            </p>
-          </motion.section>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {cmsContent ? (
+            <div 
+              className="prose prose-slate max-w-none bg-white border border-slate-100 rounded-2xl p-8 md:p-12 shadow-sm text-slate-600 leading-relaxed privacy-policy-content"
+              dangerouslySetInnerHTML={{ __html: cmsContent }}
+            />
+          ) : (
+            <div className="space-y-16">
+              {/* ── 2. INTRODUCTION ────────────────────────────────────────────── */}
+              <motion.section {...fadeUp(0)} className="prose prose-slate max-w-none">
+                <p className="text-sm text-slate-600 leading-relaxed font-light">
+                  {data.intro}
+                </p>
+              </motion.section>
 
-          {/* ── 3. INFORMATION WE COLLECT ──────────────────────────────────── */}
-          <section>
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-1 h-5 rounded-full bg-primary-600" />
-              <h2 className="text-xl font-bold text-slate-900">Information We Collect</h2>
-            </div>
+              {/* ── 3. INFORMATION WE COLLECT ──────────────────────────────────── */}
+              <section>
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-1 h-5 rounded-full bg-primary-600" />
+                  <h2 className="text-xl font-bold text-slate-900">Information We Collect</h2>
+                </div>
 
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
-              {data.collection.map((item, i) => (
-                <motion.div
-                  key={i}
-                  {...fadeUp(i * 0.05)}
-                  className="bg-white border border-slate-100 rounded-xl p-5 hover:shadow-sm transition-shadow flex flex-col gap-3"
-                >
-                  <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center text-primary-600">
-                    <Eye className="w-4.5 h-4.5" />
+                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
+                  {data.collection.map((item, i) => (
+                    <motion.div
+                      key={i}
+                      {...fadeUp(i * 0.05)}
+                      className="bg-white border border-slate-100 rounded-xl p-5 hover:shadow-sm transition-shadow flex flex-col gap-3"
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-slate-50 flex items-center justify-center text-primary-600">
+                        <Eye className="w-4.5 h-4.5" />
+                      </div>
+                      <h3 className="text-sm font-bold text-slate-900">{item.title}</h3>
+                      <p className="text-xs text-slate-500 leading-relaxed font-light">{item.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+
+              {/* ── 4. HOW WE USE INFORMATION ──────────────────────────────────── */}
+              <section>
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-1 h-5 rounded-full bg-primary-600" />
+                  <h2 className="text-xl font-bold text-slate-900">How We Use Your Information</h2>
+                </div>
+
+                <div className="bg-white border border-slate-100 rounded-2xl p-6 space-y-4 shadow-sm">
+                  {data.usage.map((point, i) => (
+                    <motion.div
+                      key={i}
+                      {...fadeUp(i * 0.05)}
+                      className="flex items-start gap-3"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-slate-600 font-light">{point}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </section>
+
+              {/* ── 5. ADDITIONAL SECTIONS ─────────────────────────────────────── */}
+              <div className="grid md:grid-cols-2 gap-6">
+                
+                {/* Data Protection & Security */}
+                <motion.div {...fadeUp(0)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Lock className="w-5 h-5 text-primary-600" />
+                    <h3 className="text-base font-bold text-slate-900">Data Protection & Security</h3>
                   </div>
-                  <h3 className="text-sm font-bold text-slate-900">{item.title}</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed font-light">{item.desc}</p>
+                  <p className="text-sm text-slate-500 leading-relaxed font-light">{data.protection}</p>
                 </motion.div>
-              ))}
-            </div>
-          </section>
 
-          {/* ── 4. HOW WE USE INFORMATION ──────────────────────────────────── */}
-          <section>
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-1 h-5 rounded-full bg-primary-600" />
-              <h2 className="text-xl font-bold text-slate-900">How We Use Your Information</h2>
-            </div>
-
-            <div className="bg-white border border-slate-100 rounded-2xl p-6 space-y-4 shadow-sm">
-              {data.usage.map((point, i) => (
-                <motion.div
-                  key={i}
-                  {...fadeUp(i * 0.05)}
-                  className="flex items-start gap-3"
-                >
-                  <CheckCircle2 className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-slate-600 font-light">{point}</p>
+                {/* Cookies & Website Analytics */}
+                <motion.div {...fadeUp(0.1)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Cookie className="w-5 h-5 text-primary-600" />
+                    <h3 className="text-base font-bold text-slate-900">Cookies & Website Analytics</h3>
+                  </div>
+                  <p className="text-sm text-slate-500 leading-relaxed font-light">{data.cookies}</p>
                 </motion.div>
-              ))}
+
+                {/* Third-Party Services */}
+                <motion.div {...fadeUp(0.2)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Share2 className="w-5 h-5 text-primary-600" />
+                    <h3 className="text-base font-bold text-slate-900">Third-Party Services</h3>
+                  </div>
+                  <p className="text-sm text-slate-500 leading-relaxed font-light">{data.thirdParty}</p>
+                </motion.div>
+
+                {/* User Rights */}
+                <motion.div {...fadeUp(0.3)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <UserCheck className="w-5 h-5 text-primary-600" />
+                    <h3 className="text-base font-bold text-slate-900">User Rights</h3>
+                  </div>
+                  <p className="text-sm text-slate-500 leading-relaxed font-light">{data.userRights}</p>
+                </motion.div>
+
+                {/* Data Retention Policy */}
+                <motion.div {...fadeUp(0.4)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <HardDrive className="w-5 h-5 text-primary-600" />
+                    <h3 className="text-base font-bold text-slate-900">Data Retention Policy</h3>
+                  </div>
+                  <p className="text-sm text-slate-500 leading-relaxed font-light">{data.retention}</p>
+                </motion.div>
+
+                {/* Policy Updates */}
+                <motion.div {...fadeUp(0.5)} className="bg-slate-50 border border-slate-100 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <RefreshCw className="w-5 h-5 text-primary-600" />
+                    <h3 className="text-base font-bold text-slate-900">Policy Updates</h3>
+                  </div>
+                  <p className="text-sm text-slate-500 leading-relaxed font-light">{data.updates}</p>
+                </motion.div>
+
+              </div>
+
+              {/* ── 6. CONTACT INFORMATION ─────────────────────────────────────── */}
+              <motion.section {...fadeUp(0)} className="text-center max-w-2xl mx-auto">
+                <h2 className="text-lg font-bold text-slate-900 mb-2">Contact Information</h2>
+                <p className="text-sm text-slate-500 leading-relaxed font-light mb-4">
+                  For any queries regarding this Privacy Policy, please contact:
+                </p>
+                <div className="bg-white border border-slate-100 rounded-xl p-6 space-y-2">
+                  <p className="text-sm font-bold text-slate-900">{data.contact.name}</p>
+                  <p className="text-xs text-slate-500">{data.contact.address}</p>
+                  <a href={`mailto:${data.contact.email}`} className="text-xs text-primary-600 hover:text-primary-700 transition-colors flex items-center justify-center gap-1 mt-2">
+                    <Mail className="w-3.5 h-3.5" /> {data.contact.email}
+                  </a>
+                </div>
+              </motion.section>
             </div>
-          </section>
-
-          {/* ── 5. ADDITIONAL SECTIONS ─────────────────────────────────────── */}
-          <div className="grid md:grid-cols-2 gap-6">
-            
-            {/* Data Protection & Security */}
-            <motion.div {...fadeUp(0)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <Lock className="w-5 h-5 text-primary-600" />
-                <h3 className="text-base font-bold text-slate-900">Data Protection & Security</h3>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed font-light">{data.protection}</p>
-            </motion.div>
-
-            {/* Cookies & Website Analytics */}
-            <motion.div {...fadeUp(0.1)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <Cookie className="w-5 h-5 text-primary-600" />
-                <h3 className="text-base font-bold text-slate-900">Cookies & Website Analytics</h3>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed font-light">{data.cookies}</p>
-            </motion.div>
-
-            {/* Third-Party Services */}
-            <motion.div {...fadeUp(0.2)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <Share2 className="w-5 h-5 text-primary-600" />
-                <h3 className="text-base font-bold text-slate-900">Third-Party Services</h3>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed font-light">{data.thirdParty}</p>
-            </motion.div>
-
-            {/* User Rights */}
-            <motion.div {...fadeUp(0.3)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <UserCheck className="w-5 h-5 text-primary-600" />
-                <h3 className="text-base font-bold text-slate-900">User Rights</h3>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed font-light">{data.userRights}</p>
-            </motion.div>
-
-            {/* Data Retention Policy */}
-            <motion.div {...fadeUp(0.4)} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <HardDrive className="w-5 h-5 text-primary-600" />
-                <h3 className="text-base font-bold text-slate-900">Data Retention Policy</h3>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed font-light">{data.retention}</p>
-            </motion.div>
-
-            {/* Policy Updates */}
-            <motion.div {...fadeUp(0.5)} className="bg-slate-50 border border-slate-100 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <RefreshCw className="w-5 h-5 text-primary-600" />
-                <h3 className="text-base font-bold text-slate-900">Policy Updates</h3>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed font-light">{data.updates}</p>
-            </motion.div>
-
-          </div>
-
-          {/* ── 6. CONTACT INFORMATION ─────────────────────────────────────── */}
-          <motion.section {...fadeUp(0)} className="text-center max-w-2xl mx-auto">
-            <h2 className="text-lg font-bold text-slate-900 mb-2">Contact Information</h2>
-            <p className="text-sm text-slate-500 leading-relaxed font-light mb-4">
-              For any queries regarding this Privacy Policy, please contact:
-            </p>
-            <div className="bg-white border border-slate-100 rounded-xl p-6 space-y-2">
-              <p className="text-sm font-bold text-slate-900">{data.contact.name}</p>
-              <p className="text-xs text-slate-500">{data.contact.address}</p>
-              <a href={`mailto:${data.contact.email}`} className="text-xs text-primary-600 hover:text-primary-700 transition-colors flex items-center justify-center gap-1 mt-2">
-                <Mail className="w-3.5 h-3.5" /> {data.contact.email}
-              </a>
-            </div>
-          </motion.section>
-
+          )}
         </div>
       </main>
 

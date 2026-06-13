@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { antiRaggingData } from '../../data/antiRagging';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import { Home, ChevronRight, Scale, Shield, AlertTriangle } from 'lucide-react';
+import { cmsService } from '../../services/cmsService';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 15 },
@@ -42,6 +43,53 @@ function DataTable({ columns, data }) {
 }
 
 export default function AntiRaggingPage() {
+  const [data, setData] = useState(antiRaggingData);
+
+  useEffect(() => {
+    const fetchCMS = async () => {
+      try {
+        const res = await cmsService.getPage('about');
+        const sections = res.data?.sections || [];
+        const sec = sections.find(s => s.sectionKey === 'about.anti_ragging');
+        if (sec) {
+          const parsed = JSON.parse(sec.content);
+          setData(prev => ({
+            ...prev,
+            committee: parsed.committee || prev.committee,
+            squads: parsed.squads || prev.squads,
+            generalCommittee: parsed.members || parsed.generalCommittee || prev.generalCommittee
+          }));
+        }
+      } catch (err) {
+        console.error('Failed to load Anti Ragging CMS data:', err);
+      }
+    };
+    fetchCMS();
+  }, []);
+
+  const formattedCommittee = (data.committee || []).map((item, idx) => ({
+    sno: idx + 1,
+    name: item.name || '',
+    designation: item.department ? `${item.designation} (${item.department})` : (item.designation || ''),
+    position: item.role || item.position || '',
+    contact: item.phone || item.contact || ''
+  }));
+
+  const formattedSquads = (data.squads || []).map((item, idx) => ({
+    sno: idx + 1,
+    name: item.name || '',
+    designation: item.department ? `${item.designation} (${item.department})` : (item.designation || ''),
+    position: item.role || item.position || '',
+    contact: item.phone || item.contact || ''
+  }));
+
+  const formattedGeneral = (data.generalCommittee || []).map((item, idx) => ({
+    sno: idx + 1,
+    name: item.name || '',
+    position: item.role || item.position || '',
+    mobile: item.phone || item.mobile || ''
+  }));
+
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col">
       <Navbar />
@@ -86,7 +134,7 @@ export default function AntiRaggingPage() {
             </div>
             <div className="bg-primary-50/50 border border-primary-100 rounded-2xl p-6 md:p-8">
               <ul className="space-y-4">
-                {antiRaggingData.instructions.map((item, i) => (
+                {data.instructions.map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-slate-700 text-sm md:text-base leading-relaxed">
                     <div className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-2 flex-shrink-0" />
                     {item}
@@ -104,7 +152,7 @@ export default function AntiRaggingPage() {
             </div>
             <DataTable
               columns={['S.No.', 'Staff Name', 'Designation', 'Position', 'Contact No.']}
-              data={antiRaggingData.committee}
+              data={formattedCommittee}
             />
           </motion.section>
 
@@ -116,7 +164,7 @@ export default function AntiRaggingPage() {
             </div>
             <DataTable
               columns={['S.No.', 'Staff Name', 'Designation', 'Position', 'Contact No.']}
-              data={antiRaggingData.squads}
+              data={formattedSquads}
             />
           </motion.section>
 
@@ -129,7 +177,7 @@ export default function AntiRaggingPage() {
                 <h2 className="text-xl font-bold text-slate-900">Objectives</h2>
               </div>
               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6 space-y-4">
-                {antiRaggingData.objectives.map((item, i) => (
+                {data.objectives.map((item, i) => (
                   <div key={i} className="flex items-start gap-3 text-slate-600 text-sm leading-relaxed">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary-600 mt-2 flex-shrink-0" />
                     <p>{item}</p>
@@ -145,7 +193,7 @@ export default function AntiRaggingPage() {
                 <h2 className="text-xl font-bold text-slate-900">Functions</h2>
               </div>
               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6 space-y-4">
-                {antiRaggingData.functions.map((item, i) => (
+                {data.functions.map((item, i) => (
                   <div key={i} className="flex items-start gap-3 text-slate-600 text-sm leading-relaxed">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary-600 mt-2 flex-shrink-0" />
                     <p>{item}</p>
@@ -163,7 +211,7 @@ export default function AntiRaggingPage() {
             </div>
             <DataTable
               columns={['S.No.', 'Name & Designation', 'Position', 'Mobile']}
-              data={antiRaggingData.generalCommittee}
+              data={formattedGeneral}
             />
           </motion.section>
 

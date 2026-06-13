@@ -1,15 +1,50 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import DepartmentTimelineSection from '../../components/sections/DepartmentTimelineSection';
 import { departmentsTimelineData } from '../../data/departmentsOverviewData';
+import { cmsService } from '../../services/cmsService';
+import SuspenseLoader from '../../components/ui/SuspenseLoader';
 
 const DepartmentsOverviewPage = () => {
+  const [hero, setHero] = useState({
+    title: 'Colleges & Departments',
+    subtitle: 'Academic Excellence',
+    description: 'Discover our world-class facilities, industry-integrated curriculum, and the visionary faculty shaping the next generation of global innovators.'
+  });
+  const [engineering, setEngineering] = useState(departmentsTimelineData.engineering);
+  const [standalone, setStandalone] = useState(departmentsTimelineData.standalone);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    const fetchCMS = async () => {
+      try {
+        const res = await cmsService.getPage('departments_overview');
+        const sections = res.data?.sections || [];
+        const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
+
+        if (map['departments_overview.hero']) {
+          setHero(JSON.parse(map['departments_overview.hero'].content));
+        }
+        if (map['departments_overview.engineering']) {
+          setEngineering(JSON.parse(map['departments_overview.engineering'].content));
+        }
+        if (map['departments_overview.standalone']) {
+          setStandalone(JSON.parse(map['departments_overview.standalone'].content));
+        }
+      } catch (err) {
+        console.error('Failed to load departments overview CMS', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCMS();
   }, []);
+
+  if (loading) return <SuspenseLoader />;
 
   return (
     <HelmetProvider>
@@ -38,14 +73,13 @@ const DepartmentsOverviewPage = () => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
               >
                 <span className="text-accent-gold font-bold tracking-[0.2em] uppercase text-sm mb-6 block">
-                  Academic Excellence
+                  {hero.subtitle}
                 </span>
                 <h1 className="text-5xl md:text-7xl font-display font-extrabold text-white mb-8 leading-tight">
-                  Colleges & <br className="hidden md:block" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-white/50">Departments</span>
+                  {hero.title}
                 </h1>
                 <p className="text-lg md:text-xl text-white/70 leading-relaxed max-w-2xl mx-auto">
-                  Discover our world-class facilities, industry-integrated curriculum, and the visionary faculty shaping the next generation of global innovators.
+                  {hero.description}
                 </p>
               </motion.div>
             </div>
@@ -72,7 +106,7 @@ const DepartmentsOverviewPage = () => {
           <div className="relative z-10 bg-primary-950">
             <DepartmentTimelineSection 
               title="Engineering Programs" 
-              data={departmentsTimelineData.engineering} 
+              data={engineering} 
             />
             
             {/* Separator */}
@@ -80,7 +114,7 @@ const DepartmentsOverviewPage = () => {
             
             <DepartmentTimelineSection 
               title="Stand Alone Courses" 
-              data={departmentsTimelineData.standalone} 
+              data={standalone} 
             />
           </div>
         </main>

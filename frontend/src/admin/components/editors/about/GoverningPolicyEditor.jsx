@@ -5,17 +5,20 @@ import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { AdminInput } from '../../ui/AdminInput';
 import { fileService } from '../../../services/fileService';
 import { cmsService } from '../../../../services/cmsService';
+import { governingCouncilData } from '../../../../data/governingCouncil';
 
 const GoverningPolicyEditor = () => {
   const toast = useToast();
-  const [form, setForm] = useState({ members: [] });
+  const [form, setForm] = useState({ members: governingCouncilData.map(m => ({ id: Date.now() + Math.random(), ...m })) });
   const [loading, setLoading] = useState(true);
   const [sectionsMap, setSectionsMap] = useState({});
+  const [pageId, setPageId] = useState(null);
 
   useEffect(() => {
     const fetchPage = async () => {
       try {
         const res = await cmsService.getPage('about');
+        setPageId(res.data?.id);
         const sections = res.data?.sections || [];
         const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
         setSectionsMap(map);
@@ -37,8 +40,17 @@ const GoverningPolicyEditor = () => {
   const handleSave = async (publish = false) => {
     setLoading(true);
     try {
+      const content = JSON.stringify(form);
       if (sectionsMap['about.governing_policy']) {
-        await cmsService.updateSection(sectionsMap['about.governing_policy'].id, { content: JSON.stringify(form) });
+        await cmsService.updateSection(sectionsMap['about.governing_policy'].id, { content });
+      } else {
+        const newSec = await cmsService.createSection({
+          pageId,
+          sectionKey: 'about.governing_policy',
+          title: 'Governing Council Policy',
+          content
+        });
+        setSectionsMap(prev => ({ ...prev, 'about.governing_policy': newSec.data }));
       }
       toast({ type: 'success', title: publish ? 'Published!' : 'Draft saved' });
     } catch (err) {
@@ -49,7 +61,7 @@ const GoverningPolicyEditor = () => {
   };
 
   const handleReset = () => {
-    setForm({ members: [] });
+    setForm({ members: governingCouncilData.map(m => ({ id: Date.now() + Math.random(), ...m })) });
     toast({ type: 'info', title: 'Reset', message: 'Reverted to defaults.' });
   };
 

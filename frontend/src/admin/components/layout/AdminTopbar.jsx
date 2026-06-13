@@ -16,6 +16,10 @@ const BREADCRUMB_MAP = {
   '/admin/dashboard/homepage/placement-excellence': 'Placement Excellence Section Editor',
   '/admin/dashboard/homepage/contact': 'Contact Section Editor',
   '/admin/dashboard/homepage/footer': 'Footer Editor',
+  '/admin/dashboard/homepage/gallery': 'Homepage Gallery Editor',
+  '/admin/dashboard/homepage/videos': 'Video Showcase Editor',
+  '/admin/dashboard/homepage/facilities': 'Campus Facilities Editor',
+  '/admin/dashboard/departments/overview': 'Departments Overview Editor',
   
   // Updates
   '/admin/dashboard/updates/events': 'Latest Events',

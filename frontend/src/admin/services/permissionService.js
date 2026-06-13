@@ -13,6 +13,9 @@ export const MODULES = {
   homepage_placements: '/admin/dashboard/homepage/placement-excellence',
   homepage_contact: '/admin/dashboard/homepage/contact',
   homepage_footer: '/admin/dashboard/homepage/footer',
+  homepage_gallery: '/admin/dashboard/homepage/gallery',
+  homepage_videos: '/admin/dashboard/homepage/videos',
+  homepage_facilities: '/admin/dashboard/homepage/facilities',
 
   // Updates
   updates_events: '/admin/dashboard/updates/events',

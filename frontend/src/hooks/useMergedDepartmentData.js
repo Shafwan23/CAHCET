@@ -66,8 +66,8 @@ export function useMergedDepartmentData(deptKey, staticData) {
       if (cmsData.faculties && cmsData.faculties.length > 0 && (!globalFaculty || globalFaculty.length === 0)) {
         merged.facultyData = cmsData.faculties;
       }
-      if (cmsData.achievements && Object.keys(cmsData.achievements).length > 0) {
-        merged.achievementsData = { ...merged.achievementsData, ...cmsData.achievements };
+      if (cmsData.achievements && (Array.isArray(cmsData.achievements) ? cmsData.achievements.length > 0 : Object.keys(cmsData.achievements).length > 0)) {
+        merged.achievementsData = cmsData.achievements;
       }
       if (cmsData.gallery && cmsData.gallery.length > 0) {
         merged.galleryData = cmsData.gallery;

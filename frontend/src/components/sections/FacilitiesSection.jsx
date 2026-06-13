@@ -41,8 +41,17 @@ const FacilitiesSection = ({ data }) => {
     },
   ];
 
-  const facilities = data?.items || defaultFacilities;
+  const facilities = (data?.items || defaultFacilities).map(item => {
+    let image = item.image;
+    if (!image) {
+      if (item.title === 'Campus Hostel') image = campusHostelImg;
+      if (item.title === 'Sports Arena') image = sportsArenaImg;
+    }
+    return { ...item, image };
+  });
   const sectionTitle = data?.title || 'Infrastructure Built for Innovation';
+  const sectionSubtitle = data?.subtitle || 'World-Class Campus';
+  const sectionDesc = data?.description || 'Explore our sprawling 100-acre campus designed to provide the best learning and living experience.';
   return (
     <Section id="facilities" className="bg-white">
       <Container>
@@ -54,12 +63,12 @@ const FacilitiesSection = ({ data }) => {
             viewport={{ once: true }}
             className="md:w-2/3"
           >
-            <span className="text-accent-gold font-bold tracking-widest uppercase text-sm mb-4 block">World-Class Campus</span>
+            <span className="text-accent-gold font-bold tracking-widest uppercase text-sm mb-4 block">{sectionSubtitle}</span>
             <h2 className="text-4xl md:text-5xl font-display font-bold text-primary-900 mb-6">
               {sectionTitle}
             </h2>
             <p className="text-primary-600 text-lg">
-              Explore our sprawling 100-acre campus designed to provide the best learning and living experience.
+              {sectionDesc}
             </p>
           </motion.div>
         </div>

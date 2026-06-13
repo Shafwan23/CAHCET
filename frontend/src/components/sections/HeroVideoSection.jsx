@@ -42,9 +42,9 @@ const HeroVideoSection = ({ data }) => {
           loop 
           playsInline
           className="block md:hidden w-full h-full object-cover object-center pointer-events-none"
-          poster="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=800"
+          poster={data?.bgImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=800"}
         >
-          <source src={campusVideoMV} type="video/mp4" />
+          <source src={data?.mobileVideoUrl || data?.videoUrl || campusVideoMV} type="video/mp4" />
         </video>
 
         {/* Desktop Video (landscape) */}
@@ -54,12 +54,12 @@ const HeroVideoSection = ({ data }) => {
           loop 
           playsInline
           className="hidden md:block w-full h-full object-cover object-center pointer-events-none"
-          poster="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=2000"
+          poster={data?.bgImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=2000"}
         >
-          <source src={campusVideo} type="video/mp4" />
+          <source src={data?.videoUrl || campusVideo} type="video/mp4" />
           {/* Fallback image */}
           <img 
-            src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=2000" 
+            src={data?.bgImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=2000"} 
             alt="University Campus"
             className="w-full h-full object-cover"
           />

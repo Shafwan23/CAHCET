@@ -25,13 +25,23 @@ export default function PeoplesMessagePage() {
         const chairmanSec = sections.find(s => s.sectionKey === 'about.chairman');
         const principalSec = sections.find(s => s.sectionKey === 'about.principal');
         
-        const newMessages = [];
-        if (chairmanSec) newMessages.push(JSON.parse(chairmanSec.content));
-        if (principalSec) newMessages.push(JSON.parse(principalSec.content));
+        let newMessages = [...fallbackMessages];
         
-        if (newMessages.length > 0) {
-          setMessages(newMessages);
+        if (chairmanSec) {
+          const data = JSON.parse(chairmanSec.content);
+          if (data && data.name) {
+            newMessages = newMessages.map(m => m.id === 'chairman' ? data : m);
+          }
         }
+        
+        if (principalSec) {
+          const data = JSON.parse(principalSec.content);
+          if (data && data.name) {
+            newMessages = newMessages.map(m => m.id === 'principal' ? data : m);
+          }
+        }
+        
+        setMessages(newMessages);
       } catch (err) {
         console.error('Failed to load peoples messages:', err);
       }

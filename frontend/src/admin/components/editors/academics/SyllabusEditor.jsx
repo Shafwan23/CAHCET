@@ -18,6 +18,9 @@ const SyllabusEditor = () => {
   const [regFilter, setRegFilter] = useState('All');
   const [semFilter, setSemFilter] = useState('All');
 
+  const [sectionId, setSectionId] = useState(null);
+  const [pageId, setPageId] = useState(null);
+
   useEffect(() => {
     loadData();
   }, []);
@@ -25,9 +28,13 @@ const SyllabusEditor = () => {
   const loadData = async () => {
     try {
       const page = await cmsService.getPage('academics');
-      const section = page.sections?.find(s => s.sectionKey === 'academics.syllabus');
-      if (section && section.content) {
-        setForm(section.content);
+      setPageId(page.data?.id);
+      const section = page.data?.sections?.find(s => s.sectionKey === 'academics.syllabus');
+      if (section) {
+        setSectionId(section.id);
+        if (section.content) {
+          setForm(typeof section.content === 'string' ? JSON.parse(section.content) : section.content);
+        }
       }
     } catch (err) {
       toast({ type: 'error', title: 'Failed to load data' });
@@ -41,7 +48,18 @@ const SyllabusEditor = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await cmsService.updateSection('academics.syllabus', form);
+      const content = JSON.stringify(form);
+      if (sectionId) {
+        await cmsService.updateSection(sectionId, { content });
+      } else {
+        const newSec = await cmsService.createSection({
+          pageId,
+          sectionKey: 'academics.syllabus',
+          title: 'Syllabus Archive',
+          content
+        });
+        setSectionId(newSec.data?.id);
+      }
       toast({ type: 'success', title: 'Changes published' });
     } catch (err) {
       toast({ type: 'error', title: 'Failed to save' });

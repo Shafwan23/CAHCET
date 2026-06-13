@@ -19,6 +19,20 @@ const ICON_MAP = {
   Code, Cpu, Database, Settings, Radio, Zap, BrainCircuit, Building2
 };
 
+const allDepartmentsLookup = {
+  cse: { name: 'Computer Science', code: 'CSE', icon: 'Code', color: 'from-blue-500 to-primary-600' },
+  aids: { name: 'AI & Data Science', code: 'AIDS', icon: 'Database', color: 'from-primary-500 to-pink-600' },
+  it: { name: 'Information Technology', code: 'IT', icon: 'Cpu', color: 'from-cyan-500 to-blue-600' },
+  mech: { name: 'Mechanical Engineering', code: 'MECH', icon: 'Settings', color: 'from-amber-500 to-amber-600' },
+  ece: { name: 'Electronics & Comm.', code: 'ECE', icon: 'Radio', color: 'from-amber-500 to-primary-600' },
+  eee: { name: 'Electrical & Electronics', code: 'EEE', icon: 'Zap', color: 'from-yellow-500 to-amber-600' },
+  aiml: { name: 'AI & Machine Learning', code: 'AIML', icon: 'BrainCircuit', color: 'from-violet-500 to-primary-600' },
+  civil: { name: 'Civil Engineering', code: 'CIVIL', icon: 'Building2', color: 'from-slate-500 to-slate-700' },
+  mca: { name: 'Master of Comp. App.', code: 'MCA', icon: 'Code', color: 'from-teal-500 to-teal-700' },
+  mba: { name: 'Business Administration', code: 'MBA', icon: 'Building2', color: 'from-orange-500 to-orange-700' },
+  sh: { name: 'Science & Humanities', code: 'SH', icon: 'Cpu', color: 'from-cyan-500 to-cyan-700' },
+};
+
 const DepartmentsSection = ({ data }) => {
   const navigate = useNavigate();
 
@@ -33,7 +47,15 @@ const DepartmentsSection = ({ data }) => {
     { name: 'Civil Engineering', code: 'CIVIL', icon: 'Building2', color: 'from-slate-500 to-slate-700' },
   ];
 
-  const departments = data?.items || defaultDepartments;
+  let departments = defaultDepartments;
+  if (data?.highlightedDepts && Array.isArray(data.highlightedDepts) && data.highlightedDepts.length > 0) {
+    departments = data.highlightedDepts
+      .map(key => allDepartmentsLookup[key.toLowerCase()])
+      .filter(Boolean);
+  } else if (data?.items && Array.isArray(data.items)) {
+    departments = data.items;
+  }
+
   const { subtitle, title, description } = data || {
     subtitle: 'Academic Departments',
     title: 'Future-Ready Engineering Programs',

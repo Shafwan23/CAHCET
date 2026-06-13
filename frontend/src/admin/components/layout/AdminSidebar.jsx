@@ -10,7 +10,7 @@ import {
   Building2, ChevronRight, X, Layers, Trophy, BookOpenCheck, MapPin,
   Shield, Heart, CheckCircle, Receipt, Scroll, Info,
   Edit3, FileCheck, Award, Landmark, CreditCard, FlaskConical, PhoneCall,
-  Settings, Bot, Users
+  Settings, Bot, Users, Video
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { DEPARTMENTS } from '../../services/departmentService';
@@ -18,7 +18,7 @@ import { roleService } from '../../services/roleService';
 
 /* ─────────────────────────────────────────
    Navigation definitions
-───────────────────────────────────────── */
+   ───────────────────────────────────────── */
 const OVERVIEW_ITEMS = [
   { label: 'Dashboard',    icon: LayoutDashboard, path: '/admin/dashboard' },
   { label: 'SEO Settings', icon: SearchIcon,      path: '/admin/dashboard/seo' },
@@ -39,6 +39,9 @@ const HOMEPAGE_ITEMS = [
   { label: 'Placement Excellence Section', icon: TrendingUp,   path: '/admin/dashboard/homepage/placement-excellence' },
   { label: 'Contact Section',              icon: Phone,        path: '/admin/dashboard/homepage/contact' },
   { label: 'Footer',                       icon: Footprints,   path: '/admin/dashboard/homepage/footer' },
+  { label: 'Gallery Section',              icon: Images,       path: '/admin/dashboard/homepage/gallery' },
+  { label: 'Video Showcase',               icon: Video,        path: '/admin/dashboard/homepage/videos' },
+  { label: 'Campus Facilities',            icon: Layers,       path: '/admin/dashboard/homepage/facilities' },
 ];
 
 const UPDATES_ITEMS = [
@@ -400,6 +403,11 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
             <>
               {!collapsed && <SectionHeading label="Departments" />}
               <div className="space-y-0.5">
+                <SidebarNavLink
+                  item={{ label: 'Departments Overview', icon: Building2, path: '/admin/dashboard/departments/overview' }}
+                  collapsed={collapsed}
+                  onClose={() => { saveScroll(); onClose?.(); }}
+                />
                 {DEPARTMENTS.map(dept => (
                   <DeptAccordion
                     key={dept.key}
