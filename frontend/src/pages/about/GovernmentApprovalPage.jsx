@@ -15,118 +15,56 @@ const fadeUp = (delay = 0) => ({
 
 // ── Document Card ────────────────────────────────────────────────────────────
 function DocumentCard({ title, desc, status, url, index }) {
-  const [showModal, setShowModal] = useState(false);
-
   return (
-    <>
-      <motion.div
-        {...fadeUp(index * 0.05)}
-        className="group relative bg-white border border-slate-100 rounded-2xl p-6 hover:shadow-md transition-all duration-300 flex flex-col justify-between gap-4 overflow-hidden"
-      >
-        {/* Glow effect on hover */}
-        <div className="absolute -inset-px bg-gradient-to-r from-primary-500/0 to-primary-500/0 group-hover:from-primary-500/5 group-hover:to-primary-500/10 transition-all duration-500 opacity-0 group-hover:opacity-100" />
+    <motion.a
+      href={url || "#"}
+      target="_blank"
+      rel="noopener noreferrer"
+      {...fadeUp(index * 0.05)}
+      whileHover={{ y: -10, scale: 1.03 }}
+      className="group relative bg-gradient-to-br from-primary-50 via-white to-accent-gold/10 border-2 border-primary-100 rounded-[2rem] p-8 shadow-xl hover:shadow-[0_20px_50px_rgba(212,175,55,0.2)] transition-all duration-300 flex flex-col justify-between gap-6 overflow-hidden block"
+    >
+      {/* Decorative top border */}
+      <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-primary-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      {/* Background glow */}
+      <div className="absolute -inset-px bg-gradient-to-br from-primary-50/50 to-white opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10" />
 
-        <div className="relative z-10 space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-primary-600 group-hover:bg-primary-50 group-hover:text-primary-700 transition-colors">
-              <FileText className="w-5 h-5" />
-            </div>
-            {status && (
-              <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full ${
-                status === 'Accredited' || status === 'Approved' || status === 'Affiliated'
-                  ? 'bg-primary-50 text-amber-600 border border-primary-100'
-                  : 'bg-amber-50 text-amber-600 border border-amber-100'
-              }`}>
-                {status}
-              </span>
-            )}
+      <div className="relative z-10 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-primary-600 group-hover:bg-primary-600 group-hover:text-white transition-all duration-500 shadow-sm group-hover:scale-110">
+            <FileText className="w-6 h-6" />
           </div>
-
-          <div>
-            <h3 className="text-base font-bold text-slate-900 group-hover:text-primary-700 transition-colors">
-              {title}
-            </h3>
-            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              {desc}
-            </p>
-          </div>
+          {status && (
+            <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm ${
+              status === 'Accredited' || status === 'Approved' || status === 'Affiliated'
+                ? 'bg-accent-gold/10 text-accent-gold border border-accent-gold/20'
+                : 'bg-slate-100 text-slate-500 border border-slate-200'
+            }`}>
+              {status}
+            </span>
+          )}
         </div>
 
-        <div className="relative z-10 pt-2 flex items-center justify-between text-xs font-medium">
-          <button
-            onClick={() => setShowModal(true)}
-            className="text-primary-600 hover:text-primary-700 flex items-center gap-1 transition-colors"
-          >
-            <Download className="w-3.5 h-3.5" /> View Approval
-          </button>
-          <span className="text-slate-300">PDF</span>
+        <div>
+          <h3 className="text-lg font-bold text-slate-900 group-hover:text-primary-700 transition-colors mb-2">
+            {title}
+          </h3>
+          <p className="text-sm text-slate-500 leading-relaxed">
+            {desc}
+          </p>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Modal */}
-      <AnimatePresence>
-        {showModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowModal(false)}
-              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
-            />
-
-            {/* Modal Content */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ type: 'spring', damping: 25 }}
-              className="relative bg-white rounded-3xl p-8 max-w-lg w-full shadow-luxury border border-slate-100"
-            >
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center text-primary-600 flex-shrink-0">
-                  <FileText className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900">{title}</h3>
-                  <p className="text-xs text-slate-500">Document Preview</p>
-                </div>
-              </div>
-
-              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6 text-center mb-6">
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  In a real-world scenario, this would open a PDF viewer or download the document for:
-                  <span className="block font-bold mt-1 text-slate-900">{title}</span>
-                </p>
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-lg transition-colors"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2.5 bg-primary-900 hover:bg-primary-800 text-white text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  <Download className="w-4 h-4" /> Download
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </>
+      <div className="relative z-10 pt-4 flex items-center justify-between text-sm font-medium border-t border-slate-50 group-hover:border-primary-50 transition-colors mt-auto">
+        <span className="text-primary-600 group-hover:text-primary-700 flex items-center gap-2 transition-colors">
+          <Download className="w-4 h-4" /> View Document
+        </span>
+        <span className="text-slate-300 group-hover:text-primary-300 flex items-center gap-1">
+          PDF <ExternalLink className="w-3 h-3" />
+        </span>
+      </div>
+    </motion.a>
   );
 }
 
@@ -172,81 +110,86 @@ export default function GovernmentApprovalPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
+    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col">
       <Navbar />
 
-      <main className="flex-1 pt-20">
-        {/* ── COMPACT HEADER ──────────────────────────────────────────────── */}
-        <section className="bg-white border-b border-slate-100">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
-            {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-4">
-              <a href="/" className="hover:text-primary-600 transition-colors flex items-center gap-1">
-                <Home className="w-3.5 h-3.5" /> Home
-              </a>
-              <ChevronRight className="w-3 h-3" />
-              <span>About</span>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-primary-600">Government Approval</span>
-            </nav>
-
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-1 h-6 rounded-full bg-primary-600" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary-600">Compliance & Recognition</span>
+      <main className="flex-1">
+        {/* ── SPECTACULAR HEADER ──────────────────────────────────────────────── */}
+        <section className="relative w-full overflow-hidden bg-primary-950 mb-16 shadow-2xl rounded-b-[3rem]">
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary-950 via-primary-900 to-indigo-900 opacity-90" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-accent-gold/10 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-[100px]" />
+          
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 relative z-10 text-center flex flex-col items-center">
+            <div className="inline-block px-4 py-1.5 bg-white/10 backdrop-blur-md text-white text-xs font-bold uppercase tracking-widest rounded-full border border-white/20 mb-6">
+              Compliance & Recognition
             </div>
-
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-              Government Approval & Recognition
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-400 mb-6 tracking-tight drop-shadow-lg">
+              Government Approvals
             </h1>
-
-            <p className="text-sm text-slate-500 max-w-2xl leading-relaxed">
-              CAHCET is approved by AICTE and affiliated to Anna University. Explore our official approval documents.
+            <p className="text-primary-200 text-lg md:text-xl max-w-2xl leading-relaxed font-light">
+              CAHCET is approved by AICTE and affiliated to Anna University. Explore our official statutory approval documents.
             </p>
           </div>
+          <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
         </section>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+        <div className="w-full flex flex-col">
           
           {/* ── AICTE SECTION ─────────────────────────────────────────────── */}
-          <section>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-primary-600 mb-1">Approvals</p>
-                <h2 className="text-xl font-bold text-slate-900">AICTE EOA Reports</h2>
-                <p className="text-xs text-slate-500 mt-0.5">All India Council for Technical Education</p>
+          <section className="py-20 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4 border-b border-slate-100 pb-6">
+                <div>
+                  <div className="w-12 h-1 bg-accent-gold rounded-full mb-4" />
+                  <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-900">AICTE EOA Reports</h2>
+                  <p className="text-slate-500 mt-2 text-lg font-light">All India Council for Technical Education</p>
+                </div>
+                <div className="text-sm text-slate-400 font-medium bg-slate-50 px-4 py-2 rounded-full border border-slate-100 shadow-sm">
+                  <span className="text-primary-600 font-bold">{data.aicte?.length || 0}</span> documents available
+                </div>
               </div>
-              <div className="text-xs text-slate-400 font-medium">{data.aicte?.length || 0} documents available</div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-              {data.aicte?.map((doc, i) => (
-                <DocumentCard key={doc.id} {...doc} index={i} />
-              ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                {data.aicte?.map((doc, i) => (
+                  <DocumentCard key={doc.id} {...doc} index={i} />
+                ))}
+              </div>
             </div>
           </section>
 
           {/* ── ACCREDITATION SECTION ─────────────────────────────────────── */}
-          <section>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-primary-600 mb-1">Certifications</p>
-                <h2 className="text-xl font-bold text-slate-900">Accreditations & Recognitions</h2>
-                <p className="text-xs text-slate-500 mt-0.5">National and state level compliance</p>
+          <section className="py-20 bg-slate-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4 border-b border-slate-200 pb-6">
+                <div>
+                  <div className="w-12 h-1 bg-accent-gold rounded-full mb-4" />
+                  <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-900">Accreditations & Recognitions</h2>
+                  <p className="text-slate-500 mt-2 text-lg font-light">National and state level compliance</p>
+                </div>
+                <div className="text-sm text-slate-400 font-medium bg-white px-4 py-2 rounded-full border border-slate-100 shadow-sm">
+                  <span className="text-primary-600 font-bold">{data.accreditations?.length || 0}</span> documents available
+                </div>
               </div>
-              <div className="text-xs text-slate-400 font-medium">{data.accreditations?.length || 0} documents available</div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-              {data.accreditations?.map((doc, i) => (
-                <DocumentCard key={doc.id} {...doc} index={i} />
-              ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                {data.accreditations?.map((doc, i) => (
+                  <DocumentCard key={doc.id} {...doc} index={i} />
+                ))}
+              </div>
             </div>
           </section>
 
           {/* ── NOTE ──────────────────────────────────────────────────────── */}
-          <div className="bg-white border border-slate-100 rounded-2xl p-6 text-center text-xs text-slate-400 font-medium max-w-2xl mx-auto">
-            All documents are official records of CAHCET. For any verification, please contact the administrative office.
-          </div>
+          <section className="py-20 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-gradient-to-r from-primary-50 via-slate-50 to-primary-50 border border-primary-100/50 rounded-[2rem] p-8 md:p-12 text-center text-sm text-primary-900/60 font-medium max-w-3xl mx-auto shadow-inner">
+                <p className="text-lg">All documents are official statutory records of CAHCET.</p>
+                <p className="mt-2 font-light">For any verification or queries, please contact the administrative office.</p>
+              </div>
+            </div>
+          </section>
 
         </div>
       </main>

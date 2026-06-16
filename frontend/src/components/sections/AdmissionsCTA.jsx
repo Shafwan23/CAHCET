@@ -12,6 +12,11 @@ const AdmissionsCTA = ({ data }) => {
     buttonLink: '/admissions/registration-2026#apply-process'
   };
 
+  const getPhoneLink = (p) => {
+    const digits = p.match(/\+?\d[\d\-\s]+/);
+    return digits ? `tel:${digits[0].replace(/[\s-]/g, '')}` : `tel:${p}`;
+  };
+
   return (
     <Section className="pb-0 overflow-hidden">
       <Container>
@@ -40,15 +45,21 @@ const AdmissionsCTA = ({ data }) => {
               
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
                 <button 
-                  onClick={() => window.location.href = buttonLink}
-                  className="btn-accent px-10 py-4 text-lg"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '/admissions/registration-2026#apply-process';
+                  }}
+                  className="bg-accent-gold hover:bg-yellow-600 text-white font-bold px-10 py-4 text-lg rounded-full shadow-lg transition-transform hover:-translate-y-1 inline-flex items-center justify-center text-center"
                 >
-                  {buttonText}
+                  {buttonText || 'Apply Now'}
                 </button>
-                <button className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-full transition-all">
+                <a 
+                  href={getPhoneLink(data?.phone || '1800-123-4567')}
+                  className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-bold px-8 py-4 rounded-full transition-all"
+                >
                   <Phone className="w-5 h-5" />
-                  Counseling: {data?.phone || '1800-XXX-XXXX'}
-                </button>
+                  Counseling: {data?.phone || '1800-123-4567'}
+                </a>
               </div>
 
               <div className="flex items-center gap-8 text-primary-300">

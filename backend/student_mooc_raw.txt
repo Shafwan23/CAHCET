@@ -1,0 +1,34 @@
+Academic Year (2024-2025)
+S.NO\tSTUDENT NAME\tCOMPANY NAME\tCOURSE NAME\tDATE
+1\tR Abrar ul haque\tcoursera\tSetup Python\t3/13/2025
+2\tSubasri\tcoursera\tSetup Python\t3/8/2025
+3\tSubasri\tcoursera\tAutomate DOC Review with sharepoint &power Automate\t3/12/2025
+4\tSubasri\tcoursera\tDecryption with Python\t3/8/2025
+5\tSubasri\tcoursera\tPython Generators\t3/8/2025
+6\tSubasri\tcoursera\tPython 101: Develop your First Python Progran\t 
+7\tSubasri\tCoursera\tPython 101: Develop Your First Python Program\t08/03/2025
+8\tHemapriya P\tCoursera\tBusiness Analysis & Process Management\t27/05/2025
+9\tAyisha Siddiqha H\tCoursera\tBusiness Analysis & Process Management\t27/05/2025
+10\tMohammed Aasif\tGreat Learning\tPygame Basics\t11/2024
+11\tR. Abrar-ul-haque\tGreat Learning\tJava Programming\t11/2024
+12\tPavithra J\tGreat Learning\tJava Programming\t11/2024
+13\tRajkumar S\tCodeSignal\tIntroduction to HTML\t04/02/2025
+14\tMohammed Ragid V\tCodeSignal\tIntroduction to HTML\t04/02/2025
+15\tSyed Musthafa S\tCodeSignal\tIntroduction to HTML\t04/02/2025
+16\tSyed Nouman A\tCodeSignal\tIntroduction to HTML\t04/02/2025
+17\tRishi Kumar B\tCodeSignal\tIntroduction to HTML\t04/02/2025
+18\tThanveerul Haqs\tCodeSignal\tIntroduction to HTML\t26/02/2025
+19\tVaishnavi D\tCodeSignal\tIntroduction to HTML\t27/02/2025
+20\tShawoor Saqib\tCodeSignal\tIntroduction to HTML\t03/03/2025
+21\tSamnesh\tCodeSignal\tIntroduction to HTML\t04/02/2025
+22\tShahid Ahamed\tCodeSignal\tIntroduction to HTML\t04/02/2025
+23\tSuresh\tCodeSignal\tIntroduction to HTML\t04/02/2025
+24\tVijaya Kumar\tCodeSignal\tIntroduction to HTML\t03/03/2025
+25\tSanthosh Kumar\tCodeSignal\tIntroduction to HTML\t03/03/2025
+26\tMuhammed Khursheed Ahmed\tCodeSignal\tIntroduction to HTML\t04/02/2025
+27\tB. Mohammed Sakheer\tCodeSignal\tIntroduction to HTML\t01/06/2025
+28\tPooja Sri\tCodeSignal\tIntroduction to HTML\t03/03/2025
+29\tSyed Rabbani\tCodeSignal\tIntroduction to HTML\t04/02/2025
+30\tNaseeruddeen S\tCodeSignal\tIntroduction to HTML\t01/06/2025
+
+<truncated 37970 bytes

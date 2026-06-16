@@ -42,17 +42,28 @@ const DepartmentSidebar = ({ deptCode, activeSection }) => {
   return (
     <>
       {/* Desktop Elite Glassmorphism Sidebar */}
-      <div className="hidden md:block w-72 lg:w-80 shrink-0 relative z-20">
-        <div className="sticky top-28 bg-white/60 backdrop-blur-3xl border border-white/40 rounded-[2rem] p-6 shadow-luxury">
+      <div className={cn(
+        "hidden md:block shrink-0 relative z-20 transition-all duration-500",
+        activeSection === 'achievements' ? "w-full" : "w-72 lg:w-80"
+      )}>
+        <div className={cn(
+          "bg-white/60 backdrop-blur-3xl border border-white/40 rounded-[2rem] p-6 shadow-luxury",
+          activeSection === 'achievements' ? "flex flex-col gap-4" : "sticky top-28"
+        )}>
           {/* Subtle Inner Glow */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent rounded-[2rem] pointer-events-none" />
           
-          <h3 className="text-primary-900 font-display font-bold text-xl mb-6 px-4 relative z-10 flex items-center gap-2">
-            <div className="w-2 h-6 bg-accent-gold rounded-full" />
-            Navigation
-          </h3>
+          {activeSection !== 'achievements' && (
+            <h3 className="text-primary-900 font-display font-bold text-xl mb-6 px-4 relative z-10 flex items-center gap-2">
+              <div className="w-2 h-6 bg-accent-gold rounded-full" />
+              Navigation
+            </h3>
+          )}
           
-          <nav className="flex flex-col gap-2 relative z-10">
+          <nav className={cn(
+            "relative z-10 flex",
+            activeSection === 'achievements' ? "flex-row flex-wrap justify-center gap-3" : "flex-col gap-2"
+          )}>
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               const Icon = item.icon;
@@ -64,7 +75,8 @@ const DepartmentSidebar = ({ deptCode, activeSection }) => {
                   state={{ fromDeptSidebar: true }}
                   onClick={handleNavClick}
                   className={cn(
-                    "relative px-4 py-4 rounded-2xl transition-all duration-300 font-medium text-sm flex items-center gap-4 group overflow-hidden",
+                    "relative rounded-2xl transition-all duration-300 font-medium text-sm flex items-center gap-4 group overflow-hidden",
+                    activeSection === 'achievements' ? "px-4 py-3 min-w-[160px]" : "px-4 py-4",
                     isActive ? "text-primary-900" : "text-primary-500 hover:text-primary-900 hover:bg-white/50"
                   )}
                 >

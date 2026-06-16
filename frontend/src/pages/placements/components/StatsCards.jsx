@@ -33,8 +33,9 @@ function StatCard({ icon: Icon, label, value, numericValue, accent, delay, suffi
     <motion.div
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="relative group overflow-hidden rounded-2xl p-5 flex flex-col gap-3 bg-white border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300"
+      whileHover={{ y: -8, scale: 1.03 }}
+      transition={{ duration: 0.4, delay, ease: "easeOut" }}
+      className="relative group overflow-hidden rounded-2xl p-5 flex flex-col gap-3 bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-[rgba(37,99,235,0.1)] hover:border-slate-300 transition-all cursor-default"
     >
       {/* Glow on hover */}
       <div
@@ -52,10 +53,10 @@ function StatCard({ icon: Icon, label, value, numericValue, accent, delay, suffi
 
       {/* Icon */}
       <div
-        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 shadow-sm"
         style={{ background: `${accent}10`, border: `1.5px solid ${accent}25` }}
       >
-        <Icon className="w-5 h-5" style={{ color: accent }} />
+        <Icon className="w-6 h-6 group-hover:animate-pulse" style={{ color: accent }} />
       </div>
 
       {/* Value */}

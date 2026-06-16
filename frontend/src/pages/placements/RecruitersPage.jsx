@@ -20,7 +20,7 @@ const BRAND_COLORS = [
   { bg: '#F0F9FF', accent: '#0369A1' },
 ];
 
-// ── Recruiter card — NO animations ───────────────────────────────────────────
+// ── Recruiter card ───────────────────────────────────────────────────────────
 function RecruiterCard({ name, logo, fullName, index }) {
   const [imgError, setImgError] = useState(false);
   const color = BRAND_COLORS[index % BRAND_COLORS.length];
@@ -28,14 +28,16 @@ function RecruiterCard({ name, logo, fullName, index }) {
   const showLogo = logo && !imgError;
 
   return (
-    <div className="group flex flex-col items-center gap-3 rounded-2xl p-5 bg-white border border-slate-100 hover:border-blue-200 hover:shadow-md transition-shadow duration-200 cursor-default">
+    <div className="group flex flex-col items-center gap-3 rounded-2xl p-6 bg-white border border-slate-100 hover:border-blue-300 hover:shadow-[0_15px_30px_-5px_rgba(37,99,235,0.1)] transition-all duration-300 cursor-default relative overflow-hidden h-full">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
       {/* Logo / Initials */}
       <div
-        className="w-20 h-16 rounded-xl flex items-center justify-center overflow-hidden"
+        className="w-20 h-20 rounded-xl flex items-center justify-center overflow-hidden relative z-10 transition-transform duration-300 group-hover:-translate-y-1 shadow-sm shrink-0"
         style={
           showLogo
-            ? { background: '#f8fafc', border: '1px solid #e2e8f0' }
-            : { background: color.bg, border: `1.5px solid ${color.accent}30` }
+            ? { background: '#fff', border: '1px solid #f1f5f9' }
+            : { background: color.bg, border: `1px solid ${color.accent}30` }
         }
       >
         {showLogo ? (
@@ -43,21 +45,21 @@ function RecruiterCard({ name, logo, fullName, index }) {
             src={logo}
             alt={`${name} logo`}
             onError={() => setImgError(true)}
-            className="w-14 h-12 object-contain"
+            className="w-16 h-14 object-contain filter group-hover:brightness-110 transition-all duration-300"
           />
         ) : (
-          <span className="text-xl font-black" style={{ color: color.accent }}>
+          <span className="text-2xl font-black" style={{ color: color.accent }}>
             {initials}
           </span>
         )}
       </div>
 
       {/* Name */}
-      <div className="text-center">
+      <div className="text-center relative z-10 flex-1 flex flex-col">
         <span className="block text-sm font-bold text-slate-800 group-hover:text-blue-700 transition-colors">
           {name}
         </span>
-        <span className="block text-[10px] text-slate-400 mt-0.5 leading-tight line-clamp-2">
+        <span className="block text-[10px] text-slate-500 mt-1 leading-tight line-clamp-2 px-2 font-medium">
           {fullName}
         </span>
       </div>
@@ -96,25 +98,43 @@ function StatBadge({ value, label, color }) {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function RecruitersPage() {
-  const [activeYear, setActiveYear] = useState(placementActivities[0].year);
-  const activeData = placementActivities.find((a) => a.year === activeYear);
+  const [activeYear, setActiveYear] = useState(null);
   const [loading, setLoading] = useState(true);
   const [liveRecruiters, setLiveRecruiters] = useState([]);
+  const [liveActivities, setLiveActivities] = useState([]);
+  const [cmsData, setCmsData] = useState({});
 
   useEffect(() => {
     cmsService.getPage('placements')
       .then(res => {
+        setCmsData(res.data || {});
         const sections = res.data?.sections || [];
-        const sec = sections.find(s => s.sectionKey === 'placements.recruiters');
-        if (sec && sec.content) {
-          const parsed = JSON.parse(sec.content);
-          if (Array.isArray(parsed)) {
-            setLiveRecruiters(parsed.map(r => ({
-              name: r.companyName,
-              logo: r.logoUrl || '',
-              fullName: r.rolesOffered || 'Partner',
-            })));
-          }
+        
+        // Load Recruiters
+        const recSec = sections.find(s => s.sectionKey === 'placements.recruiters');
+        if (recSec && recSec.content) {
+          try {
+            const parsed = JSON.parse(recSec.content);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setLiveRecruiters(parsed.map(r => ({
+                name: r.companyName,
+                logo: r.logoUrl || '',
+                fullName: r.rolesOffered || 'Partner',
+              })));
+            }
+          } catch (e) { console.error('Failed to parse recruiters'); }
+        }
+
+        // Load Activities
+        const actSec = sections.find(s => s.sectionKey === 'placements.activities');
+        if (actSec && actSec.content) {
+          try {
+            const parsed = JSON.parse(actSec.content);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setLiveActivities(parsed);
+              setActiveYear(parsed[0].year);
+            }
+          } catch (e) { console.error('Failed to parse activities'); }
         }
       })
       .catch(console.error)
@@ -122,6 +142,16 @@ export default function RecruitersPage() {
   }, []);
 
   const displayRecruiters = liveRecruiters.length > 0 ? liveRecruiters : topRecruiters;
+  const displayActivities = liveActivities.length > 0 ? liveActivities : placementActivities;
+  
+  // Set default active year if not set
+  useEffect(() => {
+    if (!activeYear && displayActivities.length > 0) {
+      setActiveYear(displayActivities[0].year);
+    }
+  }, [activeYear, displayActivities]);
+
+  const activeData = displayActivities.find((a) => a.year === activeYear) || displayActivities[0] || { activities: [] };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
@@ -170,10 +200,10 @@ export default function RecruitersPage() {
 
             {/* Stats */}
             <div className="flex flex-wrap gap-3">
-              <StatBadge value="100+"    label="Companies Visited"          color="#60a5fa" />
-              <StatBadge value="530+"    label="Students Placed (AY 25–26)" color="#34d399" />
-              <StatBadge value="₹36 LPA" label="Highest Package"            color="#fbbf24" />
-              <StatBadge value="93%"     label="Placement Rate"             color="#c084fc" />
+              <StatBadge value={cmsData.stats?.companiesVisited || "530+"}    label="Companies Visited"          color="#60a5fa" />
+              <StatBadge value={cmsData.stats?.studentsPlaced || "530+"}    label="Students Placed (AY 25–26)" color="#34d399" />
+              <StatBadge value={cmsData.stats?.highestPackage || "₹36 LPA"} label="Highest Package"            color="#fbbf24" />
+              <StatBadge value={cmsData.stats?.placementRate || "93%"}     label="Placement Rate"             color="#c084fc" />
             </div>
           </div>
         </header>
@@ -196,10 +226,22 @@ export default function RecruitersPage() {
                 <p className="text-slate-500 font-medium">Loading live recruiters...</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {displayRecruiters.map((rec, i) => (
-                  <RecruiterCard key={rec.name + i} {...rec} index={i} />
-                ))}
+              <div className="relative w-full overflow-hidden py-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+                <div className="hidden sm:block absolute top-0 bottom-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+                <div className="hidden sm:block absolute top-0 bottom-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+
+                <motion.div
+                  animate={{ x: [0, -2432] }}
+                  transition={{ repeat: Infinity, ease: "linear", duration: 40 }}
+                  className="flex gap-6 w-max"
+                  style={{ willChange: "transform" }}
+                >
+                  {[...displayRecruiters, ...displayRecruiters, ...displayRecruiters, ...displayRecruiters].map((rec, i) => (
+                    <div key={i} className="w-[280px] shrink-0">
+                      <RecruiterCard {...rec} index={i} />
+                    </div>
+                  ))}
+                </motion.div>
               </div>
             )}
           </div>
@@ -219,10 +261,10 @@ export default function RecruitersPage() {
 
             {/* Year tabs */}
             <div className="flex flex-wrap gap-3 mb-7">
-              {placementActivities.map((act) => (
+              {displayActivities.map((act) => (
                 <TabButton
                   key={act.year}
-                  label={`AY ${act.year}`}
+                  label={act.label || `AY ${act.year}`}
                   isActive={activeYear === act.year}
                   onClick={() => setActiveYear(act.year)}
                 />
@@ -248,22 +290,28 @@ export default function RecruitersPage() {
                   </h3>
                 </div>
 
-                <div className="px-7 py-7">
-                  <ol className="space-y-4">
+                <div className="p-8">
+                  <div className="relative border-l-2 border-slate-100 ml-3 space-y-6 pb-4">
                     {activeData.activities.map((item, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <span
-                          className="flex-shrink-0 mt-0.5 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                          style={{ background: '#eff6ff', color: '#2563eb', border: '1px solid #bfdbfe' }}
-                        >
-                          {i + 1}
-                        </span>
-                        <p className="text-slate-600 text-sm leading-relaxed">{item}</p>
-                      </li>
+                      <motion.div 
+                        key={i} 
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: i * 0.05 }}
+                        className="relative pl-8 group"
+                      >
+                        <div className="absolute -left-[17px] top-1 w-8 h-8 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center group-hover:border-blue-500 group-hover:bg-blue-50 transition-colors duration-300 shadow-sm z-10">
+                          <span className="text-xs font-bold text-slate-500 group-hover:text-blue-600 transition-colors">{i + 1}</span>
+                        </div>
+                        <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm group-hover:shadow-[0_10px_25px_-5px_rgba(37,99,235,0.12)] group-hover:border-blue-200 group-hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                          <p className="text-slate-700 text-sm leading-relaxed font-medium relative z-10 group-hover:text-blue-950 transition-colors duration-300">{item}</p>
+                        </div>
+                      </motion.div>
                     ))}
-                  </ol>
+                  </div>
 
-                  <div className="mt-8 pt-5 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-400 font-medium">
+                  <div className="mt-8 pt-5 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-400 font-medium ml-3">
                     <CheckCircle2 className="w-4 h-4 text-amber-500 flex-shrink-0" />
                     All activities are conducted under the guidance of the Placement Officer, CAHCET.
                   </div>

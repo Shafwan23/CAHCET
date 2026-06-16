@@ -1,23 +1,31 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronRight, Home } from 'lucide-react';
 import { departmentAnimations } from '../../animations/departmentAnimations';
 import FloatingParticles from '../ui/FloatingParticles';
 
 const DepartmentHero = ({ data }) => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"]
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
   if (!data) return null;
 
   return (
-    <div className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-primary-950 flex items-center min-h-[40vh] md:min-h-[50vh] rounded-b-[3rem] shadow-luxury z-10">
-      {/* Animated Background Image */}
-      <div className="absolute inset-0 z-0">
+    <div ref={ref} className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-primary-950 flex items-center min-h-[40vh] md:min-h-[50vh] rounded-b-[3rem] shadow-luxury z-10">
+      {/* Animated Background Image with Parallax */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <motion.div 
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 15, ease: "easeOut" }}
-          className="absolute inset-0"
+          style={{ y }}
+          className="absolute inset-0 scale-110"
         >
-          <img 
+          <motion.img 
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 15, ease: "easeOut" }}
             src={data.backgroundImage} 
             alt={data.title}
             className="w-full h-full object-cover opacity-30"
@@ -60,7 +68,7 @@ const DepartmentHero = ({ data }) => {
             initial="hidden"
             animate="visible"
             custom={0.1}
-            className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 leading-[1.1] tracking-tight"
+            className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-6 leading-[1.1] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-accent-gold"
           >
             {data.title}
           </motion.h1>

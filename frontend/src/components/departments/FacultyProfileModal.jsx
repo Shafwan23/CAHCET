@@ -57,7 +57,8 @@ const FacultyProfileModal = ({ faculty, isOpen, onClose }) => {
               <OptimizedImage
                 src={photoSrc}
                 alt={faculty.name}
-                containerClassName="w-40 h-40 rounded-full border-4 border-accent-gold/50 shadow-xl mb-6 shadow-black/50"
+                containerClassName="w-40 h-40 rounded-full border-4 border-accent-gold/50 shadow-xl mb-6 shadow-black/50 bg-white"
+                className="w-full h-full object-contain rounded-full"
               />
               <h3 className="text-2xl font-display font-bold mb-1">{faculty.name}</h3>
               <p className="text-accent-gold font-medium text-sm tracking-wider uppercase mb-6">{faculty.designation}</p>

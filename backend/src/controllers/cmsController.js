@@ -206,3 +206,71 @@ exports.deleteSection = asyncHandler(async (req, res) => {
 
   res.status(200).json({ success: true, message: 'Section deleted successfully' });
 });
+
+// --- Aggregated Stats ---
+exports.getAggregatedStats = asyncHandler(async (req, res) => {
+  // 1. Faculty Count: Sum of all faculty objects across all dept_* pages
+  const facultySections = await prisma.contentSection.findMany({
+    where: {
+      sectionKey: 'faculty',
+      page: { slug: { startsWith: 'dept_' } }
+    }
+  });
+
+  let totalFaculty = 0;
+  facultySections.forEach(sec => {
+    try {
+      const parsed = JSON.parse(sec.content);
+      if (Array.isArray(parsed)) {
+        totalFaculty += parsed.length;
+      }
+    } catch (e) {}
+  });
+
+  // 2 & 3. Unique Companies & Highest Package from placements.students
+  const placementStudentsSection = await prisma.contentSection.findFirst({
+    where: {
+      sectionKey: 'placements.students',
+      page: { slug: 'placements' }
+    }
+  });
+
+  let uniqueCompaniesCount = 0;
+  let highestPackageNum = 0;
+  let highestPackageStr = '0 LPA';
+
+  if (placementStudentsSection && placementStudentsSection.content) {
+    try {
+      const students = JSON.parse(placementStudentsSection.content);
+      if (Array.isArray(students)) {
+        const companies = new Set();
+        students.forEach(student => {
+          if (student.company) companies.add(student.company.trim().toUpperCase());
+          
+          if (student.package) {
+            // Extract numbers from strings like "24 LPA", "10.5 LPA"
+            const packageStr = String(student.package);
+            const numMatch = packageStr.match(/(\d+(\.\d+)?)/);
+            if (numMatch && numMatch[1]) {
+              const val = parseFloat(numMatch[1]);
+              if (val > highestPackageNum) {
+                highestPackageNum = val;
+                highestPackageStr = student.package;
+              }
+            }
+          }
+        });
+        uniqueCompaniesCount = companies.size;
+      }
+    } catch (e) {}
+  }
+
+  res.status(200).json({
+    success: true,
+    data: {
+      facultyCount: totalFaculty,
+      uniqueCompanies: uniqueCompaniesCount,
+      highestPackage: highestPackageStr
+    }
+  });
+});

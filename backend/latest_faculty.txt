@@ -1,0 +1,50 @@
+<USER_REQUEST>
+dont make duplicate text in a card, arrange the texts correctly evenly for all the cards and in that 5 mentioned files, the 4 student achievement page and faculty training page in these 5 page add another filter options filter by year and divide the provided data correctly 
+International journal data 
+'Abrar Ahmed Katiyan, A Machine Learning–Based Video Compression for Effective Video Encoding and Transmission, Journal of Machine and Computing, April 2025.
+DOI: 10.53759/7669/jmc202505076
+
+K. Abrar Ahmed, Analysis of Android Malware Detection Using Machine Learning Techniques, January 2024.
+Conference: International Conference on Electronics, Engineering Physics, and Earth Science
+DOI: 10.1063/5.0199036
+
+Dr. K. Abrar Ahmed, Mathematical Modeling and Computational Tools for Efficient Water Resource Management: Optimizing Allocation and Sustainability, Journal of Neonatal Surgery, 14(10S): 683–695, April 2025.
+DOI: 10.52783/jns.v14.2906
+
+T. Balaji, M. Abdulnaseer, A Review on Impacts of Machine Learning in Diverse Fields, AIP Conference Proceedings, Vol. 2935, 020014 (2024).
+DOI: 10.1063/5.0198988
+
+Dr. Abrar Ahmed K. & Dr. Inamul Hussain R. Z.
+Anticipating Groundwater Depletion for Water Scarcity Alleviation through Advanced Deep Learning Models.
+IRO Journal on Sustainable Wireless Systems (ISSN: 2582-3167), December 2023.
+
+Mrs. Revathi P
+Bipolar Alternate Mark Inversion Encoding (BAMI) Scheme for Performance Signature of Optical Transceiver Systems under Thermal Effects.
+Journal of Optical Communications, March 29, 2023.
+DOI: https://doi.org/10.1515/joc-2023-0021
+
+Dr. K. Lokeshwaran & Dr. K. Abrar Ahmed
+Enhancement of Health System for Emergency Care Using IoT Technique.
+International Journal of Early Childhood Special Education (INT-JECSE), Vol. 14, Issue 05, 2022.
+ISSN: 1308-5581
+
+ 
+Academic Year (2018– 2019)
+R.Vaishnavi, C.Koteeswaran and Sheik Faritha Begum, “Mining and Observation Human Motion Styles in Domestic-Based Health Commentary System” Journal Of Co
+<truncated 45215 bytes>
+ 28th July 2018 to 30th July 2018.
+J. Fathima Begum has participated in Five Days FDP on “DATA ANALYSIS USING R AND MATLAB TOOLS” at CAHCET held on 30th Apr 2019 to 4th Apr 2019.
+A.R.Md. Yousuff has participated in Five Days FDP on “DATA ANALYSIS USING R AND MATLAB TOOLS” at CAHCET held on 30th Apr 2019 to 4th Apr 2019.
+A.R.Md. Yousuff has participated in Two Days Workshop on “BIG DATA AND HADOOP” at CAHCET held on 5th Oct 2018 to 6th Oct 2018.
+A. R. Mohamed Yousuff   has completed a course on “Essential Design Principles for Tableau” by University of California, Davis on Coursera. Certificate earned at Thursday, October 11, 2018 12:09 PM GMT”.
+A. R. Mohamed Yousuff has completed a course on “Python Data Structures” by University of Michigan on Coursera. Certificate earned at Tuesday, October 9, 2018 4:24 PM GMT”.
+A. R. Mohamed Yousuff has completed a course on “Programming for Everybody (Getting Started with Python)” by University of Michigan on Coursera. Certificate earned at Friday, October 5, 2018 2:26 AM GMT”.
+A. R. Mohamed Yousuff has completed a course on “Fundamentals of Visualization with Tableau” by University of California, Davis on Coursera. Certificate earned at Saturday, September 29, 2018 4:20 PM GMT”.
+K. Abrar Ahmed has participated in Five Days FDP on “DATA ANALYSIS USING R AND MATLAB TOOLS” at CAHCET held on 30th Apr 2019 to 4th Apr 2019.
+K. Abrar Ahmed has participated in Two Days Workshop on “BIG DATA AND HADOOP” at CAHCET held on 5th Oct 2018 to 6th Oct 2018.
+B. Preethi has participated in Two Days Workshop on “BIG DATA AND HADOOP” at CAHCET held on 5th Oct 2018 to 6th Oct 2018.
+M. Abdul Naseer has participated in Five Days FDP on “DATA ANALYSIS USING R AND MATLAB TOOLS” at CAHCET held on 30th Apr 2019 to 4th Apr 2019.
+M. Abdul Naseer has participated in Two Days Workshop o
+<truncated 24445 bytes>
+
+NOTE: The output was truncated because it was too long. Use a more targeted query or a smaller range to get the information you need.

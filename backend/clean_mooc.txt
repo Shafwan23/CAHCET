@@ -1,0 +1,54 @@
+add mooc course details , fields are '
+S.NO	STUDENT NAME	COMPANY NAME	COURSE NAME	DATE ' , data ' 1	R Abrar ul haque	coursera	Setup Python	3/13/2025
+2	Subasri	coursera	Setup Python	3/8/2025
+3	Subasri	coursera	Automate DOC Review with sharepoint &power Automate	3/12/2025
+4	Subasri	coursera	Decryption with Python	3/8/2025
+5	Subasri	coursera	Python Generators	3/8/2025
+6	Subasri	coursera	Python 101: Develop your First Python Progran	 
+7	Subasri	Coursera	Python 101: Develop Your First Python Program	08/03/2025
+8	Hemapriya P	Coursera	Business Analysis & Process Management	27/05/2025
+9	Ayisha Siddiqha H	Coursera	Business Analysis & Process Management	27/05/2025
+10	Mohammed Aasif	Great Learning	Pygame Basics	11/2024
+11	R. Abrar-ul-haque	Great Learning	Java Programming	11/2024
+12	Pavithra J	Great Learning	Java Programming	11/2024
+13	Rajkumar S	CodeSignal	Introduction to HTML	04/02/2025
+14	Mohammed Ragid V	CodeSignal	Introduction to HTML	04/02/2025
+15	Syed Musthafa S	CodeSignal	Introduction to HTML	04/02/2025
+16	Syed Nouman A	CodeSignal	Introduction to HTML	04/02/2025
+17	Rishi Kumar B	CodeSignal	Introduction to HTML	04/02/2025
+18	Thanveerul Haqs	CodeSignal	Introduction to HTML	26/02/2025
+19	Vaishnavi D	CodeSignal	Introduction to HTML	27/02/2025
+20	Shawoor Saqib	CodeSignal	Introduction to HTML	03/03/2025
+21	Samnesh	CodeSignal	Introduction to HTML	04/02/2025
+22	Shahid Ahamed	CodeSignal	Introduction to HTML	04/02/2025
+23	Suresh	CodeSignal	Introduction to HTML	04/02/2025
+24	Vijaya Kumar	CodeSignal	Introduction to HTML	03/03/2025
+25	Santhosh Kumar	CodeSignal	Introduction to HTML	03/03/2025
+26	Muhammed Khursheed Ahmed	CodeSignal	Introduction to HTML	04/02/2025
+27	B. Mohammed Sakheer	CodeSignal	Introduction to HTML	01/06/2025
+28	Pooja Sri	CodeSignal	Introduction to HTML	03/03/2025
+29	Syed Rabbani	CodeSignal	Introduction to HTML	04/02/2025
+30	Naseeruddeen S	CodeSignal	Introduction to HTML	01/06/2025
+31	Salman Faris T.S	CodeSignal	Introduction to HTML	01/06/2025
+32	Zuhair Abdul Wahid S
+<truncated 34440 bytes>
+RAL NETWORK DEEP LEARNING	4/16/2024	GUVI
+130	MOHAMMED ASJAD ZAKI	PYTHON 101 FOR DATA SCIENCE	5/6/2023	COGNITIVECLASS.AI
+131	MOHAMMED ASJAD ZAKI	MACHINE LEARNING WITH PYTHON	5/6/2023	COGNITIVECLASS.AI
+132	PRASANTH SARAVANAN	NEURAL NETWORK DEEP LEARNING	4/16/2024	GUVI
+133	MUHAMMED ABRAR G	NEURAL NETWORK DEEP LEARNING	4/16/2024	GUVI
+134	SHAIK MOHAMMAD PARVEZ	NEURAL NETWORK DEEP LEARNING	3/12/2024	GUVI
+135	SWARNA UMASANKAR	NEURAL NETWORK DEEP LEARNING	4/16/2024	GUVI
+136	MUHAMMED ABRAR 	INVESTMENT BANKING JOB SIMULATION	1/14/2024	FORAGE
+137	SENTHIL KUMARAN R	NEURAL NETWORK DEEP LEARNING	2/20/2024	GUVI
+138	BHARANI KUMAR A	NEURAL NETWORK DEEP LEARNING	3/11/2024	GUVI
+139	ABDUL KAREEM	NEURAL NETWORK DEEP LEARNING	3/26/2024	GUVI
+140	ABDUL MUJEEB K	NEURAL NETWORK DEEP LEARNING	3/26/2024	GUVI
+141	MOTESH VIGNESH	NEURAL NETWORK DEEP LEARNING	3/12/2024	GUVI
+142	RUHENA TALQIN A K	EMPLOYABILITY SKILLS DEVELOPMENT TRAINING PROGRAMME	2023-2024	TITAN LeAP, NAANDI FOUNDATION
+143	M SAKTHI	HUMAN RESOURCE	3/2/2024	DIGITAL ADDA
+144	M SAKTHI	INTRODUCTION TO HTML	4/26/2023	SOLOLEARN
+145	NAHIDA MARYAM C.K	NEURAL NETWORK DEEP LEARNING	3/26/2024	GUVI
+146	SWARNA U	NSE ACADEMY INDUSTRIAL READINESS PROGRAM ON BLOCK CHAIN	8/28/2023	NSE ACADEMY LIMITED
+147	G KAREEM WASIQUE	NEURAL NETWORK DEEP LEARNING	3/26/2024	GUVI
+148	SHAIK MOHAMMAD PARVEZ	INVESTMENT BANKING JOB SIMULATION	1/14/2024	FORAGE'

@@ -16,6 +16,7 @@ const router = express.Router();
 // We will allow `cms:view` to read.
 
 // Public routes for fetching published content
+router.get('/aggregated-stats', cmsController.getAggregatedStats);
 router.get('/pages', cmsController.getPages);
 router.get('/pages/:slug', cmsController.getPageBySlug);
 router.post('/pages', protect, permissionMiddleware('cms:create'), validateCreatePage, cmsController.createPage);

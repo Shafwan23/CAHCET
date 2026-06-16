@@ -1,0 +1,50 @@
+
+
+Created At: 2026-06-16T08:52:43Z
+Completed At: 2026-06-16T08:52:49Z
+
+				The command completed successfully.
+				Output:
+				<truncated 5 lines>
+Dr. Inamul Hussain R Z Presented a paper “Crowd Funding using BlockChain and Third Web Technology” in 4th International Conference on Technology and Advancement in computing Application(ICTACA 24).'
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-06-16T12:37:02+05:30.
+
+The user's current state is as follows:
+Active Document: c:\Users\91807\Desktop\Shafwan\cahcet\backend\check_faculty_override.js (LANGUAGE_JAVASCRIPT)
+Cursor is on line: 1
+Other open documents:
+- c:\Users\91807\Desktop\Shafwan\cahcet\backend\check_faculty_override.js (LANGUAGE_JAVASCRIPT)
+- c:\Users\91807\Desktop\Shafwan\cahcet\backend\.env (LANGUAGE_UNSPECIFIED)
+</ADDITIONAL_METADATA>
+<USER_REQUEST>
+this is national conference 'Dr. Inamul Hussain R Z and Dr. Abrar Ahmed K, an Associate Professor in the CSE department, presented a paper titled "Prediction of Groundwater Level to Improve Water Scarcity Using Deep Learning Algorithm" at the National Conference on Recent Trends in Artificial Intelligence and Soft Computing. This conference took place in January 2024 at the Bannari Amman Institute of Technology and focused on recent trends and developments in artificial intelligence and soft computing within the national context.
+Mr. R. Sugumar has presented a paper entitled “FRD: FRAGMENTATION AND REPLICATION OF DATA OVER MULTI-CLOUDS WITH OPTIMIST PERFORMANCE AND SECURITY” in a National Conference on Emerging Trends in Science, Engineering and Technology organized by the department of computer science and engineering, NTET, Coimbatore held on 4 March 2016.
+Mr. R. Sugumar has presented a paper entitled “SECURED PUBLIC AUDITING SCHEME FOR REGENERATING CODE BASED CLOUD STORAGES” in a National Conference on Recent Trends in Computer Technology NCRTCT’ 16 organized by the department of Master of Computer Applications, Sri Balaji Chockalingam Engineering College, held on 18 Ma
+<truncated 4215 bytes>
+2025. DOI: 10.53759/7669/jmc202505076\r\nAuthor(s)\r\nAbrar Ahmed Katiyan\r\n\r\nYear\r\n2025\r\n\r\nAbrar Ahmed Katiyan, A Machine Learning–Based Video Compression for Effective Video Encoding and Transmission, Journal of Machine and Computing, April 2025. DOI: 10.53759/7669/jmc202505076' \n2. this is for international conferences 'Abdulnaseer M and T Balaji, both Assistant Professors in 
+
+
+undefined
+Created At: 2026-06-16T08:52:23Z
+Completed At: 2026-06-16T08:52:28Z
+
+				The command completed successfully.
+				Output:
+				<USER_REQUEST>
+this is for international conferences 'Abdulnaseer M and T Balaji, both Assistant Professors in the Computer Science and Engineering (CSE) department, authored a paper titled "A Review on Impacts of Machine Learning in Diverse Fields." This paper was presented at the International Conference on Artificial Intelligence Systems for Sustainable Solutions (AIS3 2023), held at CAHCET in January 2023. The conference was an international event focusing on sustainable solutions through ar
+<USER_REQUEST>
+this is national conference 'Dr. Inamul Hussain R Z and Dr. Abrar Ahmed K, an Associate Professor in the CSE department, presented a paper titled "Prediction of Groundwater Level to Improve Water Scarcity Using Deep Learning Algorithm" at the National Conference on Recent Trends in Artificial Intelligence and Soft Computing. This conference took place in January 2024 at the Bannari Amman Institute of Technology and focused on recent trends and developments in artificial intelligen
+Created At: 2026-06-16T08:50:33Z
+Completed At: 2026-06-16T08:50:37Z
+
+				The command completed successfully.
+				Output:
+				{"step_index":187,"source":"USER_EXPLICIT","type":"USER_INPUT","status":"DONE","created_at":"2026-06-16T07:07:02Z","content":"<USER_REQUEST>\nthis is for international conferences 'Abdulnaseer M and T Balaji, both Assistant Professors in the Computer Science and Engineering (CSE) department, authored a paper titled \"A Review on Impacts of Machine Learning in Diverse Field
+
+
+undefined
+
+
+

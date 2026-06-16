@@ -5,6 +5,7 @@ import { Input, Select } from './FormElements';
 import { collegeData } from '../../data/collegeData';
 import Button from './Button';
 import logoImg from '../../assets/images/logo.jfif';
+import apiClient from '../../services/authService';
 
 const EnquiryModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -55,8 +56,10 @@ const EnquiryModal = ({ isOpen, onClose }) => {
 
     if (!formData.email) {
       newErrors.email = 'Email Address is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
+    } else if (!formData.email.toLowerCase().endsWith('@gmail.com')) {
+      newErrors.email = 'Please provide a valid @gmail.com address';
+    } else if (formData.email.toLowerCase().split('@')[1] !== 'gmail.com') {
+      newErrors.email = 'Please provide a valid @gmail.com address';
     }
 
     if (!formData.course) {
@@ -67,21 +70,34 @@ const EnquiryModal = ({ isOpen, onClose }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
       setIsSubmitting(true);
-      // Simulate API call
-      setTimeout(() => {
+      try {
+        const payload = {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.mobile,
+          subject: `Admission Enquiry - ${formData.course}`,
+          message: `I am interested in applying for the ${formData.course} course. Please provide more details.`
+        };
+        
+        await apiClient.post('/contact', payload);
+        
         setIsSubmitting(false);
         setIsSuccess(true);
         setFormData({ name: '', mobile: '', email: '', course: '' });
-        // Close after success delay
+        
         setTimeout(() => {
           setIsSuccess(false);
           onClose();
         }, 3000);
-      }, 1500);
+      } catch (err) {
+        console.error('Failed to submit enquiry', err);
+        setIsSubmitting(false);
+        // You could also set a generic error message here if needed
+      }
     }
   };
 

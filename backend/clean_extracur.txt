@@ -1,0 +1,106 @@
+in students co curricular achievements add 'Academic Year (2024-2025)
+Veshal J P successfully completed an Internship on Full Stack Development at SkillUp Tech Solutions from 12 January 2025 to 5 March 2025.
+
+Niyaz Ahmed S participated in the AIML for Geodata Analysis Online Course conducted by ISRO from 19 August 2024 to 23 August 2024, and was selected.
+
+Hariram T J participated in Quizathon conducted by the Tamil Nadu Government from 2 September 2024 to 8 September 2024.
+
+N Mathiha Lubna participated in Quizathon conducted by the Tamil Nadu Government from 2 September 2024 to 8 September 2024.
+
+S Kishore Kumar participated in Quizathon conducted by the Tamil Nadu Government from 2 September 2024 to 8 September 2024.
+
+Academic Year (2023-2024)
+Rahul B participated in the Smart India Hackathon 2023 organized by the Ministry of Education, under the theme Cryptvalue, at the National level in 2023.
+
+Kamal Raj P participated in the Smart India Hackathon 2023 organized by the Ministry of Education, under the theme Cryptvalue, at the National level in 2023.
+
+Vadepeer M participated in the Smart India Hackathon 2023 organized by the Ministry of Education, under the theme Cryptvalue, at the National level in 2023.
+
+Zaheer Abbas M participated in the Smart India Hackathon 2023 organized by the Ministry of Education, under the theme Cryptvalue, at the National level in 2023.
+
+Shafwaan Ahamed T participated in the Smart India Hackathon 2023 organized by the Ministry of Education, under the theme Cryptvalue, at the National level in 2023.
+
+Vahitha H participated in the Smart India Hackathon 2023 organized by the Ministry of Education, under the theme Cryptvalue, at the National level in 2023.
+
+Mohammed Khasim M successfully completed the IR4.0 Foundation Course conducted by the Government of Tamil Nadu, Microsoft, and SAP through Tech Sakshaam, at the State level, on 25 July 2023.
+
+Narmadha A secured the second place in the Paper Presentation event.
+Sathiya Priya secured the second 
+<truncated 326 bytes>
+Shaufann Ahmed secured the second place in the Technical Quiz event.
+Abrar secured the second place in the Technical Quiz event.
+Riyazur Rahman M was the runner-up in the Get Set Code event.
+N Akash was the runner-up in the Get Set Code and Script Debugging events.
+Y Mohammed Shaaz was the runner-up in the Get Set Code and Script Debugging events.
+Vasanth S D secured the first place in the Lint It event.
+Suriya Moorthy T S secured the second place in the Project Expo event.
+Suriya Moorthy T S secured the second place in the Technical Quiz event.
+Shwetha V secured the second place in the Paper Presentation event.
+Academic Year(2022-2023)
+
+A Sadiqua Tazeen emerged as the winner in the Paper Presentation event.
+F Sabeeha Fathima emerged as the winner in the Paper Presentation event.
+Rahul B secured the second place in the Paper Presentation event.
+H Abubaker Siddique secured the first place in the Coding & Debugging event.
+Vishaal K R emerged as the winner in the Technical Quiz event.
+Raksha Sri A secured the first place in the Poster Presentation event.
+Shaik Parvez emerged as the winner in the Reels Making event.
+Academic Year(2021-2022)
+
+ Raksha Sri emerged as the winner in the Art event.
+Akhilan secured the first place in the Connections event.
+A Raksha Sri secured the second place in the Poster Presentation event.' 
+in extra curricular achievements add
+in extra curricular achievements add 'Extra-Curricular Achievements
+Academic Year (2024-2025)
+R Malini was selected for Tennis in the Tamil Nadu Tennis Ball Cricket Team on 11 October 2024.
+Faasil Ammar P won the Gold Medal in Cricket at The CM Trophy in September 2024.
+
+S M Syed Gaffer won the Silver Medal in Football at The CM Trophy in September 2024.
+
+M Vishanth won the Silver Medal in Football at The CM Trophy in September 2024.
+
+J P Veshal won the Silver Medal in Football at The CM Trophy in September 2024.
+
+J Yuvaraj won the Silver Medal in Football at The CM Trophy in September 2024.
+
+K Raghul won the Silver Medal in Football at The CM Trophy in September 2024.
+
+Salman Khan won the Silver Medal in Football at The CM Trophy in September 2024.
+
+Rekha M won the Silver Medal in High Jump at The CM Trophy in September 2024.
+
+Durgalakshmi S won Second place in Volleyball at the Anna University Tournament on 29 September 2024.
+
+Jayalakshmi K won Second place in Volleyball at the Anna University Tournament on 29 September 2024.
+
+ 
+Syed Zaid Ahmed participated in the Tennis event held at SKP Engineering College, Thiruvannamalai and secured Third place on 22 September 2024.
+
+Rohan Emmanuel A won First place in Badminton at an event conducted at CAHCET on 18 September 2024.
+
+Rohan Emmanuel A secured Third place in Tennis at the event held at SKP Engineering College, Thiruvannamalai on 22 September 2024.
+
+Rithish Vijayakumar won First place in Badminton at an event conducted at CAHCET on 18 September 2024.
+
+Rithish Vijayakumar secured Third place in Tennis at the event held at SKP Engineering College, Thiruvannamalai on 22 September 2024.
+
+Syed Gaffar S M secured Third place in Football at the event held at Arunai Engineering College from 27 to 28 September 2024.
+
+Vishanth M secured Third place in Football at the event held at Arunai Engineering College from 27 to 28 September 2024.
+
+Raghul K secured Third place in Football at the event held at Arunai Engineering C
+<truncated 11233 bytes>
+d A from CAHCET won First place in Badminton in the Anna University Sports Board event on 15 October 2023.
+Madhumitha A from CAHCET secured Second place in Table Tennis in the Anna University Sports Board event on 4 October 2023.
+Dharshini N. G from CAHCET secured Second place in Table Tennis in the Anna University Sports Board event on 4 October 2023.
+Vishanth M from CAHCET secured Third place in Football in the Anna University Sports Board event on 6 October 2023.
+Sasank Sekhar Pathaik S from CAHCET secured Third place in Football in the Anna University Sports Board event on 6 October 2023.
+Yuvaraj J from CAHCET secured Third place in Football in the Anna University Sports Board event on 6 October 2023.
+Vishanth M from CAHCET secured Third place in Hockey in the Anna University Sports Board event on 29 October 2023.
+Yuvaraj J from CAHCET secured Third place in Hockey in the Anna University Sports Board event on 29 October 2023.
+Madhumitha A from CAHCET secured Second place in the 400 m Relay during the Annual Sports Day on 9 May 2024.
+Madhumitha A from CAHCET won Chess during the Annual Sports Day on 9 May 2024.
+Madhumitha A from CAHCET won Table Tennis during the Annual Sports Day on 9 May 2024.
+Dharshini N. G from CAHCET won Table Tennis during the Annual Sports Day on 9 May 2024.
+Dharshini N. G from CAHCET won Chess during the Annual Sports Day on 9 May 2024.'

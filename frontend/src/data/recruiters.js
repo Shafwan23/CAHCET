@@ -1,25 +1,13 @@
 // ── Top Recruiters ─────────────────────────────────────────────────────────────
 export const topRecruiters = [
+  { name: 'Cognizant',     logo: '/images/recruiters/cognizant.png',    fullName: 'Cognizant Technology Solutions' },
+  { name: 'Accenture',     logo: '/images/recruiters/accenture.png',    fullName: 'Accenture' },
+  { name: 'Wipro',         logo: '/images/recruiters/wipro.png',        fullName: 'Wipro Technologies' },
+  { name: 'Zoho',          logo: '/images/recruiters/zoho.png',         fullName: 'Zoho Corporation' },
+  { name: 'Tech Mahindra', logo: '/images/recruiters/techmahindra.png', fullName: 'Tech Mahindra Limited' },
+  { name: 'E2E',           logo: null,                                  fullName: 'E2E Networks / E2E Solutions' },
   { name: 'TCS',           logo: '/images/recruiters/tcs.png',          fullName: 'Tata Consultancy Services' },
   { name: 'Infosys',       logo: '/images/recruiters/infosys.png',      fullName: 'Infosys Limited' },
-  { name: 'Wipro',         logo: '/images/recruiters/wipro.png',        fullName: 'Wipro Technologies' },
-  { name: 'Cognizant',     logo: '/images/recruiters/cognizant.png',    fullName: 'Cognizant Technology Solutions' },
-  { name: 'HCL',           logo: '/images/recruiters/hcl.png',          fullName: 'HCL Technologies' },
-  { name: 'Zoho',          logo: '/images/recruiters/zoho.png',         fullName: 'Zoho Corporation' },
-  { name: 'Accenture',     logo: '/images/recruiters/accenture.png',    fullName: 'Accenture' },
-  { name: 'Capgemini',     logo: '/images/recruiters/capgemini.png',    fullName: 'Capgemini India' },
-  { name: 'IBM',           logo: '/images/recruiters/ibm.png',          fullName: 'IBM India Pvt. Ltd.' },
-  { name: 'Tech Mahindra', logo: '/images/recruiters/techmahindra.png', fullName: 'Tech Mahindra Limited' },
-  { name: 'L&T Infotech',  logo: '/images/recruiters/ltimindtree.png',  fullName: 'LTIMindtree' },
-  { name: 'Mphasis',       logo: '/images/recruiters/mphasis.png',      fullName: 'Mphasis Limited' },
-  { name: 'Hexaware',      logo: '/images/recruiters/hexaware.png',     fullName: 'Hexaware Technologies' },
-  { name: 'Persistent',    logo: '/images/recruiters/persistent.png',   fullName: 'Persistent Systems' },
-  { name: 'Mindtree',      logo: '/images/recruiters/mindtree.png',     fullName: 'Mindtree Ltd.' },
-  { name: 'Syntel',        logo: null,                                   fullName: 'Syntel (Atos)' },
-  { name: 'Birlasoft',     logo: '/images/recruiters/birlasoft.png',    fullName: 'Birlasoft Limited' },
-  { name: 'Zensar',        logo: '/images/recruiters/zensar.png',       fullName: 'Zensar Technologies' },
-  { name: 'Cyient',        logo: null,                                   fullName: 'Cyient Limited' },
-  { name: 'Mastech',       logo: null,                                   fullName: 'Mastech Digital' },
 ];
 
 // ── Placement Activities ───────────────────────────────────────────────────────

@@ -5,30 +5,46 @@ import {
 } from 'lucide-react';
 
 export const functionalities = [
-  { id: 1, text: 'Identifying potential research areas across engineering disciplines', icon: Target },
-  { id: 2, text: 'Preparing proposals for AICTE, UGC, DST, IE(I), etc.', icon: FileText },
-  { id: 3, text: 'Encouraging multidisciplinary research collaborations', icon: Share2 },
-  { id: 4, text: 'Supporting publication in National/International conferences', icon: Award },
-  { id: 5, text: 'Coordinating research activities across departments', icon: Users },
-  { id: 6, text: 'Encouraging participation in FDPs', icon: BookOpen },
-  { id: 7, text: 'Motivating faculty for Ph.D. programs', icon: Lightbulb },
-  { id: 8, text: 'Promoting publication in Scopus indexed journals', icon: FileText },
-  { id: 9, text: 'Resource mobilization through industry collaboration', icon: Briefcase },
-  { id: 10, text: 'Supporting student project funding proposals', icon: DollarSign },
-  { id: 11, text: 'Encouraging internal funding proposals', icon: Settings },
-  { id: 12, text: 'Organizing semester R&D meetings', icon: Calendar },
-  { id: 13, text: 'Evaluating and approving research proposals', icon: Award },
+  { id: 1, text: 'To identify potential areas of research in various disciplines of engineering and form the faculty into various clusters based on their specialization.', icon: Target },
+  { id: 2, text: 'To prepare and submit proposals to government agencies like AICTE, UGC, DST, IE(I) etc for obtaining funded projects.', icon: FileText },
+  { id: 3, text: 'To encourage multi-disciplinary research internally within the institute and externally with other organizations.', icon: Share2 },
+  { id: 4, text: 'Encourage staff to attend/publish papers in various National/International conferences of their specialised areas.', icon: Award },
+  { id: 5, text: 'To coordinate the research activities among the various departments of the college.', icon: Users },
+  { id: 6, text: 'Encourage the faculty to attend various research oriented Faculty development programmes.', icon: BookOpen },
+  { id: 7, text: 'Encourage and motivate the staff to apply for Ph.D at various Universities.', icon: Lightbulb },
+  { id: 8, text: 'To encourage the staff to publish their research works in reputed journals that have good impact factor and are Scopus indexed.', icon: FileText },
+  { id: 9, text: 'To plan for resource mobilization through industry interaction, consultancy and Extramural funding.', icon: Briefcase },
+  { id: 10, text: 'Scrutinize the student’s project proposals and send them to various agencies for financial support and recommend the suitable projects.', icon: DollarSign },
+  { id: 11, text: 'In order to promote research activity in college, CAHCET promotes and encourages to prepare and submit a proposal for internal funding.', icon: Settings },
+  { id: 12, text: 'To keep research and development active, R & D Cell organize meetings every start and end of the semesters and subsequently discuss about internal funding systems.', icon: Calendar },
+  { id: 13, text: 'R & D cell receives the internal proposals, the committee evaluates and finally it approves or rejects based on the novelty or benefits to society or college.', icon: Award },
 ];
 
 export const team = [
-  { id: 1, role: 'Research & Development Coordinator', name: 'Dr. A. Rajesh', designation: 'Professor', department: 'ECE', icon: Users },
-  { id: 2, role: 'Publications Coordinator', name: 'Dr. S. Priya', designation: 'Associate Professor', department: 'CSE', icon: BookOpen },
-  { id: 3, role: 'Patents/IPR Coordinator', name: 'Dr. M. Kumar', designation: 'Professor', department: 'MECH', icon: LightbulbIcon },
-  { id: 4, role: 'Grants Coordinator', name: 'Dr. K. Sarah', designation: 'Associate Professor', department: 'EEE', icon: DollarSign },
-  { id: 5, role: 'Innovation Coordinator', name: 'Dr. R. Anand', designation: 'Professor', department: 'IT', icon: Zap },
-  { id: 6, role: 'Institute Innovation Council', name: 'Dr. V. Lakshmi', designation: 'Professor', department: 'S&H', icon: Compass },
-  { id: 7, role: 'Hackathon Coordinator', name: 'Mr. J. David', designation: 'Assistant Professor', department: 'CSE', icon: Cpu },
-  { id: 8, role: 'Startup Coordinator', name: 'Mr. K. Suresh', designation: 'Assistant Professor', department: 'ECE', icon: Briefcase },
+  { id: 1, role: 'Research & Development Coordinator', name: 'Dr. Gayathri Devi', designation: 'Associate Professor', department: 'MCA', icon: Users },
+  { id: 2, role: 'Publications Coordinator', name: 'Dr. E. Parthiban', designation: 'Associate Professor', department: 'Chemistry', icon: BookOpen },
+  { id: 3, role: 'Patents/IPR Coordinator', name: 'Mr. T.S. Kathick', designation: 'HOD', department: 'AI&DS', icon: LightbulbIcon },
+  { id: 4, role: 'Grants Coordinator', name: 'Dr. S. Sudharsan & Dr. R. Senthil', designation: 'Associate/Assistant Professor', department: 'Maths & MECH', icon: DollarSign },
+  { id: 5, role: 'Innovation Coordinator', name: 'Dr. R.Z. Inamul Hussain', designation: 'Associate Professor', department: 'CSE', icon: Zap },
+  { id: 6, role: 'Institute Innovation Council (IIC)', name: 'Mrs. T.S. Sindhu', designation: 'Assistant Professor', department: 'ECE', icon: Compass },
+  { id: 7, role: 'Hackathon Coordinator', name: 'Mr. M. Abdul Naseer', designation: 'Assistant Professor', department: 'CSE', icon: Cpu },
+  { id: 8, role: 'Startup Coordinator', name: 'Dr. Y.J. Nazeer Ahmed', designation: 'Associate Professor', department: 'ECE', icon: Briefcase },
+];
+
+export const achievementsList = [
+  "A Business Incubator proposal has been submitted to the Ministry of Micro, Small and Medium Enterprises (MSME).",
+  "A Pre-Incubation Centre proposal has been submitted to the Tamil Nadu State Council for Science and Technology (TNSCST).",
+  "A collaborative research proposal worth ₹3 Crores has been submitted to the Anusandhan National Research Foundation (ANRF) in association with SVCET.",
+  "One faculty start-up has been successfully registered by Dr. B. A. Mohammad Hashim.",
+  "Three Ph.D. scholars are currently pursuing their research under the ECE Department Research Centre of the institution.",
+  "55 research papers have been published in refereed journals by faculty members.",
+  "242 students have actively participated in regional and national-level hackathons, promoting innovation and problem-solving skills.",
+  "Two student ideas have been shortlisted for the finals of Smart India Hackathon 2025: One team will present at IIT Kharagpur, and One team will present at Dharwad, Karnataka.",
+  "Three patents have been successfully published.",
+  "A research grant of ₹5 Lakhs has been sanctioned under the NIDHI-PRAYAS scheme to Dr. B. A. Mohammad Hashim.",
+  "A student project grant of ₹7,500 has been received from TNSCST for the ECE Department under the guidance of Dr. B. A. Mohammad Hashim.",
+  "Fourteen (14) research funding proposals have been submitted to various State and Central Government agencies.",
+  "Fifteen faculty members are currently pursuing Ph.D. programmes, strengthening the institution’s research ecosystem."
 ];
 
 export const achievementGroups = [

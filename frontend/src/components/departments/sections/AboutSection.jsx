@@ -6,22 +6,30 @@ import { cn } from '../../../utils/cn';
 
 const AccordionItem = ({ title, icon: Icon, children, isOpen, onToggle }) => {
   return (
-    <div className={cn(
-      "border rounded-2xl overflow-hidden transition-colors duration-300",
-      isOpen ? "border-accent-gold bg-white shadow-xl shadow-accent-gold/10" : "border-primary-100 bg-white hover:border-primary-300"
-    )}>
+    <motion.div 
+      whileHover={{ scale: 1.01 }}
+      className={cn(
+        "border rounded-2xl overflow-hidden transition-all duration-300",
+        isOpen ? "border-accent-gold bg-white shadow-xl shadow-accent-gold/10" : "border-primary-100 bg-white hover:border-primary-300 hover:shadow-luxury-hover"
+      )}
+    >
       <button 
         onClick={onToggle}
-        className="w-full px-6 py-5 flex items-center justify-between text-left"
+        className="w-full px-6 py-5 flex items-center justify-between text-left group"
       >
         <div className="flex items-center gap-4">
           <div className={cn(
-            "p-2 rounded-xl transition-colors",
-            isOpen ? "bg-accent-gold/20 text-accent-gold" : "bg-primary-50 text-primary-400"
+            "p-2 rounded-xl transition-all duration-300",
+            isOpen ? "bg-accent-gold/20 text-accent-gold scale-110" : "bg-primary-50 text-primary-400 group-hover:bg-primary-100"
           )}>
             <Icon className="w-6 h-6" />
           </div>
-          <h3 className="font-display font-bold text-lg text-primary-900">{title}</h3>
+          <h3 className={cn(
+            "font-display font-bold text-lg transition-colors",
+            isOpen ? "text-transparent bg-clip-text bg-gradient-to-r from-primary-900 to-accent-gold" : "text-primary-900"
+          )}>
+            {title}
+          </h3>
         </div>
         <div className={cn(
           "w-8 h-8 rounded-full flex items-center justify-center transition-colors",
@@ -44,7 +52,7 @@ const AccordionItem = ({ title, icon: Icon, children, isOpen, onToggle }) => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 
@@ -64,84 +72,85 @@ const AboutSection = ({ data }) => {
         <div className="w-20 h-1 bg-accent-gold rounded-full" />
       </div>
 
-      <div className="space-y-4">
-        <AccordionItem 
-          title="About the Department" 
-          icon={Info}
-          isOpen={openAccordion === 'about'}
-          onToggle={() => toggleAccordion('about')}
-        >
-          <p>{data.about}</p>
-        </AccordionItem>
+      <motion.div 
+        variants={departmentAnimations.staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        className="space-y-4"
+      >
+        <motion.div variants={departmentAnimations.fadeUp}>
+          <AccordionItem 
+            title="About the Department" 
+            icon={Info}
+            isOpen={openAccordion === 'about'}
+            onToggle={() => toggleAccordion('about')}
+          >
+            <p>{data.about}</p>
+          </AccordionItem>
+        </motion.div>
 
-        <AccordionItem 
-          title="Vision" 
-          icon={Compass}
-          isOpen={openAccordion === 'vision'}
-          onToggle={() => toggleAccordion('vision')}
-        >
-          <p className="italic text-lg text-primary-700 border-l-4 border-accent-gold pl-4 py-2">
-            "{data.vision}"
-          </p>
-        </AccordionItem>
+        <motion.div variants={departmentAnimations.fadeUp}>
+          <AccordionItem 
+            title="Vision" 
+            icon={Compass}
+            isOpen={openAccordion === 'vision'}
+            onToggle={() => toggleAccordion('vision')}
+          >
+            <p className="italic text-lg text-primary-700 border-l-4 border-accent-gold pl-4 py-2">
+              "{data.vision}"
+            </p>
+          </AccordionItem>
+        </motion.div>
 
-        <AccordionItem 
-          title="Mission" 
-          icon={Target}
-          isOpen={openAccordion === 'mission'}
-          onToggle={() => toggleAccordion('mission')}
-        >
-          <ul className="space-y-3">
-            {data.mission.map((item, idx) => (
-              <li key={idx} className="flex gap-3">
-                <span className="w-6 h-6 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center shrink-0 text-xs font-bold">{idx + 1}</span>
-                <span>{item.substring(item.indexOf(':') + 1).trim()}</span>
-              </li>
-            ))}
-          </ul>
-        </AccordionItem>
+        <motion.div variants={departmentAnimations.fadeUp}>
+          <AccordionItem 
+            title="Mission" 
+            icon={Target}
+            isOpen={openAccordion === 'mission'}
+            onToggle={() => toggleAccordion('mission')}
+          >
+            <ul className="space-y-3">
+              {data.mission.map((item, idx) => (
+                <li key={idx} className="flex gap-3">
+                  <span className="w-6 h-6 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center shrink-0 text-xs font-bold">{idx + 1}</span>
+                  <span>{item.substring(item.indexOf(':') + 1).trim()}</span>
+                </li>
+              ))}
+            </ul>
+          </AccordionItem>
+        </motion.div>
 
-        <AccordionItem 
-          title="Program Educational Objectives (PEOs)" 
-          icon={Star}
-          isOpen={openAccordion === 'peos'}
-          onToggle={() => toggleAccordion('peos')}
-        >
-          <ul className="space-y-3">
-            {data.peos.map((item, idx) => (
-              <li key={idx} className="flex gap-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-accent-gold mt-2 shrink-0" />
-                <span>{item.substring(item.indexOf(':') + 1).trim()}</span>
-              </li>
-            ))}
-          </ul>
-        </AccordionItem>
+        <motion.div variants={departmentAnimations.fadeUp}>
+          <AccordionItem 
+            title="Program Educational Objectives (PEOs)" 
+            icon={Star}
+            isOpen={openAccordion === 'peos'}
+            onToggle={() => toggleAccordion('peos')}
+          >
+            <ul className="space-y-3">
+              {data.peos.map((item, idx) => (
+                <li key={idx} className="flex gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-accent-gold mt-2 shrink-0" />
+                  <span>{item.substring(item.indexOf(':') + 1).trim()}</span>
+                </li>
+              ))}
+            </ul>
+          </AccordionItem>
+        </motion.div>
 
-        <AccordionItem 
-          title="Program Outcomes (POs) & PSOs" 
-          icon={BookOpen}
-          isOpen={openAccordion === 'pos'}
-          onToggle={() => toggleAccordion('pos')}
-        >
-          <div className="space-y-6">
-            <div>
-              <h4 className="font-bold text-primary-900 mb-3 uppercase tracking-wider text-xs">Program Outcomes</h4>
-              <ul className="space-y-2 text-sm">
-                {data.pos.map((item, idx) => {
-                  const [title, desc] = item.split(':');
-                  return (
-                    <li key={idx} className="border-b border-primary-50 pb-2 last:border-0">
-                      <strong className="text-primary-800">{title}:</strong> {desc}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            {data.psos && (
+        <motion.div variants={departmentAnimations.fadeUp}>
+          <AccordionItem 
+            title="Program Outcomes (POs) & PSOs" 
+            icon={BookOpen}
+            isOpen={openAccordion === 'pos'}
+            onToggle={() => toggleAccordion('pos')}
+          >
+            <div className="space-y-6">
               <div>
-                <h4 className="font-bold text-primary-900 mb-3 uppercase tracking-wider text-xs">Program Specific Outcomes</h4>
+                <h4 className="font-bold text-primary-900 mb-3 uppercase tracking-wider text-xs">Program Outcomes</h4>
                 <ul className="space-y-2 text-sm">
-                  {data.psos.map((item, idx) => {
+                  {data.pos.map((item, idx) => {
                     const [title, desc] = item.split(':');
                     return (
                       <li key={idx} className="border-b border-primary-50 pb-2 last:border-0">
@@ -151,10 +160,25 @@ const AboutSection = ({ data }) => {
                   })}
                 </ul>
               </div>
-            )}
-          </div>
-        </AccordionItem>
-      </div>
+              {data.psos && (
+                <div>
+                  <h4 className="font-bold text-primary-900 mb-3 uppercase tracking-wider text-xs">Program Specific Outcomes</h4>
+                  <ul className="space-y-2 text-sm">
+                    {data.psos.map((item, idx) => {
+                      const [title, desc] = item.split(':');
+                      return (
+                        <li key={idx} className="border-b border-primary-50 pb-2 last:border-0">
+                          <strong className="text-primary-800">{title}:</strong> {desc}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </AccordionItem>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

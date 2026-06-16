@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, ChevronRight, Send, Check, Loader2, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, ChevronRight, Send, Check, Loader2, ExternalLink, User } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { cn } from '../utils/cn';
@@ -130,64 +130,87 @@ const ContactPage = () => {
         {/* 2. Contact Information Showcase */}
         <section className="py-16">
           <div className="container mx-auto px-4 md:px-8 max-w-7xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Address */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-500 hover:-translate-y-1 group hover:border-primary-600/30"
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, scale: 1.03 }}
+                transition={{ duration: 0.6, delay: 0, ease: "easeOut" }}
+                className="bg-white hover:bg-gradient-to-br hover:from-white hover:to-primary-50 rounded-[2rem] p-8 shadow-xl hover:shadow-[0_20px_40px_rgba(30,58,138,0.12)] flex flex-col justify-between group relative overflow-hidden border-2 border-slate-100 hover:border-primary-200 transition-all duration-500"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center mb-6 group-hover:bg-accent-gold group-hover:text-primary-950 transition-colors text-primary-600">
-                  <MapPin className="w-6 h-6" />
+                <div className="absolute -right-10 -top-10 w-32 h-32 bg-primary-100/50 rounded-full blur-3xl group-hover:bg-accent-gold/20 transition-colors duration-500" />
+                <div className="relative z-10">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-6 group-hover:bg-primary-600 group-hover:border-primary-600 group-hover:text-white transition-all text-primary-600 shadow-sm">
+                    <MapPin className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Mailing Address</h3>
+                  <a href="https://maps.app.goo.gl/88DFCxj4PDQGCSNm9" target="_blank" rel="noopener noreferrer" className="text-slate-600 font-medium leading-relaxed text-sm whitespace-pre-wrap hover:text-primary-600 transition-colors block">
+                    {cmsData.address || 'C. Abdul Hakeem College of Engineering & Technology,\nMelvisharam-632509, Vellore District,\nTamil Nadu, INDIA.'}
+                  </a>
                 </div>
-                <h3 className="text-xl font-bold text-primary-950 mb-3">Mailing Address</h3>
-                <p className="text-slate-600 font-light leading-relaxed text-sm whitespace-pre-wrap">
-                  {cmsData.address || 'C. Abdul Hakeem College of Engineering & Technology,\nMelvisharam-632509, Vellore District,\nTamil Nadu, INDIA.'}
-                </p>
               </motion.div>
 
               {/* Phone */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-500 hover:-translate-y-1 group hover:border-primary-600/30"
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, scale: 1.03 }}
+                transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+                className="bg-white hover:bg-gradient-to-br hover:from-white hover:to-primary-50 rounded-[2rem] p-8 shadow-xl hover:shadow-[0_20px_40px_rgba(30,58,138,0.12)] flex flex-col justify-between group relative overflow-hidden border-2 border-slate-100 hover:border-primary-200 transition-all duration-500"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center mb-6 group-hover:bg-accent-gold group-hover:text-primary-950 transition-colors text-primary-600">
-                  <Phone className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-primary-950 mb-3">Phone Numbers</h3>
-                <div className="space-y-2 text-slate-600 font-light text-sm flex flex-col">
-                  {cmsData.phones && cmsData.phones.length > 0 ? (
-                    cmsData.phones.map((phone, idx) => (
-                      <a key={idx} href={`tel:${phone}`} className="hover:text-primary-600 text-slate-800 transition-colors block font-medium">{phone}</a>
-                    ))
-                  ) : (
-                    <p className="font-medium text-slate-800">+91-4172-267387</p>
-                  )}
+                <div className="absolute -right-10 -top-10 w-32 h-32 bg-primary-100/50 rounded-full blur-3xl group-hover:bg-accent-gold/20 transition-colors duration-500" />
+                <div className="relative z-10">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-6 group-hover:bg-primary-600 group-hover:border-primary-600 group-hover:text-white transition-all text-primary-600 shadow-sm">
+                    <Phone className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Phone Numbers</h3>
+                  <div className="space-y-3 text-slate-600 font-medium text-sm flex flex-col">
+                    {cmsData.phones && cmsData.phones.length > 0 ? (
+                      cmsData.phones.map((phone, idx) => (
+                        <a key={idx} href={`tel:${phone}`} className="inline-flex items-center gap-2 hover:text-primary-600 text-slate-800 transition-colors block font-bold bg-slate-50 hover:bg-primary-50 px-4 py-2 rounded-xl border border-slate-100 hover:border-primary-100 shadow-sm w-fit">
+                          <Phone className="w-4 h-4 text-primary-500" /> {phone}
+                        </a>
+                      ))
+                    ) : (
+                      <a href="tel:+914172267387" className="inline-flex items-center gap-2 hover:text-primary-600 text-slate-800 transition-colors block font-bold bg-slate-50 hover:bg-primary-50 px-4 py-2 rounded-xl border border-slate-100 hover:border-primary-100 shadow-sm w-fit">
+                        <Phone className="w-4 h-4 text-primary-500" /> +91-4172-267387
+                      </a>
+                    )}
+                  </div>
                 </div>
               </motion.div>
 
               {/* Email */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-all duration-500 hover:-translate-y-1 group hover:border-primary-600/30"
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -10, scale: 1.03 }}
+                transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+                className="bg-white hover:bg-gradient-to-br hover:from-white hover:to-primary-50 rounded-[2rem] p-8 shadow-xl hover:shadow-[0_20px_40px_rgba(30,58,138,0.12)] flex flex-col justify-between group relative overflow-hidden border-2 border-slate-100 hover:border-primary-200 transition-all duration-500"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center mb-6 group-hover:bg-accent-gold group-hover:text-primary-950 transition-colors text-primary-600">
-                  <Mail className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-primary-950 mb-3">Email Support</h3>
-                <div className="space-y-2 text-slate-600 font-light text-sm">
-                  {cmsData.emails && cmsData.emails.length > 0 ? (
-                    cmsData.emails.map((email, idx) => (
-                      <p key={idx}><a href={`mailto:${email}`} className="hover:text-primary-600 text-slate-800 transition-colors block truncate font-medium">{email}</a></p>
-                    ))
-                  ) : (
-                    <p><a href="mailto:info.cahcet@gmail.com" className="hover:text-primary-600 text-slate-800 transition-colors block truncate font-medium">info.cahcet@gmail.com</a></p>
-                  )}
+                <div className="absolute -right-10 -top-10 w-32 h-32 bg-primary-100/50 rounded-full blur-3xl group-hover:bg-accent-gold/20 transition-colors duration-500" />
+                <div className="relative z-10">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-6 group-hover:bg-primary-600 group-hover:border-primary-600 group-hover:text-white transition-all text-primary-600 shadow-sm">
+                    <Mail className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">Email Support</h3>
+                  <div className="space-y-3 text-slate-600 font-medium text-sm">
+                    {cmsData.emails && cmsData.emails.length > 0 ? (
+                      cmsData.emails.map((email, idx) => (
+                        <a key={idx} href={`mailto:${email}`} className="inline-flex items-center gap-2 hover:text-primary-600 text-slate-800 transition-colors block truncate font-bold bg-slate-50 hover:bg-primary-50 px-4 py-2 rounded-xl border border-slate-100 hover:border-primary-100 shadow-sm w-full">
+                          <Mail className="w-4 h-4 text-primary-500" /> {email}
+                        </a>
+                      ))
+                    ) : (
+                      <a href="mailto:info.cahcet@gmail.com" className="inline-flex items-center gap-2 hover:text-primary-600 text-slate-800 transition-colors block truncate font-bold bg-slate-50 hover:bg-primary-50 px-4 py-2 rounded-xl border border-slate-100 hover:border-primary-100 shadow-sm w-full">
+                        <Mail className="w-4 h-4 text-primary-500" /> info.cahcet@gmail.com
+                      </a>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -200,57 +223,66 @@ const ContactPage = () => {
             <div className="flex flex-col lg:flex-row gap-12 items-stretch">
               {/* Form Block */}
               <div className="w-full lg:w-7/12">
-                <div className="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm">
-                  <div className="text-primary-600 text-sm font-bold tracking-widest uppercase mb-2">Send a Message</div>
-                  <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-950 mb-4">Admissions & Support</h2>
-                  <p className="text-slate-500 font-light mb-10 text-base">Fill out the form below and our team will get back to you within 24 hours.</p>
+                <div className="bg-gradient-to-br from-white via-primary-50/30 to-accent-gold/5 border-2 border-primary-100 rounded-[2.5rem] p-8 md:p-12 shadow-xl relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary-400 via-accent-gold to-primary-600" />
+                  
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center text-primary-600">
+                      <Send className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="text-primary-600 text-xs font-bold tracking-widest uppercase">Send a Message</div>
+                      <h2 className="text-2xl md:text-3xl font-display font-bold text-primary-950">Admissions & Support</h2>
+                    </div>
+                  </div>
+                  <p className="text-slate-600 font-medium mb-10 text-base">Fill out the form below and our team will get back to you within 24 hours.</p>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       {/* First Name */}
-                      <div className="relative">
+                      <div className="relative group">
                         <input
                           type="text"
                           name="firstName"
                           value={formData.firstName}
                           onChange={handleChange}
-                          className="w-full bg-slate-50 border border-slate-200 focus:border-primary-600 rounded-xl px-4 py-3.5 outline-none transition-all duration-300 text-slate-800 font-light placeholder-transparent peer focus:ring-1 focus:ring-primary-600/20"
+                          className="w-full bg-white border-2 border-slate-100 hover:border-primary-200 focus:border-primary-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300 text-slate-800 font-medium placeholder-transparent peer focus:ring-4 focus:ring-primary-500/10 focus:shadow-md"
                           placeholder="First Name"
                         />
-                        <label className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 pointer-events-none peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:left-3 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">
+                        <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                           First Name
                         </label>
                       </div>
                       {/* Last Name */}
-                      <div className="relative">
+                      <div className="relative group">
                         <input
                           type="text"
                           name="lastName"
                           value={formData.lastName}
                           onChange={handleChange}
-                          className="w-full bg-slate-50 border border-slate-200 focus:border-primary-600 rounded-xl px-4 py-3.5 outline-none transition-all duration-300 text-slate-800 font-light placeholder-transparent peer focus:ring-1 focus:ring-primary-600/20"
+                          className="w-full bg-white border-2 border-slate-100 hover:border-primary-200 focus:border-primary-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300 text-slate-800 font-medium placeholder-transparent peer focus:ring-4 focus:ring-primary-500/10 focus:shadow-md"
                           placeholder="Last Name"
                         />
-                        <label className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 pointer-events-none peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:left-3 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">
+                        <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                           Last Name
                         </label>
                       </div>
                     </div>
 
                     {/* Email */}
-                    <div className="relative">
+                    <div className="relative group">
                       <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
                         className={cn(
-                          "w-full bg-slate-50 border rounded-xl px-4 py-3.5 outline-none transition-all duration-300 text-slate-800 font-light placeholder-transparent peer focus:ring-1",
-                          errors.email ? "border-amber-500 focus:border-amber-500 focus:ring-amber-500/20" : "border-slate-200 focus:border-primary-600 focus:ring-primary-600/20"
+                          "w-full bg-white border-2 rounded-2xl px-5 py-4 outline-none transition-all duration-300 text-slate-800 font-medium placeholder-transparent peer focus:ring-4 focus:shadow-md",
+                          errors.email ? "border-amber-400 hover:border-amber-500 focus:border-amber-500 focus:ring-amber-500/10" : "border-slate-100 hover:border-primary-200 focus:border-primary-500 focus:ring-primary-500/10"
                         )}
                         placeholder="Email Address"
                       />
-                      <label className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 pointer-events-none peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:left-3 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">
+                      <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                         Email Address *
                       </label>
                       <AnimatePresence>
@@ -259,7 +291,7 @@ const ContactPage = () => {
                             initial={{ opacity: 0, y: -5 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
-                            className="text-amber-500 text-xs mt-1 absolute"
+                            className="text-amber-500 text-xs font-bold mt-1 absolute"
                           >
                             {errors.email}
                           </motion.p>
@@ -268,34 +300,34 @@ const ContactPage = () => {
                     </div>
 
                     {/* Subject */}
-                    <div className="relative">
+                    <div className="relative group">
                       <input
                         type="text"
                         name="subject"
                         value={formData.subject}
                         onChange={handleChange}
-                        className="w-full bg-slate-50 border border-slate-200 focus:border-primary-600 rounded-xl px-4 py-3.5 outline-none transition-all duration-300 text-slate-800 font-light placeholder-transparent peer focus:ring-1 focus:ring-primary-600/20"
+                        className="w-full bg-white border-2 border-slate-100 hover:border-primary-200 focus:border-primary-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300 text-slate-800 font-medium placeholder-transparent peer focus:ring-4 focus:ring-primary-500/10 focus:shadow-md"
                         placeholder="Subject"
                       />
-                      <label className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 pointer-events-none peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:left-3 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">
+                      <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                         Subject
                       </label>
                     </div>
 
                     {/* Message */}
-                    <div className="relative">
+                    <div className="relative group">
                       <textarea
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
                         rows={5}
                         className={cn(
-                          "w-full bg-slate-50 border rounded-xl px-4 py-3.5 outline-none transition-all duration-300 text-slate-800 font-light placeholder-transparent peer resize-none focus:ring-1",
-                          errors.message ? "border-amber-500 focus:border-amber-500 focus:ring-amber-500/20" : "border-slate-200 focus:border-primary-600 focus:ring-primary-600/20"
+                          "w-full bg-white border-2 rounded-2xl px-5 py-4 outline-none transition-all duration-300 text-slate-800 font-medium placeholder-transparent peer resize-none focus:ring-4 focus:shadow-md",
+                          errors.message ? "border-amber-400 hover:border-amber-500 focus:border-amber-500 focus:ring-amber-500/10" : "border-slate-100 hover:border-primary-200 focus:border-primary-500 focus:ring-primary-500/10"
                         )}
                         placeholder="Your Message"
                       />
-                      <label className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 pointer-events-none peer-focus:-top-2.5 peer-focus:left-3 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-1 peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:left-3 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-1">
+                      <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                         Your Message *
                       </label>
                       <AnimatePresence>
@@ -304,7 +336,7 @@ const ContactPage = () => {
                             initial={{ opacity: 0, y: -5 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
-                            className="text-amber-500 text-xs mt-1 absolute"
+                            className="text-amber-500 text-xs font-bold mt-1 absolute"
                           >
                             {errors.message}
                           </motion.p>
@@ -313,58 +345,68 @@ const ContactPage = () => {
                     </div>
 
                     {/* Submit Button */}
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                       type="submit"
                       disabled={isSubmitting || isSuccess}
                       className={cn(
-                        "w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 border",
+                        "w-full sm:w-auto px-10 py-4 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 border-2",
                         isSuccess 
-                          ? "bg-amber-500 text-white border-transparent" 
-                          : "bg-accent-gold text-primary-950 hover:bg-primary-950 hover:text-white border-transparent shadow-md"
+                          ? "bg-amber-500 text-white border-amber-600 shadow-lg" 
+                          : "bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-primary-400 text-white border-transparent shadow-[0_10px_20px_rgba(30,58,138,0.2)] hover:shadow-[0_15px_30px_rgba(30,58,138,0.3)]"
                       )}
                     >
                       {isSubmitting ? (
                         <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className="w-5 h-5 animate-spin" />
                           <span>Sending...</span>
                         </>
                       ) : isSuccess ? (
                         <>
-                          <Check className="w-4 h-4" />
+                          <Check className="w-5 h-5" />
                           <span>Message Sent</span>
                         </>
                       ) : (
                         <>
-                          <Send className="w-4 h-4" />
+                          <Send className="w-5 h-5" />
                           <span>Send Message</span>
                         </>
                       )}
-                    </button>
+                    </motion.button>
                   </form>
                 </div>
               </div>
 
               {/* Map Block */}
               <div className="w-full lg:w-5/12 flex">
-                <div className="relative w-full rounded-3xl overflow-hidden shadow-lg border border-slate-200 flex flex-col justify-between min-h-[400px]">
+                <div className="relative w-full rounded-3xl overflow-hidden shadow-xl border-2 border-primary-100 flex flex-col justify-between min-h-[400px]">
+                  
+                  {/* Floating Open In Maps Button */}
+                  <div className="absolute top-6 right-6 z-10">
+                    <a href="https://maps.app.goo.gl/88DFCxj4PDQGCSNm9" target="_blank" rel="noopener noreferrer" className="bg-white/95 backdrop-blur text-primary-700 px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg hover:bg-primary-600 hover:text-white transition-all flex items-center gap-2 border border-primary-100 hover:scale-105 transform">
+                      <ExternalLink className="w-4 h-4" /> Open in Maps
+                    </a>
+                  </div>
+
                   {cmsData.mapUrl ? (
-                    <iframe src={cmsData.mapUrl} className="absolute inset-0 w-full h-full border-0" allowFullScreen="" loading="lazy"></iframe>
+                    <iframe src="https://maps.google.com/maps?q=C.%20Abdul%20Hakeem%20College%20of%20Engineering%20%26%20Technology&t=m&z=17&ie=UTF8&iwloc=&output=embed" className="absolute inset-0 w-full h-full border-0 grayscale-[10%] hover:grayscale-0 transition-all duration-700 hover:scale-105" allowFullScreen="" loading="lazy"></iframe>
                   ) : (
-                    <div className="absolute inset-0 bg-primary-950 flex flex-col items-center justify-center p-8 text-center">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-950 to-primary-900 flex flex-col items-center justify-center p-8 text-center">
                       <MapPin className="w-12 h-12 text-accent-gold mb-4 animate-bounce" />
                       <h3 className="text-xl font-bold text-white mb-2">College Location</h3>
-                      <p className="text-primary-200 font-light text-sm mb-6 max-w-sm">
+                      <p className="text-primary-200 font-medium text-sm mb-6 max-w-sm">
                         Melvisharam, Vellore District, Tamil Nadu.
                       </p>
                     </div>
                   )}
                   
                   {/* Location Card Overlay */}
-                  <div className="relative mt-auto m-6 bg-white/95 backdrop-blur-md p-6 rounded-2xl border border-slate-100 shadow-md text-slate-800">
-                    <h4 className="text-sm font-bold text-slate-800 mb-1">C. Abdul Hakeem College</h4>
-                    <p className="text-xs text-slate-500 font-light">Engineering & Technology</p>
-                    <div className="mt-4 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
-                      <div className="flex items-center gap-2 text-slate-600">
+                  <div className="relative mt-auto m-6 bg-white/95 backdrop-blur-md p-6 rounded-2xl border-2 border-primary-100 shadow-[0_10px_30px_rgba(0,0,0,0.1)] text-slate-800 transform hover:-translate-y-1 transition-all duration-300">
+                    <h4 className="text-base font-bold text-primary-950 mb-1">C. Abdul Hakeem College</h4>
+                    <p className="text-sm text-primary-600 font-medium">Engineering & Technology</p>
+                    <div className="mt-4 pt-4 border-t-2 border-primary-50 flex justify-between items-center text-sm font-bold">
+                      <div className="flex items-center gap-2 text-slate-700">
                         <Clock className="w-4 h-4 text-accent-gold" />
                         <span>{cmsData.timings || 'Mon - Sat: 9AM - 5PM'}</span>
                       </div>
@@ -389,7 +431,7 @@ const ContactPage = () => {
               <p className="text-slate-500 mt-2 font-light text-lg">Direct lines to administrative and departmental heads.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {(cmsData.departments || []).map((office, index) => {
                 return (
                   <motion.div
@@ -397,26 +439,28 @@ const ContactPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.5, delay: index * 0.05 }}
-                    className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all duration-500 flex flex-col justify-between min-h-[16rem] hover:-translate-y-1 group hover:border-primary-600/30"
+                    whileHover={{ y: -10, scale: 1.03 }}
+                    transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+                    className="bg-white hover:bg-gradient-to-br hover:from-white hover:to-primary-50 border-2 border-slate-100 p-6 rounded-[2rem] shadow-xl hover:shadow-[0_20px_40px_rgba(30,58,138,0.12)] hover:border-primary-200 transition-all duration-500 flex flex-col justify-between min-h-[16rem] group relative overflow-hidden transform"
                   >
-                    <div>
-                      <div className="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center mb-4 group-hover:bg-accent-gold group-hover:text-primary-950 transition-colors text-primary-600">
-                        <MapPin className="w-5 h-5" />
+                    <div className="absolute -right-10 -top-10 w-32 h-32 bg-primary-100/50 rounded-full blur-3xl group-hover:bg-accent-gold/20 transition-colors duration-500" />
+                    <div className="relative z-10">
+                      <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-5 group-hover:bg-primary-600 group-hover:border-primary-600 group-hover:text-white transition-all duration-300 shadow-sm text-primary-600 group-hover:scale-110">
+                        <User className="w-6 h-6" />
                       </div>
-                      <h4 className="text-xs font-bold text-primary-600 uppercase tracking-widest mb-1">{office.person}</h4>
-                      <h3 className="text-lg font-bold text-slate-800 group-hover:text-primary-700 transition-colors">{office.name}</h3>
-                      <div className="space-y-1 mt-3 text-sm text-slate-500 font-light">
+                      <h4 className="text-xs font-bold text-primary-600 uppercase tracking-widest mb-2 bg-primary-50 border border-primary-100 inline-block px-3 py-1 rounded-full">{office.person}</h4>
+                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-primary-700 transition-colors leading-tight mb-4">{office.name}</h3>
+                      <div className="space-y-3 mt-4 pt-4 border-t border-slate-100 text-sm text-slate-600 font-medium">
                         {office.email && (
-                          <p className="flex items-center gap-2">
-                            <Mail className="w-3.5 h-3.5 text-slate-400" />
-                            <a href={`mailto:${office.email}`} className="hover:text-primary-600 text-slate-600 transition-colors truncate">{office.email}</a>
+                          <p className="flex items-center gap-3 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100 shadow-sm group-hover:border-primary-100 group-hover:bg-primary-50/30 transition-all">
+                            <Mail className="w-4 h-4 text-primary-500" />
+                            <a href={`mailto:${office.email}`} className="hover:text-primary-600 transition-colors truncate">{office.email}</a>
                           </p>
                         )}
                         {office.phone && (
-                          <p className="flex items-center gap-2">
-                            <Phone className="w-3.5 h-3.5 text-slate-400" />
-                            <a href={`tel:${office.phone.split('#')[0].trim()}`} className="hover:text-primary-600 text-slate-600 transition-colors">{office.phone}</a>
+                          <p className="flex items-center gap-3 bg-slate-50 px-3 py-2 rounded-xl border border-slate-100 shadow-sm group-hover:border-primary-100 group-hover:bg-primary-50/30 transition-all">
+                            <Phone className="w-4 h-4 text-primary-500" />
+                            <a href={`tel:${office.phone.split('#')[0].trim()}`} className="hover:text-primary-600 transition-colors">{office.phone}</a>
                           </p>
                         )}
                       </div>

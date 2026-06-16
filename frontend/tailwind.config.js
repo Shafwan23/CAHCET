@@ -70,8 +70,8 @@ export default {
           '50%': { transform: 'translateY(-20px)' },
         },
         shimmer: {
-          from: { backgroundPosition: '200% 0' },
-          to: { backgroundPosition: '-200% 0' },
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
         },
       },
       backdropBlur: {

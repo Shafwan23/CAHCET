@@ -4,9 +4,7 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import HeroVideoSection from '../components/sections/HeroVideoSection';
 import WelcomeSection from '../components/sections/WelcomeSection';
-import StatsSection from '../components/sections/StatsSection';
 import DepartmentsSection from '../components/sections/DepartmentsSection';
-import FacilitiesSection from '../components/sections/FacilitiesSection';
 import GallerySection from '../components/sections/GallerySection';
 import PlacementsSection from '../components/sections/PlacementsSection';
 import DynamicInfoSection from '../components/sections/DynamicInfoSection';
@@ -15,6 +13,7 @@ import AdmissionsCTA from '../components/sections/AdmissionsCTA';
 import ContactSection from '../components/sections/ContactSection';
 import { cmsService } from '../services/cmsService';
 import SuspenseLoader from '../components/ui/SuspenseLoader';
+import apiClient from '../services/authService';
 
 const Home = () => {
   const [homeData, setHomeData] = useState(null);
@@ -23,14 +22,16 @@ const Home = () => {
   useEffect(() => {
     const fetchHomeCMS = async () => {
       try {
-        const [homeRes, updatesRes, placementsRes] = await Promise.all([
+        const [homeRes, updatesRes, placementsRes, statsRes] = await Promise.all([
           cmsService.getPage('home').catch(() => ({ data: { sections: [] } })),
           cmsService.getPage('updates').catch(() => ({ data: { sections: [] } })),
-          cmsService.getPage('placements').catch(() => ({ data: { sections: [] } }))
+          cmsService.getPage('placements').catch(() => ({ data: { sections: [] } })),
+          apiClient.get('/cms/aggregated-stats').catch(() => ({ data: { data: {} } }))
         ]);
 
         const sectionsArray = homeRes.data?.sections || [];
         const updatesArray = updatesRes.data?.sections || [];
+        const statsData = statsRes.data?.data || {};
         
         // Map sections array into an object keyed by sectionKey
         const sectionsMap = {};
@@ -42,6 +43,37 @@ const Home = () => {
             sectionsMap[sec.sectionKey] = sec.content;
           }
         });
+
+        // Combine Real-time stats with CMS stats
+        let cmsStats = sectionsMap['home.statistics'];
+        if (!Array.isArray(cmsStats)) {
+          cmsStats = [
+            { label: 'Successful Placements', value: '95', suffix: '%', icon: '🎯' },
+            { label: 'Expert Faculty', value: '250', suffix: '+', icon: '👨‍🏫' },
+            { label: 'Companies Visited', value: '150', suffix: '+', icon: '🏢' },
+            { label: 'Highest Package', value: '24', suffix: ' LPA', icon: '💰' },
+          ];
+        }
+
+        // Apply real-time overrides if available
+        cmsStats = cmsStats.map(stat => {
+          if (stat.label === 'Expert Faculty' && statsData.facultyCount > 0) {
+            return { ...stat, value: statsData.facultyCount.toString() };
+          }
+          if (stat.label === 'Companies Visited' && statsData.uniqueCompanies > 0) {
+            return { ...stat, value: statsData.uniqueCompanies.toString() };
+          }
+          if (stat.label === 'Highest Package' && statsData.highestPackage) {
+            const packageStr = String(statsData.highestPackage);
+            const numMatch = packageStr.match(/(\d+(\.\d+)?)/);
+            if (numMatch && numMatch[1]) {
+              return { ...stat, value: numMatch[1], suffix: packageStr.replace(numMatch[1], '') };
+            }
+          }
+          return stat;
+        });
+        
+        sectionsMap['home.statistics'] = cmsStats;
 
         // Merge updates data into the home.dynamicinfo structure
         const dynamicInfo = sectionsMap['home.dynamicinfo'] || {
@@ -78,6 +110,7 @@ const Home = () => {
           }
         });
         sectionsMap['placements_live'] = { recruiters, students };
+        sectionsMap['statsData'] = statsData;
 
         setHomeData(sectionsMap);
       } catch (err) {
@@ -108,12 +141,10 @@ const Home = () => {
         <main>
           <HeroVideoSection data={data['home.hero']} />
           <WelcomeSection data={data['home.welcome']} />
-          <StatsSection data={data['home.statistics']} />
           <DynamicInfoSection data={data['home.dynamicinfo']} />
           <DepartmentsSection data={data['home.departments']} />
-          <FacilitiesSection data={data['home.facilities']} />
           <GallerySection data={data['home.gallery']} />
-          <PlacementsSection data={data['home.placements']} liveData={data['placements_live']} />
+          <PlacementsSection data={data['home.placements']} liveData={data['placements_live']} liveStats={homeData?.statsData || {}} />
           <VideoShowcaseSection data={data['home.videos']} />
           <AdmissionsCTA data={data['home.cta']} />
           <ContactSection data={data['home.contact']} />

@@ -16,25 +16,30 @@ const fadeUp = (delay = 0) => ({
 // ── Reusable Table Component ─────────────────────────────────────────────────
 function DataTable({ columns, data }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+    <div className="overflow-x-auto rounded-[2rem] border-2 border-primary-100 shadow-xl bg-gradient-to-br from-white to-primary-50 p-2 mt-8">
       <table className="w-full text-sm text-left text-slate-600">
-        <thead className="text-xs uppercase tracking-wider text-slate-700 bg-slate-50 border-b border-slate-200">
+        <thead className="text-xs uppercase tracking-wider text-primary-900 bg-primary-100/50 border-b-2 border-primary-100">
           <tr>
             {columns.map((col, index) => (
-              <th key={index} className="px-6 py-4 font-semibold">{col}</th>
+              <th key={index} className="px-6 py-5 font-bold whitespace-nowrap">{col}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {data.map((row, rowIndex) => (
-            <tr
+            <motion.tr
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: rowIndex * 0.05 }}
+              whileHover={{ scale: 1.01, backgroundColor: '#f0f9ff' }}
               key={rowIndex}
-              className="bg-white border-b border-slate-100 last:border-b-0 hover:bg-slate-50/50 transition-colors"
+              className="bg-white border-b border-primary-50 last:border-b-0 hover:shadow-md transition-all duration-300 relative z-10"
             >
               {Object.values(row).map((val, cellIndex) => (
-                <td key={cellIndex} className="px-6 py-4">{val}</td>
+                <td key={cellIndex} className="px-6 py-5 font-medium text-slate-800">{val}</td>
               ))}
-            </tr>
+            </motion.tr>
           ))}
         </tbody>
       </table>
@@ -91,129 +96,156 @@ export default function AntiRaggingPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 flex flex-col">
+    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col">
       <Navbar />
 
-      <main className="flex-1 pt-20">
-        {/* ── HEADER ──────────────────────────────────────────────────────── */}
-        <section className="bg-slate-50 border-b border-slate-100">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-            {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-6">
-              <a href="/" className="hover:text-primary-600 transition-colors flex items-center gap-1">
-                <Home className="w-3.5 h-3.5" /> Home
-              </a>
-              <ChevronRight className="w-3 h-3" />
-              <span>About</span>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-primary-600">Anti Ragging Policy</span>
-            </nav>
-
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-1 h-8 rounded-full bg-amber-600" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600">Zero Tolerance</span>
+      <main className="flex-1">
+        {/* ── SPECTACULAR HEADER ──────────────────────────────────────────────── */}
+        <section className="relative w-full overflow-hidden bg-primary-950 mb-16 shadow-2xl rounded-b-[3rem]">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-950 via-primary-900 to-indigo-900 opacity-90" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
+          <div className="absolute -top-20 -right-20 w-96 h-96 bg-amber-500/20 rounded-full blur-[100px]" />
+          <div className="absolute top-40 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-[80px]" />
+          
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 relative z-10 text-center flex flex-col items-center">
+            <div className="inline-block px-4 py-1.5 bg-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-widest rounded-full border border-amber-500/30 mb-6">
+              Zero Tolerance
             </div>
-
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-400 mb-6 tracking-tight drop-shadow-lg">
               Anti Ragging Policy
             </h1>
-
-            <p className="text-base text-slate-500 max-w-2xl leading-relaxed">
+            <p className="text-primary-200 text-lg md:text-xl max-w-2xl leading-relaxed font-light">
               CAHCET maintains a strict zero-tolerance policy towards ragging. We are committed to providing a safe and welcoming environment for all students.
             </p>
           </div>
+          <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
         </section>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-20">
+        <div className="w-full flex flex-col">
           
           {/* ── INSTRUCTIONS ────────────────────────────────────────────────── */}
-          <motion.section {...fadeUp(0)}>
-            <div className="flex items-center gap-3 mb-6">
-              <AlertTriangle className="w-5 h-5 text-amber-600" />
-              <h2 className="text-xl font-bold text-slate-900">Important Instructions</h2>
+          <section className="py-20 bg-slate-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div {...fadeUp(0)}>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-600 shadow-sm border border-amber-100/50">
+                    <AlertTriangle className="w-6 h-6" />
+                  </div>
+                  <h2 className="text-3xl font-display font-bold text-slate-900">Important Instructions</h2>
+                </div>
+                <div className="bg-white border border-slate-100 rounded-[2rem] p-8 md:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-400 to-amber-600" />
+                  <ul className="space-y-6">
+                    {data.instructions.map((item, i) => (
+                      <li key={i} className="flex items-start gap-4 text-slate-700 text-base leading-relaxed group">
+                        <div className="w-2 h-2 rounded-full bg-amber-500 mt-2.5 flex-shrink-0 group-hover:scale-150 transition-transform shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+                        <span className="group-hover:text-slate-900 transition-colors">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
             </div>
-            <div className="bg-primary-50/50 border border-primary-100 rounded-2xl p-6 md:p-8">
-              <ul className="space-y-4">
-                {data.instructions.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-slate-700 text-sm md:text-base leading-relaxed">
-                    <div className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-2 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.section>
+          </section>
 
           {/* ── COMMITTEE TABLE ─────────────────────────────────────────────── */}
-          <motion.section {...fadeUp(0.1)}>
-            <div className="flex items-center gap-3 mb-6">
-              <Shield className="w-5 h-5 text-primary-600" />
-              <h2 className="text-xl font-bold text-slate-900">Anti Ragging Committee</h2>
+          <section className="py-20 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div {...fadeUp(0.1)}>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-primary-600 shadow-sm border border-primary-100/50">
+                    <Shield className="w-6 h-6" />
+                  </div>
+                  <h2 className="text-3xl font-display font-bold text-slate-900">Anti Ragging Committee</h2>
+                </div>
+                <DataTable
+                  columns={['S.No.', 'Staff Name', 'Designation', 'Position', 'Contact No.']}
+                  data={formattedCommittee}
+                />
+              </motion.div>
             </div>
-            <DataTable
-              columns={['S.No.', 'Staff Name', 'Designation', 'Position', 'Contact No.']}
-              data={formattedCommittee}
-            />
-          </motion.section>
+          </section>
 
           {/* ── SQUADS TABLE ────────────────────────────────────────────────── */}
-          <motion.section {...fadeUp(0.2)}>
-            <div className="flex items-center gap-3 mb-6">
-              <Shield className="w-5 h-5 text-primary-600" />
-              <h2 className="text-xl font-bold text-slate-900">Anti Ragging Squads</h2>
+          <section className="py-20 bg-slate-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div {...fadeUp(0.2)}>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-primary-600 shadow-sm border border-primary-100/50">
+                    <Shield className="w-6 h-6" />
+                  </div>
+                  <h2 className="text-3xl font-display font-bold text-slate-900">Anti Ragging Squads</h2>
+                </div>
+                <DataTable
+                  columns={['S.No.', 'Staff Name', 'Designation', 'Position', 'Contact No.']}
+                  data={formattedSquads}
+                />
+              </motion.div>
             </div>
-            <DataTable
-              columns={['S.No.', 'Staff Name', 'Designation', 'Position', 'Contact No.']}
-              data={formattedSquads}
-            />
-          </motion.section>
+          </section>
 
           {/* ── OBJECTIVES & FUNCTIONS ──────────────────────────────────────── */}
-          <motion.section {...fadeUp(0.3)} className="grid md:grid-cols-2 gap-8">
-            {/* Objectives */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Scale className="w-5 h-5 text-primary-600" />
-                <h2 className="text-xl font-bold text-slate-900">Objectives</h2>
-              </div>
-              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6 space-y-4">
-                {data.objectives.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 text-slate-600 text-sm leading-relaxed">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary-600 mt-2 flex-shrink-0" />
-                    <p>{item}</p>
+          <section className="py-20 bg-white border-y border-slate-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div {...fadeUp(0.3)} className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+                {/* Objectives */}
+                <div className="relative group">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl -z-10" />
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-primary-600 shadow-sm border border-primary-100/50">
+                      <Scale className="w-6 h-6" />
+                    </div>
+                    <h2 className="text-3xl font-display font-bold text-slate-900">Objectives</h2>
                   </div>
-                ))}
-              </div>
-            </div>
+                  <motion.div whileHover={{ y: -10, scale: 1.02 }} className="bg-gradient-to-br from-primary-50 via-white to-accent-gold/10 border-2 border-primary-100 rounded-[2rem] p-8 md:p-10 space-y-6 shadow-xl hover:shadow-[0_20px_50px_rgba(212,175,55,0.2)] transition-all duration-300">
+                    {data.objectives.map((item, i) => (
+                      <div key={i} className="flex items-start gap-4 text-slate-600 text-base leading-relaxed">
+                        <div className="w-2 h-2 rounded-full bg-primary-600 mt-2.5 flex-shrink-0" />
+                        <p>{item}</p>
+                      </div>
+                    ))}
+                    </motion.div>
+                </div>
 
-            {/* Functions */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Scale className="w-5 h-5 text-primary-600" />
-                <h2 className="text-xl font-bold text-slate-900">Functions</h2>
-              </div>
-              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6 space-y-4">
-                {data.functions.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 text-slate-600 text-sm leading-relaxed">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary-600 mt-2 flex-shrink-0" />
-                    <p>{item}</p>
+                {/* Functions */}
+                <div className="relative group">
+                  <div className="absolute -inset-4 bg-gradient-to-l from-primary-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl -z-10" />
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-primary-600 shadow-sm border border-primary-100/50">
+                      <Scale className="w-6 h-6" />
+                    </div>
+                    <h2 className="text-3xl font-display font-bold text-slate-900">Functions</h2>
                   </div>
-                ))}
-              </div>
+                  <motion.div whileHover={{ y: -10, scale: 1.02 }} className="bg-gradient-to-br from-primary-50 via-white to-accent-gold/10 border-2 border-primary-100 rounded-[2rem] p-8 md:p-10 space-y-6 shadow-xl hover:shadow-[0_20px_50px_rgba(212,175,55,0.2)] transition-all duration-300">
+                    {data.functions.map((item, i) => (
+                      <div key={i} className="flex items-start gap-4 text-slate-600 text-base leading-relaxed">
+                        <div className="w-2 h-2 rounded-full bg-primary-600 mt-2.5 flex-shrink-0" />
+                        <p>{item}</p>
+                      </div>
+                    ))}
+                    </motion.div>
+                </div>
+              </motion.div>
             </div>
-          </motion.section>
+          </section>
 
           {/* ── GENERAL COMMITTEE TABLE ─────────────────────────────────────── */}
-          <motion.section {...fadeUp(0.4)}>
-            <div className="flex items-center gap-3 mb-6">
-              <Shield className="w-5 h-5 text-primary-600" />
-              <h2 className="text-xl font-bold text-slate-900">General Committee Members</h2>
+          <section className="py-20 bg-slate-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div {...fadeUp(0.4)}>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-primary-600 shadow-sm border border-primary-100/50">
+                    <Shield className="w-6 h-6" />
+                  </div>
+                  <h2 className="text-3xl font-display font-bold text-slate-900">General Committee Members</h2>
+                </div>
+                <DataTable
+                  columns={['S.No.', 'Name & Designation', 'Position', 'Mobile']}
+                  data={formattedGeneral}
+                />
+              </motion.div>
             </div>
-            <DataTable
-              columns={['S.No.', 'Name & Designation', 'Position', 'Mobile']}
-              data={formattedGeneral}
-            />
-          </motion.section>
+          </section>
 
         </div>
       </main>

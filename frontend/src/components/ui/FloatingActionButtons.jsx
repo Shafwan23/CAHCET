@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GraduationCap, FileText, Plus, X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { cn } from '../../utils/cn';
 
 const FloatingActionButtons = ({ onEnquiryClick }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const location = useLocation();
+
+  if (location.pathname !== '/') {
+    return null;
+  }
 
   const actions = [
     { 
@@ -33,7 +39,7 @@ const FloatingActionButtons = ({ onEnquiryClick }) => {
   ];
 
   return (
-    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[40] flex flex-col gap-px pointer-events-none">
+    <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[40] hidden md:flex flex-col gap-px pointer-events-none">
       {actions.map((action, i) => (
         <motion.button
           key={i}

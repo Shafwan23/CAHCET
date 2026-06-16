@@ -36,11 +36,11 @@ export function useMergedDepartmentData(deptKey, staticData) {
     
     const merged = { ...staticData };
 
-    if (globalFaculty && globalFaculty.length > 0) {
+    if (globalFaculty && globalFaculty.length > 0 && deptKey.toLowerCase() !== 'cse') {
       merged.facultyData = globalFaculty;
     }
 
-    if (cmsData) {
+    if (cmsData && deptKey.toLowerCase() !== 'cse') {
       if (cmsData.overview) {
         merged.heroData = {
           ...merged.heroData,

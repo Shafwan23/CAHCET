@@ -36,7 +36,7 @@ const companyLogoMap = {
   'microsoft': 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg'
 };
 
-const PlacementsSection = ({ data, liveData }) => {
+const PlacementsSection = ({ data, liveData, liveStats }) => {
   const { title, description } = data || {
     title: 'Empowering Global Careers',
     description: 'Our graduates are placed in leading global corporations with industry-best packages. Our training and placement cell works tirelessly to bridge the gap between academia and industry.'
@@ -134,48 +134,45 @@ const PlacementsSection = ({ data, liveData }) => {
         </div>
 
         {/* Highlight Cards */}
-        <div className="grid md:grid-cols-3 gap-8">
-          <motion.div
-            whileHover={{ y: -10 }}
-            className="bg-white p-8 rounded-2xl border border-primary-100 shadow-sm"
-          >
-            <h4 className="text-accent-gold text-4xl font-bold mb-2">
-              {data?.highestPackage || highestPackage} LPA
-            </h4>
-            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">
-              {data?.highestPackageLabel || 'Highest Package'}
-            </p>
-            <p className="text-primary-600 text-sm">
-              {data?.highestPackageDesc || 'Secured by our top students at global tech giants.'}
-            </p>
-          </motion.div>
-          <motion.div
-            whileHover={{ y: -10 }}
-            className="bg-white p-8 rounded-2xl border border-primary-100 shadow-sm"
-          >
+        <div className="grid md:grid-cols-4 gap-6">
+          <motion.div whileHover={{ y: -10 }} className="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm text-center">
             <h4 className="text-accent-gold text-4xl font-bold mb-2">
               {data?.placementRate || '95%'}
             </h4>
-            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">
-              {data?.placementRateLabel || 'Placement Rate'}
+            <p className="text-primary-900 font-bold mb-2 uppercase tracking-wider text-sm">
+              Successful Placements
             </p>
-            <p className="text-primary-600 text-sm">
-              {data?.placementRateDesc || 'Consistent track record of placement excellence across departments.'}
-            </p>
+            <p className="text-primary-600 text-xs">Consistent placement excellence.</p>
           </motion.div>
-          <motion.div
-            whileHover={{ y: -10 }}
-            className="bg-white p-8 rounded-2xl border border-primary-100 shadow-sm"
-          >
+
+          <motion.div whileHover={{ y: -10 }} className="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm text-center">
             <h4 className="text-accent-gold text-4xl font-bold mb-2">
-              {data?.totalOffers ? (data.totalOffers.endsWith('+') ? data.totalOffers : `${data.totalOffers}+`) : `${totalOffers}+`}
+              {liveStats?.facultyCount ? `${liveStats.facultyCount}+` : '250+'}
             </h4>
-            <p className="text-primary-900 font-bold mb-4 uppercase tracking-wider text-sm">
-              {data?.totalOffersLabel || 'Offers in 2026'}
+            <p className="text-primary-900 font-bold mb-2 uppercase tracking-wider text-sm">
+              Expert Faculty
             </p>
-            <p className="text-primary-600 text-sm">
-              {data?.totalOffersDesc || 'A new milestone achieved by our students this academic year.'}
+            <p className="text-primary-600 text-xs">Highly qualified educators.</p>
+          </motion.div>
+
+          <motion.div whileHover={{ y: -10 }} className="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm text-center">
+            <h4 className="text-accent-gold text-4xl font-bold mb-2">
+              {liveStats?.uniqueCompanies ? `${liveStats.uniqueCompanies}+` : '150+'}
+            </h4>
+            <p className="text-primary-900 font-bold mb-2 uppercase tracking-wider text-sm">
+              Companies Visited
             </p>
+            <p className="text-primary-600 text-xs">Global tech giants recruiting.</p>
+          </motion.div>
+
+          <motion.div whileHover={{ y: -10 }} className="bg-white p-6 rounded-2xl border border-primary-100 shadow-sm text-center">
+            <h4 className="text-accent-gold text-4xl font-bold mb-2">
+              {liveStats?.highestPackage ? liveStats.highestPackage : `${highestPackage} LPA`}
+            </h4>
+            <p className="text-primary-900 font-bold mb-2 uppercase tracking-wider text-sm">
+              Highest Package
+            </p>
+            <p className="text-primary-600 text-xs">Secured by our top students.</p>
           </motion.div>
         </div>
       </Container>

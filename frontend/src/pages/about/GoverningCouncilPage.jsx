@@ -62,114 +62,105 @@ export default function GoverningCouncilPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col">
+    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col">
       <Navbar />
 
-      <main className="flex-1 pt-20">
-        {/* ── COMPACT HEADER ──────────────────────────────────────────────── */}
-        <section className="bg-white border-b border-slate-100">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
-            {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs font-medium text-slate-400 mb-4">
-              <a href="/" className="hover:text-primary-600 transition-colors flex items-center gap-1">
-                <Home className="w-3.5 h-3.5" /> Home
-              </a>
-              <ChevronRight className="w-3 h-3" />
-              <span>About</span>
-              <ChevronRight className="w-3 h-3" />
-              <span className="text-primary-600">Governing Council</span>
-            </nav>
-
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-1 h-6 rounded-full bg-primary-600" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary-600">Leadership</span>
+      <main className="flex-1">
+        {/* ── SPECTACULAR HEADER ──────────────────────────────────────────────── */}
+        <section className="relative w-full overflow-hidden bg-primary-950 mb-16 shadow-2xl rounded-b-[3rem]">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-950 via-primary-900 to-indigo-900 opacity-90" />
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
+          <div className="absolute -top-20 -right-20 w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]" />
+          <div className="absolute top-40 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-[80px]" />
+          
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 relative z-10 text-center flex flex-col items-center">
+            <div className="inline-block px-4 py-1.5 bg-accent-gold/20 text-accent-gold text-xs font-bold uppercase tracking-widest rounded-full border border-accent-gold/30 mb-6">
+              Leadership
             </div>
-
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-slate-400 mb-6 tracking-tight drop-shadow-lg">
               Governing Council
             </h1>
-
-            <p className="text-sm text-slate-500 max-w-2xl leading-relaxed">
+            <p className="text-primary-200 text-lg md:text-xl max-w-2xl leading-relaxed font-light">
               Meet the distinguished members of our governing council who provide strategic direction and oversight.
             </p>
           </div>
+          <div className="absolute bottom-0 w-full h-px bg-gradient-to-r from-transparent via-accent-gold/50 to-transparent" />
         </section>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="w-full flex flex-col">
           
-          {/* ── COUNCIL MEMBERS LIST ────────────────────────────────────────── */}
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="space-y-4"
-          >
-            {membersList.map((member) => (
+          {/* ── COUNCIL MEMBERS GRID ────────────────────────────────────────── */}
+          <section className="py-20 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <motion.div
-                key={member.sno}
-                variants={itemAnim}
-                className="group relative bg-white border border-slate-100 rounded-2xl p-6 hover:shadow-md transition-all duration-300 overflow-hidden"
+                variants={container}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
               >
-                {/* Glow effect on hover */}
-                <div className="absolute -inset-px bg-gradient-to-r from-primary-500/0 to-primary-500/0 group-hover:from-primary-500/5 group-hover:to-primary-500/10 transition-all duration-500 opacity-0 group-hover:opacity-100" />
+                {membersList.map((member) => (
+                  <motion.div
+                    key={member.sno}
+                    variants={itemAnim}
+                    whileHover={{ y: -10, scale: 1.03 }}
+                    className="group relative bg-gradient-to-br from-primary-50 via-white to-accent-gold/10 border-2 border-primary-100 rounded-[2rem] p-8 shadow-xl hover:shadow-[0_20px_50px_rgba(212,175,55,0.2)] transition-all duration-300 overflow-hidden flex flex-col"
+                  >
+                    {/* Decorative Background */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[100px] -z-10 group-hover:bg-primary-50 transition-colors duration-500" />
+                    <div className="absolute -inset-px bg-gradient-to-br from-primary-50/50 to-white opacity-0 group-hover:opacity-100 transition-all duration-500 -z-10" />
 
-                <div className="relative z-10 grid md:grid-cols-12 gap-4 items-center">
-                  
-                  {/* S.No & Avatar fallback */}
-                  <div className="md:col-span-1 flex items-center gap-3">
-                    <span className="text-xs font-bold text-slate-300 group-hover:text-primary-400 transition-colors">
-                      {String(member.sno).padStart(2, '0')}
-                    </span>
-                    <div className="w-10 h-10 rounded-full bg-slate-50 group-hover:bg-primary-50 flex items-center justify-center text-slate-400 group-hover:text-primary-600 transition-colors overflow-hidden">
-                      {member.photoUrl ? (
-                        <img src={member.photoUrl} alt={member.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <User className="w-5 h-5" />
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Name & Qualification */}
-                  <div className="md:col-span-4">
-                    <h3 className="text-base font-bold text-slate-900 group-hover:text-primary-700 transition-colors">
-                      {member.name}
-                    </h3>
-                    {member.qualification && (
-                      <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-0.5">
-                        <GraduationCap className="w-3.5 h-3.5" />
-                        <span>{member.qualification}</span>
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="w-16 h-16 rounded-2xl bg-slate-100 group-hover:bg-primary-100 flex items-center justify-center text-slate-400 group-hover:text-primary-600 transition-colors overflow-hidden shadow-sm group-hover:scale-105 duration-300">
+                        {member.photoUrl ? (
+                          <img src={member.photoUrl} alt={member.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <User className="w-8 h-8" />
+                        )}
                       </div>
-                    )}
-                  </div>
-
-                  {/* Designation */}
-                  <div className="md:col-span-4">
-                    <div className="flex items-start gap-1.5 text-xs text-slate-600">
-                      <Briefcase className="w-3.5 h-3.5 mt-0.5 text-slate-400 flex-shrink-0" />
-                      <p className="leading-relaxed">{member.designation}</p>
+                      <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-slate-50 text-slate-500 border border-slate-100 rounded-full group-hover:border-primary-200 transition-colors">
+                        {String(member.sno).padStart(2, '0')}
+                      </span>
                     </div>
-                  </div>
 
-                  {/* Position & Category */}
-                  <div className="md:col-span-3 flex flex-col items-end gap-1.5">
-                    <div className="flex items-center gap-1.5">
-                      <Shield className="w-3.5 h-3.5 text-primary-500" />
-                      <span className="text-xs font-bold text-slate-700">{member.position}</span>
+                    <div className="mb-6 flex-1">
+                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-primary-700 transition-colors mb-2">
+                        {member.name}
+                      </h3>
+                      {member.qualification && (
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-3 font-medium tracking-wide">
+                          <GraduationCap className="w-4 h-4 text-accent-gold" />
+                          <span>{member.qualification}</span>
+                        </div>
+                      )}
+                      <div className="flex items-start gap-2 text-sm text-slate-600 leading-relaxed">
+                        <Briefcase className="w-4 h-4 mt-1 text-slate-400 flex-shrink-0" />
+                        <p>{member.designation}</p>
+                      </div>
                     </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-slate-50 text-slate-500 border border-slate-100 rounded-full">
-                      {member.category}
-                    </span>
-                  </div>
 
-                </div>
+                    <div className="pt-6 border-t border-slate-100 group-hover:border-primary-100 transition-colors flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-primary-500" />
+                        <span className="text-sm font-bold text-slate-800">{member.position}</span>
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary-600 bg-primary-50 px-2.5 py-1 rounded-md">
+                        {member.category}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
-            ))}
-          </motion.div>
+            </div>
+          </section>
 
           {/* ── NOTE ──────────────────────────────────────────────────────── */}
-          <div className="bg-white border border-slate-100 rounded-2xl p-6 text-center text-xs text-slate-400 font-medium max-w-2xl mx-auto mt-12">
-            The governing council meets regularly to review and guide the institution's progress.
-          </div>
+          <section className="py-20 bg-slate-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-gradient-to-r from-primary-50 via-slate-50 to-primary-50 border border-primary-100/50 rounded-[2rem] p-8 md:p-12 text-center text-sm text-primary-900/60 font-medium max-w-3xl mx-auto shadow-inner">
+                <p className="text-lg">The governing council meets regularly to review and guide the institution's strategic progress.</p>
+              </div>
+            </div>
+          </section>
 
         </div>
       </main>

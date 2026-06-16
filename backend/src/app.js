@@ -12,9 +12,17 @@ const app = express();
 app.use(helmet());
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || /^http:\/\/localhost:\d+$/.test(origin) || origin === process.env.FRONTEND_URL) {
+    // Clean trailing slash
+    const originClean = origin ? origin.replace(/\/$/, '') : '';
+    
+    // Allow any localhost, any Render subdomain, or the exact FRONTEND_URL
+    if (!originClean || 
+        /^http:\/\/localhost:\d+$/.test(originClean) || 
+        /\.onrender\.com$/.test(originClean) || 
+        originClean === process.env.FRONTEND_URL) {
       callback(null, true);
     } else {
+      console.warn(`CORS blocked request from origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -45,11 +53,14 @@ const applicantRoutes = require('./routes/applicantRoutes');
 const testRoutes = require('./routes/testRoutes');
 const cmsRoutes = require('./routes/cmsRoutes');
 
+const contactRoutes = require('./routes/contactRoutes');
+
 // Routes will be mounted here
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/applicant', applicantRoutes);
 app.use('/api/v1/test', testRoutes);
 app.use('/api/v1/cms', cmsRoutes);
+app.use('/api/v1/contact', contactRoutes);
 
 // Handle 404
 app.use(notFoundMiddleware);

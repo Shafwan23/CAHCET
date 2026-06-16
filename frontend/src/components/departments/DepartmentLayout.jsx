@@ -8,9 +8,16 @@ import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import SuspenseLoader from '../ui/SuspenseLoader';
 import { useLocation } from 'react-router-dom';
+import { useScroll, useSpring } from 'framer-motion';
 
 const DepartmentLayout = ({ data, activeSection, children }) => {
   const location = useLocation();
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   React.useEffect(() => {
     if (!location.state?.fromDeptSidebar) {
@@ -22,6 +29,11 @@ const DepartmentLayout = ({ data, activeSection, children }) => {
   return (
     <HelmetProvider>
       <div className="min-h-screen bg-primary-50/50 flex flex-col relative overflow-hidden">
+        {/* Scroll Progress Bar */}
+        <motion.div 
+          className="fixed top-0 left-0 right-0 h-1.5 bg-accent-gold z-[100] origin-left"
+          style={{ scaleX }}
+        />
         {/* Ambient Background Lighting */}
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
           <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-accent-gold/5 rounded-full blur-[120px] opacity-50 mix-blend-multiply" />
@@ -39,7 +51,7 @@ const DepartmentLayout = ({ data, activeSection, children }) => {
           <DepartmentHero data={data.heroData} />
 
           <div className="container mx-auto px-4 md:px-8 py-12 md:py-24 relative max-w-7xl">
-            <div className="flex flex-col md:flex-row gap-8 lg:gap-16 items-start">
+            <div className={`flex flex-col ${activeSection === 'achievements' ? '' : 'md:flex-row'} gap-8 lg:gap-16 items-start`}>
               
               <DepartmentSidebar 
                 deptCode={data.id}

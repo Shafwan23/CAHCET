@@ -51,26 +51,26 @@ const scholarshipRates = [
 const categories = [
   {
     title: "Backward Class Scholarship",
-    desc: "Available for BC, MBC, and BCM students admitted under the single-window government counseling admission path.",
-    meta: "BC / MBC / BCM Candidates",
+    desc: "This scholarship is given to BC, MBC and BCM who are coming through single window admission(Counseling).",
+    meta: "BC / MBC / BCM",
     icon: Users
   },
   {
-    title: "Adi Dravidar & ST Scholarship",
-    desc: "Full state government tuition waiver scheme for SC, ST, and SC Converted Christian students meeting eligibility requirements.",
-    meta: "SC / ST / SCC Candidates",
+    title: "Adi Draviddar and ST Scholarship",
+    desc: "This Scholarship is given to all SC/ST/SC Converted Christian as well.",
+    meta: "SC / ST / SCC",
     icon: GraduationCap
   },
   {
     title: "Merit-cum-Means Scholarship",
-    desc: "National level financial aid allocated for meritorious students belonging to minority communities (Muslim, Christian, Sikh, etc.).",
-    meta: "Minority Community Candidates",
+    desc: "This scholarship is given to all minority communities like Muslim, Christian, Sikh, etc…",
+    meta: "Minority Communities",
     icon: DollarSign
   },
   {
     title: "First Graduate Scholarship",
-    desc: "State concession scheme for students who are the first graduates in their family, admitted through counseling channels.",
-    meta: "First Graduate Families",
+    desc: "This scholarship is given to student(s) who is first graduate from his/her family and should be admitted through single window admission(Counseling).",
+    meta: "First Graduate",
     icon: Award
   }
 ];
@@ -124,198 +124,216 @@ const ScholarshipPage = () => {
 
         <FloatingParticles count={25} color="rgba(212, 175, 55, 0.12)" />
 
-        {/* Hero Section */}
-        <header className="relative pt-40 pb-24 overflow-hidden bg-gradient-to-r from-primary-950 via-primary-900 to-primary-950 text-white text-center rounded-b-[2.5rem] shadow-xl z-10">
-          {/* Geometric structural borders for premium design */}
-          <div className="absolute inset-0 pointer-events-none opacity-20">
-            <div className="absolute -left-16 -top-16 w-64 h-64 border-2 border-white rounded-full" />
-            <div className="absolute right-10 bottom-5 w-80 h-80 border border-white/40 rounded-full" />
-            <div className="absolute left-1/3 top-10 w-96 h-96 border border-white/20 rounded-full" />
+        {/* Premium Parallax Hero Section */}
+        <header className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-primary-950 flex items-center min-h-[40vh] md:min-h-[50vh] rounded-b-[3rem] shadow-luxury z-10 mb-20">
+          {/* Background Elements */}
+          <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-950/90 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-amber-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
           </div>
 
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="relative z-10 max-w-4xl px-6 mx-auto"
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="container mx-auto px-4 md:px-8 relative z-10 max-w-4xl text-center flex flex-col items-center"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold uppercase tracking-[0.25em] text-accent-gold mb-6">
-              <Award className="w-4.5 h-4.5 text-accent-gold" />
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent-gold/10 border border-accent-gold/20 text-xs font-bold uppercase tracking-widest text-accent-gold mb-6 shadow-glow-sm backdrop-blur-md">
+              <Award className="w-4.5 h-4.5" />
               Financial Assistance Portal
             </div>
-            <h1 className="text-4xl md:text-6xl font-display font-extrabold tracking-tight mb-4 text-white">
+            <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-accent-gold leading-tight">
               {title}
             </h1>
-            <p className="text-lg md:text-xl text-white/80 font-light max-w-2xl mx-auto">
+            <p className="text-xl text-primary-200 font-light max-w-2xl mx-auto leading-relaxed">
               {description}
             </p>
           </motion.div>
         </header>
 
-        <main className="flex-grow py-20 px-6 md:px-12 max-w-7xl mx-auto w-full relative z-10 flex flex-col gap-24">
+        <main className="flex-grow py-20 px-6 md:px-12 max-w-7xl mx-auto w-full relative z-10 flex flex-col gap-28">
 
-          {/* Eligibility for Scholarship Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-white border border-gray-200 rounded-[2.5rem] p-8 md:p-14 shadow-md relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-accent-gold/5 rounded-full blur-2xl" />
-            
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-10 border-b border-gray-100 pb-6">
-              <div className="p-3.5 bg-accent-gold/15 text-accent-gold rounded-2xl">
-                <AlertCircle className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-2xl md:text-3.5xl font-display font-extrabold text-primary-950">
-                  Eligibility for Scholarship
-                </h2>
-                <p className="text-sm text-gray-500 font-light mt-1">
-                  Important directives and criteria governed by institutional and state regulations
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {eligibilityRules.map((rule, idx) => {
-                const Icon = rule.icon;
-                return (
-                  <div 
-                    key={idx} 
-                    className="flex gap-4 p-5 rounded-2xl bg-slate-50 border border-gray-150/70 hover:border-accent-gold/30 duration-300 transition-colors"
-                  >
-                    <Icon className={`w-6 h-6 shrink-0 mt-0.5 ${rule.color}`} />
-                    <p className="text-sm md:text-base text-gray-700 leading-relaxed font-light">
-                      {rule.text}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-
-          {/* Scholarship Table Section */}
-          <div className="w-full">
-            <div className="text-center max-w-3xl mx-auto mb-14">
-              <h2 className="text-2xl md:text-4xl font-display font-extrabold text-primary-950 mb-4">
-                Academic Merit Concessions
-              </h2>
-              <p className="text-gray-600 font-light text-sm md:text-base">
-                Tuition fee waiver scale structured for B.E. / B.Tech courses matching 10+2 / HSC results.
-              </p>
-            </div>
-
-            {/* Desktop Table */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="hidden md:block overflow-hidden rounded-[2rem] border border-gray-200 shadow-md bg-white"
-            >
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-primary-950 text-white font-display text-sm uppercase tracking-wider">
-                    <th className="py-6 px-10 border-b border-primary-900 font-bold">10+2 / HSC Marks (Aggregate Percentage)</th>
-                    <th className="py-6 px-10 border-b border-primary-900 font-bold text-right">Scholarship / Fee Waiver Per Year</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {scholarshipRates.map((rate, idx) => (
-                    <tr 
-                      key={idx} 
-                      className="hover:bg-slate-50 transition-colors duration-200 text-gray-700"
-                    >
-                      <td className="py-6 px-10 font-semibold">{rate.marks}</td>
-                      <td className="py-6 px-10 text-right text-primary-900 font-bold text-lg flex items-center justify-end gap-2">
-                        <Percent className="w-5 h-5 text-accent-gold" />
-                        <span>{rate.scholarship}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </motion.div>
-
-            {/* Mobile Cards View */}
-            <div className="grid grid-cols-1 gap-4 md:hidden">
-              {scholarshipRates.map((rate, idx) => (
-                <div 
-                  key={idx} 
-                  className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm flex flex-col gap-2"
-                >
-                  <div className="text-xs uppercase tracking-wider font-bold text-gray-400">HSC Aggregate Marks</div>
-                  <div className="text-lg font-bold text-primary-950">{rate.marks}</div>
-                  <div className="border-t border-gray-100 my-2 pt-2 flex items-center gap-2 text-primary-900 font-bold text-base">
-                    <Percent className="w-5 h-5 text-accent-gold" />
-                    <span>{rate.scholarship}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Scholarship Categories Section */}
+          {/* Scholarship Categories Section (Moved to Top as Requested) */}
           <div>
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-2xl md:text-4xl font-display font-extrabold text-primary-950 mb-4">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-4xl md:text-6xl font-display font-extrabold text-primary-950 mb-6 tracking-tight"
+              >
                 Available Scholarships
-              </h2>
-              <p className="text-gray-600 font-light text-sm md:text-base">
-                Explore government-assisted schemes and state education waivers supporting various student categories.
-              </p>
+              </motion.h2>
+              <motion.div 
+                initial={{ width: 0 }}
+                whileInView={{ width: "8rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="h-2 bg-gradient-to-r from-accent-gold to-yellow-500 mx-auto mb-6 rounded-full shadow-glow-sm" 
+              />
+              <motion.p 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="text-primary-600 font-light text-xl"
+              >
+                Explore the exclusive scholarship programs available for our students.
+              </motion.p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {scholarships.map((cat, idx) => {
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {categories.map((cat, idx) => {
+                const Icon = cat.icon;
                 return (
                   <motion.div
-                    key={cat.id || idx}
-                    initial={{ opacity: 0, y: 30 }}
+                    key={idx}
+                    initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1, duration: 0.6 }}
-                    whileHover={{ y: -5 }}
-                    className={`bg-white border ${cat.featured ? 'border-accent-gold shadow-lg' : 'border-gray-200'} rounded-3xl p-8 relative overflow-hidden group hover:border-accent-gold/40 hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 flex flex-col`}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: idx * 0.15, duration: 0.7 }}
+                    className="relative bg-white/90 backdrop-blur-2xl border border-primary-100 rounded-[3rem] p-10 shadow-luxury hover:shadow-[0_20px_60px_-15px_rgba(212,175,55,0.2)] transition-all duration-700 group flex flex-col hover:-translate-y-3 overflow-hidden"
                   >
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-accent-gold/[0.03] rounded-full blur-xl group-hover:bg-accent-gold/5 transition-all duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-accent-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 rounded-full blur-3xl group-hover:bg-accent-gold/15 transition-all duration-700 z-0 pointer-events-none" />
                     
-                    <div className="flex justify-between items-start mb-6">
-                      <div className="p-4 bg-primary-50 text-primary-900 group-hover:bg-accent-gold/15 group-hover:text-accent-gold rounded-2xl w-fit shadow-inner duration-300 transition-all">
-                        <Award className="w-6 h-6" />
+                    <div className="flex items-start gap-6 mb-8 relative z-20">
+                      <div className="w-20 h-20 bg-primary-50 text-primary-500 group-hover:bg-accent-gold group-hover:text-white rounded-[1.5rem] flex items-center justify-center shadow-sm duration-500 transition-all border border-primary-100 group-hover:border-accent-gold group-hover:shadow-glow-sm shrink-0">
+                        <Icon className="w-10 h-10 group-hover:scale-110 transition-transform duration-500" />
                       </div>
-                      {cat.images && cat.images.length > 0 && (
-                        <div className="flex -space-x-3">
-                          {cat.images.map((img, i) => (
-                            <img key={i} src={img} alt="Badge" className="w-12 h-12 rounded-full border-2 border-white object-cover" />
-                          ))}
-                        </div>
-                      )}
+                      <div className="flex-1 pt-1">
+                        <span className="inline-block text-[10px] font-black tracking-widest text-accent-gold uppercase font-display bg-accent-gold/10 px-4 py-1.5 rounded-full border border-accent-gold/20 mb-3 shadow-inner">
+                          {cat.meta}
+                        </span>
+                        <h3 className="text-2xl md:text-3xl font-display font-bold text-primary-950 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary-950 group-hover:to-accent-gold transition-all duration-500">
+                          {cat.title}
+                        </h3>
+                      </div>
                     </div>
 
-                    <span className="text-xs font-bold tracking-widest text-accent-gold block mb-2 uppercase font-display">
-                      {cat.amount || 'Financial Aid'}
-                    </span>
-                    <h3 className="text-xl font-bold text-primary-950 mb-3 group-hover:text-accent-gold transition-colors duration-300">
-                      {cat.title}
-                    </h3>
-                    <div className="mb-3 text-xs font-semibold text-amber-600 bg-primary-50 w-fit px-3 py-1 rounded-md">
-                      Eligibility: {cat.eligibility}
+                    <div className="bg-slate-50 border border-primary-100/50 rounded-3xl p-6 relative z-20 flex-1 shadow-inner group-hover:bg-white transition-colors duration-500">
+                      <p className="text-lg text-primary-700 font-light leading-relaxed">
+                        {cat.desc}
+                      </p>
                     </div>
-                    <p className="text-sm md:text-base text-gray-650 font-light leading-relaxed flex-1">
-                      {cat.description}
-                    </p>
-                    {cat.pdfUrl && (
-                      <a href={cat.pdfUrl} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-accent-gold hover:text-amber-600 transition-colors bg-accent-gold/5 px-4 py-2 rounded-xl w-fit">
-                        Download Application Form <ArrowRight className="w-4 h-4" />
-                      </a>
-                    )}
                   </motion.div>
                 );
               })}
             </div>
           </div>
+
+          {/* Academic Merit Concessions */}
+          <div className="w-full relative z-10">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-4xl md:text-5xl font-display font-extrabold text-primary-950 mb-6">
+                Academic Merit Concessions
+              </h2>
+              <div className="w-24 h-1.5 bg-accent-gold mx-auto mb-6 rounded-full shadow-glow-sm" />
+              <p className="text-primary-600 font-light text-xl">
+                Tuition fee waiver scale structured for B.E. / B.Tech courses matching 10+2 / HSC results.
+              </p>
+            </div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="overflow-hidden rounded-[3rem] border border-white/60 shadow-luxury bg-white/80 backdrop-blur-xl relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 via-transparent to-accent-gold/5 pointer-events-none" />
+              
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-0 relative z-10 divide-y md:divide-y-0 md:divide-x divide-primary-100/50">
+                {/* Left Side: Illustration / Info */}
+                <div className="col-span-1 md:col-span-4 bg-primary-950 p-10 flex flex-col justify-center text-white relative overflow-hidden">
+                  <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-accent-gold/20 rounded-full blur-3xl" />
+                  <Award className="w-16 h-16 text-accent-gold mb-6" />
+                  <h3 className="text-3xl font-display font-bold mb-4">Merit Scholarship</h3>
+                  <p className="text-primary-200 font-light text-lg">Your hard work deserves to be rewarded. Maintain high academic standards to secure these annual fee waivers.</p>
+                </div>
+                
+                {/* Right Side: The Table */}
+                <div className="col-span-1 md:col-span-8 p-0 overflow-x-auto">
+                  <table className="w-full text-left border-collapse h-full min-w-[500px]">
+                    <thead>
+                      <tr className="bg-primary-50/50 text-primary-500 font-display text-xs uppercase tracking-widest border-b border-primary-100/50">
+                        <th className="py-6 px-8 font-black">10+2 / HSC Marks (Aggregate)</th>
+                        <th className="py-6 px-8 font-black text-right">Fee Waiver Per Year</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-primary-100/30">
+                      {scholarshipRates.map((rate, idx) => (
+                        <motion.tr 
+                          key={idx} 
+                          whileHover={{ backgroundColor: "rgba(248, 250, 252, 0.8)" }}
+                          className="transition-colors duration-300 text-primary-800 group"
+                        >
+                          <td className="py-6 px-8 font-bold text-xl text-primary-950">{rate.marks}</td>
+                          <td className="py-6 px-8 text-right text-emerald-600 font-extrabold text-xl flex items-center justify-end gap-3">
+                            <Percent className="w-5 h-5 text-emerald-500 group-hover:scale-125 group-hover:rotate-12 transition-transform duration-500" />
+                            <span className="group-hover:text-emerald-500 transition-colors">{rate.scholarship}</span>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Eligibility Rules */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="bg-white/80 backdrop-blur-xl border border-white/60 rounded-[3rem] p-10 md:p-16 shadow-luxury relative overflow-hidden group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-transparent z-0" />
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+              className="absolute top-0 right-0 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl pointer-events-none" 
+            />
+            
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-12 border-b border-primary-100/50 pb-8 relative z-10">
+              <div className="p-5 bg-gradient-to-br from-accent-gold to-yellow-600 text-white rounded-2xl shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+                <AlertCircle className="w-10 h-10" />
+              </div>
+              <div>
+                <h2 className="text-3xl md:text-5xl font-display font-extrabold text-primary-950">
+                  Eligibility Directives
+                </h2>
+                <p className="text-lg text-primary-500 font-light mt-2">
+                  Important criteria governed by institutional and state regulations
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+              {eligibilityRules.map((rule, idx) => {
+                const Icon = rule.icon;
+                return (
+                  <motion.div 
+                    key={idx} 
+                    whileHover={{ y: -5 }}
+                    className="flex items-start gap-6 p-8 rounded-[2rem] bg-white border border-primary-100 shadow-sm hover:shadow-[0_15px_30px_rgba(0,0,0,0.06)] hover:border-accent-gold/40 duration-500 transition-all group/rule"
+                  >
+                    <div className={`p-4 rounded-xl shrink-0 border border-primary-100 shadow-inner group-hover/rule:bg-accent-gold/10 group-hover/rule:border-accent-gold/30 transition-colors duration-500`}>
+                      <Icon className={`w-8 h-8 ${rule.color} group-hover/rule:scale-110 transition-transform duration-300`} />
+                    </div>
+                    <p className="text-base md:text-lg text-primary-700 leading-relaxed font-medium pt-1">
+                      {rule.text}
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
 
         </main>
 

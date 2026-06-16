@@ -8,7 +8,7 @@ import { cmsService } from '../../../../services/cmsService';
 
 const ResearchEditor = () => {
   const toast = useToast();
-  const [form, setForm] = useState({ title: '', content: '', stats: {}, sections: [], publications: [], labs: [], collaborations: [] });
+  const [form, setForm] = useState({ title: '', content: '', stats: {}, sections: [], publications: [], labs: [], collaborations: [], functionalities: [], team: [], achievementsList: [] });
   const [loading, setLoading] = useState(true);
   const [sectionsMap, setSectionsMap] = useState({});
 
@@ -50,7 +50,7 @@ const ResearchEditor = () => {
   };
 
   const handleReset = () => {
-    setForm({ title: '', content: '', stats: {}, sections: [], publications: [], labs: [], collaborations: [] });
+    setForm({ title: '', content: '', stats: {}, sections: [], publications: [], labs: [], collaborations: [], functionalities: [], team: [], achievementsList: [] });
     toast({ type: 'info', title: 'Reset', message: 'Reverted to defaults.' });
   };
 
@@ -77,6 +77,40 @@ const ResearchEditor = () => {
     list[secIdx].images = list[secIdx].images.filter((_, i) => i !== imgIdx);
     change('sections', list);
   };
+
+  // --- FUNCTIONALITIES ---
+  const addFunctionality = () => change('functionalities', [...(form.functionalities || []), '']);
+  const updateFunctionality = (idx, v) => {
+    const list = [...(form.functionalities || [])];
+    list[idx] = v;
+    change('functionalities', list);
+  };
+  const removeFunctionality = (idx) => change('functionalities', (form.functionalities || []).filter((_, i) => i !== idx));
+
+  // --- TEAM ---
+  const addTeamMember = () => change('team', [...(form.team || []), { id: Date.now(), name: '', role: '', image: '' }]);
+  const updateTeamMember = (idx, f, v) => {
+    const list = [...(form.team || [])];
+    list[idx] = { ...list[idx], [f]: v };
+    change('team', list);
+  };
+  const removeTeamMember = (idx) => change('team', (form.team || []).filter((_, i) => i !== idx));
+  const handleTeamImage = async (idx, file) => {
+    if (!file) return;
+    try {
+      const rec = await fileService.upload(file, 'research', 'team');
+      updateTeamMember(idx, 'image', rec.url);
+    } catch { toast({ type: 'error', title: 'Upload failed' }); }
+  };
+
+  // --- ACHIEVEMENTS ---
+  const addAchievement = () => change('achievementsList', [...(form.achievementsList || []), '']);
+  const updateAchievement = (idx, v) => {
+    const list = [...(form.achievementsList || [])];
+    list[idx] = v;
+    change('achievementsList', list);
+  };
+  const removeAchievement = (idx) => change('achievementsList', (form.achievementsList || []).filter((_, i) => i !== idx));
 
   // --- PUBLICATIONS ---
   const addPublication = () => change('publications', [{ id: Date.now(), title: '', authors: '', journal: '', year: '', link: '' }, ...(form.publications || [])]);
@@ -137,11 +171,69 @@ const ResearchEditor = () => {
             <div className="grid grid-cols-2 gap-4">
               <AdminInput label="Publications" value={form.stats?.publications || ''} onChange={e => changeStat('publications', e.target.value)} placeholder="e.g. 500+" />
               <AdminInput label="Patents Filed" value={form.stats?.patents || ''} onChange={e => changeStat('patents', e.target.value)} placeholder="e.g. 20+" />
-              <AdminInput label="Research Grants" value={form.stats?.grants || ''} onChange={e => changeStat('grants', e.target.value)} placeholder="e.g. ₹5 Cr+" />
+              <AdminInput label="Funding Proposals" value={form.stats?.grants || ''} onChange={e => changeStat('grants', e.target.value)} placeholder="e.g. 14+" />
               <AdminInput label="Scholars" value={form.stats?.scholars || ''} onChange={e => changeStat('scholars', e.target.value)} placeholder="e.g. 100+" />
             </div>
           </EditorCard>
         </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <EditorCard title="R&D Cell Functionalities">
+            <div className="space-y-4">
+              {(form.functionalities || []).map((item, idx) => (
+                <div key={idx} className="relative flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                  <button onClick={() => removeFunctionality(idx)} className="mt-1 p-1.5 text-amber-400 hover:text-amber-600 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <div className="flex-1">
+                    <AdminTextarea value={item} onChange={e => updateFunctionality(idx, e.target.value)} rows={2} placeholder="Functionality description..." />
+                  </div>
+                </div>
+              ))}
+              <button onClick={addFunctionality} className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 font-semibold text-sm w-full justify-center">
+                <Plus className="w-4 h-4" /> Add Functionality
+              </button>
+            </div>
+          </EditorCard>
+
+          <EditorCard title="Achievements & Innovations">
+            <div className="space-y-4">
+              {(form.achievementsList || []).map((item, idx) => (
+                <div key={idx} className="relative flex items-start gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                  <button onClick={() => removeAchievement(idx)} className="mt-1 p-1.5 text-amber-400 hover:text-amber-600 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <div className="flex-1">
+                    <AdminTextarea value={item} onChange={e => updateAchievement(idx, e.target.value)} rows={2} placeholder="Achievement description..." />
+                  </div>
+                </div>
+              ))}
+              <button onClick={addAchievement} className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100 font-semibold text-sm w-full justify-center">
+                <Plus className="w-4 h-4" /> Add Achievement
+              </button>
+            </div>
+          </EditorCard>
+        </div>
+
+        <EditorCard title="Research Team">
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {(form.team || []).map((member, idx) => (
+                <div key={member.id} className="p-4 bg-white border border-slate-200 rounded-xl relative flex flex-col gap-3">
+                  <button onClick={() => removeTeamMember(idx)} className="absolute top-2 right-2 p-1.5 text-amber-400 hover:text-amber-600 rounded-lg transition-colors z-10"><Trash2 className="w-4 h-4" /></button>
+                  <div className="w-20 h-20 bg-slate-50 border border-slate-200 rounded-full mx-auto flex items-center justify-center overflow-hidden relative group/img">
+                    {member.image ? <img src={member.image} className="w-full h-full object-cover" /> : <span className="text-[10px] text-slate-400">Photo</span>}
+                    <label className="absolute inset-0 bg-black/50 text-white flex flex-col items-center justify-center opacity-0 group-hover/img:opacity-100 cursor-pointer transition-opacity">
+                      <Upload className="w-4 h-4" />
+                      <input type="file" accept="image/*" className="hidden" onChange={e => handleTeamImage(idx, e.target.files[0])} />
+                    </label>
+                  </div>
+                  <AdminInput label="Name" value={member.name} onChange={e => updateTeamMember(idx, 'name', e.target.value)} />
+                  <AdminInput label="Role" value={member.role} onChange={e => updateTeamMember(idx, 'role', e.target.value)} />
+                </div>
+              ))}
+            </div>
+            <button onClick={addTeamMember} className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 font-semibold text-sm w-max">
+              <Plus className="w-4 h-4" /> Add Team Member
+            </button>
+          </div>
+        </EditorCard>
 
         <EditorCard title="Research Sections">
           <div className="space-y-6">

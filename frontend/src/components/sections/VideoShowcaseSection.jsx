@@ -3,11 +3,28 @@ import { motion } from 'framer-motion';
 import { Section, Container } from '../ui/Layout';
 import { slideUp } from '../../animations/variants';
 
+const getEmbedUrl = (url) => {
+  if (!url) return '';
+  if (url.includes('/embed/')) return url;
+  
+  const watchMatch = url.match(/[?&]v=([^&]+)/);
+  if (watchMatch && watchMatch[1]) {
+    return `https://www.youtube.com/embed/${watchMatch[1]}`;
+  }
+
+  const shortMatch = url.match(/youtu\.be\/([^?]+)/);
+  if (shortMatch && shortMatch[1]) {
+    return `https://www.youtube.com/embed/${shortMatch[1]}`;
+  }
+
+  return url;
+};
+
 const VideoShowcaseSection = ({ data }) => {
   const title = data?.title || 'Experience CAHCET';
   const subtitle = data?.subtitle || 'Campus Media';
   const description = data?.description || 'Take a virtual tour of our sprawling campus and listen to the success stories of our students.';
-  const videos = data?.videos || [
+  const videos = data?.videos?.length > 0 ? data.videos : [
     {
       url: 'https://www.youtube.com/embed/BYDRoSM7b1Q',
       title: 'Campus Tour',
@@ -54,7 +71,7 @@ const VideoShowcaseSection = ({ data }) => {
               <div className="relative rounded-2xl overflow-hidden shadow-lg bg-primary-900 aspect-video">
                 <iframe
                   className="w-full h-full"
-                  src={vid.url}
+                  src={getEmbedUrl(vid.url)}
                   title={vid.title}
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

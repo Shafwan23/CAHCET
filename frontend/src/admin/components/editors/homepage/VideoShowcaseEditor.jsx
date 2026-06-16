@@ -5,6 +5,23 @@ import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { AdminInput, AdminTextarea, AdminToggle } from '../../ui/AdminInput';
 import { cmsService } from '../../../../services/cmsService';
 
+const getEmbedUrl = (url) => {
+  if (!url) return '';
+  if (url.includes('/embed/')) return url;
+  
+  const watchMatch = url.match(/[?&]v=([^&]+)/);
+  if (watchMatch && watchMatch[1]) {
+    return `https://www.youtube.com/embed/${watchMatch[1]}`;
+  }
+
+  const shortMatch = url.match(/youtu\.be\/([^?]+)/);
+  if (shortMatch && shortMatch[1]) {
+    return `https://www.youtube.com/embed/${shortMatch[1]}`;
+  }
+
+  return url;
+};
+
 const VideoShowcaseEditor = () => {
   const toast = useToast();
   const [form, setForm] = useState({
@@ -115,7 +132,7 @@ const VideoShowcaseEditor = () => {
     const targetIdx = index + direction;
     if (targetIdx < 0 || targetIdx >= videos.length) return;
     const [moved] = videos.splice(index, 1);
-    images.splice(targetIdx, 0, moved);
+    videos.splice(targetIdx, 0, moved);
     change('videos', videos);
   };
 
@@ -201,7 +218,7 @@ const VideoShowcaseEditor = () => {
                   {vid.url ? (
                     <iframe
                       className="w-full h-full"
-                      src={vid.url}
+                      src={getEmbedUrl(vid.url)}
                       title={vid.title}
                       frameBorder="0"
                       allowFullScreen

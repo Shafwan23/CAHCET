@@ -1,0 +1,254 @@
+[
+  {
+    "id": 1,
+    "author": "ABDUR RAHAMAN F",
+    "company": "EDUREKA LEARNING CENTER",
+    "topic": "PYTHON-SQL",
+    "title": "PYTHON-SQL at EDUREKA LEARNING CENTER",
+    "date": "31/01/24 - 15/02/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 2,
+    "author": "T HARISH KUMAR",
+    "company": "PRODIGY INFOTECH",
+    "topic": "CYBER SECURITY",
+    "title": "CYBER SECURITY at PRODIGY INFOTECH",
+    "date": "1/04/24 - 30/04/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 3,
+    "author": "BARATH NATH P",
+    "company": "PRODIGY INFOTECH",
+    "topic": "CYBER SECURITY",
+    "title": "CYBER SECURITY at PRODIGY INFOTECH",
+    "date": "1/04/24 - 30/04/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 4,
+    "author": "KHRISHWANTH K",
+    "company": "PRODIGY INFOTECH",
+    "topic": "CYBER SECURITY",
+    "title": "CYBER SECURITY at PRODIGY INFOTECH",
+    "date": "1/04/24 - 30/04/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 5,
+    "author": "JAYEESH KUMAR S",
+    "company": "PRODIGY INFOTECH",
+    "topic": "CYBER SECURITY",
+    "title": "CYBER SECURITY at PRODIGY INFOTECH",
+    "date": "1/04/24 - 30/04/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 6,
+    "author": "GOKUL A",
+    "company": "TECHNO HACKING COMPANY",
+    "topic": "AI",
+    "title": "AI at TECHNO HACKING COMPANY",
+    "date": "",
+    "year": "2024-2025"
+  },
+  {
+    "id": 7,
+    "author": "KAABEEL AHAMED R",
+    "company": "PRODIGY INFOTECH",
+    "topic": "CYBER SECURITY",
+    "title": "CYBER SECURITY at PRODIGY INFOTECH",
+    "date": "1/04/24 - 30/04/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 8,
+    "author": "GOKULA ACHUTHAN",
+    "company": "PRODIGY INFOTECH",
+    "topic": "CYBER SECURITY",
+    "title": "CYBER SECURITY at PRODIGY INFOTECH",
+    "date": "1/04/24 - 30/04/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 9,
+    "author": "G NITHYALAKSHMI",
+    "company": "TECHNO HACKS EDUTECH",
+    "topic": "WEB DEVELOPMENT",
+    "title": "WEB DEVELOPMENT at TECHNO HACKS EDUTECH",
+    "date": "01/03/24 - 31/03/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 10,
+    "author": "SAM CHRISTOPHER",
+    "company": "INTRAINZ",
+    "topic": "",
+    "title": "INTRAINZ",
+    "date": "01/03/24 - 01/05/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 11,
+    "author": "SHAFWAAN AHAMED T",
+    "company": "SRI RAMAKRISHNA ENGINEERING COLLEGE",
+    "topic": "INNOVATION DESIGN AND ENTREPRENEURSHIP",
+    "title": "INNOVATION DESIGN AND ENTREPRENEURSHIP at SRI RAMAKRISHNA ENGINEERING COLLEGE",
+    "date": "29/01/24 - 02/02/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 12,
+    "author": "KAMAL RAJ P",
+    "company": "SRI RAMAKRISHNA ENGINEERING COLLEGE",
+    "topic": "INNOVATION DESIGN AND ENTREPRENEURSHIP",
+    "title": "INNOVATION DESIGN AND ENTREPRENEURSHIP at SRI RAMAKRISHNA ENGINEERING COLLEGE",
+    "date": "29/01/24 - 02/02/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 13,
+    "author": "DARSHINI NARASIMAN",
+    "company": "GOOGLE DEVELOPERS GROUPS",
+    "topic": "AI FUSION:GOOGLE'S DUET &AMP; DATA TRILOGY",
+    "title": "AI FUSION:GOOGLE'S DUET &AMP; DATA TRILOGY at GOOGLE DEVELOPERS GROUPS",
+    "date": "2/17/2024",
+    "year": "2024-2025"
+  },
+  {
+    "id": 14,
+    "author": "DARSHINI NARASIMAN",
+    "company": "GOOGLE DEVELOPERS GROUPS",
+    "topic": "THE GEN AI MEETUP",
+    "title": "THE GEN AI MEETUP at GOOGLE DEVELOPERS GROUPS",
+    "date": "2/24/2024",
+    "year": "2024-2025"
+  },
+  {
+    "id": 15,
+    "author": "MOHAMMED ARSHAD",
+    "company": "INTFOGLITZ",
+    "topic": "INTERNET OF THINGS",
+    "title": "INTERNET OF THINGS at INTFOGLITZ",
+    "date": "10/01/24 - 10/02/24",
+    "year": "2024-2025"
+  },
+  {
+    "id": 16,
+    "author": "G KAREEM WASIQUE",
+    "company": "YOUNITY",
+    "topic": "BUSINESS DEVELOPMENT SPECIALIST INTERN",
+    "title": "BUSINESS DEVELOPMENT SPECIALIST INTERN at YOUNITY",
+    "date": "2/1/2024",
+    "year": "2024-2025"
+  },
+  {
+    "id": 17,
+    "author": "MOHAMMED ZAHEER HUSSAIN",
+    "company": "EDUREKA LEARNING CENTER",
+    "topic": "CYBER SESSION ORGANIZED BY EDUREKA",
+    "title": "CYBER SESSION ORGANIZED BY EDUREKA at EDUREKA LEARNING CENTER",
+    "date": "7/10/2023",
+    "year": "2024-2025"
+  },
+  {
+    "id": 18,
+    "author": "HUSAIN AHMED A",
+    "company": "STRIVEN PVT LTD",
+    "topic": "WEB DEVELOPMENT",
+    "title": "WEB DEVELOPMENT at STRIVEN PVT LTD",
+    "date": "12/07/23 - 13/07/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 19,
+    "author": "DHARSHINI N G",
+    "company": "STRIVEN PVT LTD",
+    "topic": "AUTOMATION PROJECT",
+    "title": "AUTOMATION PROJECT at STRIVEN PVT LTD",
+    "date": "12/07/23 - 13/07/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 20,
+    "author": "YUMNA SAFIYA",
+    "company": "INDWORKS",
+    "topic": "",
+    "title": "INDWORKS",
+    "date": "01/07/23 - 01/09/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 21,
+    "author": "SNEHA S",
+    "company": "INDWORKS",
+    "topic": "",
+    "title": "INDWORKS",
+    "date": "01/07/23 - 01/09/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 22,
+    "author": "GOWTHAM V",
+    "company": "TECHNOHACKS",
+    "topic": "WEB DEVELOPMENT",
+    "title": "WEB DEVELOPMENT at TECHNOHACKS",
+    "date": "1/10/23 - 31/10/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 23,
+    "author": "ABDUL MUJEEB",
+    "company": "TECHNOHACKS",
+    "topic": "WEB DEVELOPMENT",
+    "title": "WEB DEVELOPMENT at TECHNOHACKS",
+    "date": "1/10/23 - 31/10/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 24,
+    "author": "RAKSHANA K",
+    "company": "STRYDO",
+    "topic": "JAVA",
+    "title": "JAVA at STRYDO",
+    "date": "17/07/23 - 28/07/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 25,
+    "author": "VIGNESH",
+    "company": "VITTAE SOFTWARE TEAM",
+    "topic": "DATA SCIENCE MODELLING",
+    "title": "DATA SCIENCE MODELLING at VITTAE SOFTWARE TEAM",
+    "date": "1/09/23 - 30/09/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 26,
+    "author": "FATHIMULLA MAAZ AHMED",
+    "company": "CODEBIND TECHNOLOGIES",
+    "topic": "WEB DEVELOPMENT",
+    "title": "WEB DEVELOPMENT at CODEBIND TECHNOLOGIES",
+    "date": "17/7/2023 - 21/07/23",
+    "year": "2024-2025"
+  },
+  {
+    "id": 27,
+    "author": "MOHAMM",
+    "company": "",
+    "topic": "",
+    "title": "",
+    "date": "",
+    "year": "2024-2025"
+  },
+  {
+    "id": 28,
+    "author": "",
+    "company": "",
+    "topic": "",
+    "title": "",
+    "date": "",
+    "year": "2024-2025"
+  }
+]

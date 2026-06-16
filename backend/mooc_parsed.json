@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "category": "mooc",
+    "author": "R Abrar ul haque",
+    "company": "coursera",
+    "title": "Setup Python",
+    "date": "3/13/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 2,
+    "category": "mooc",
+    "author": "Subasri",
+    "company": "coursera",
+    "title": "Setup Python",
+    "date": "3/8/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 3,
+    "category": "mooc",
+    "author": "Subasri",
+    "company": "coursera",
+    "title": "Automate DOC Review with sharepoint &power Automate",
+    "date": "3/12/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 4,
+    "category": "mooc",
+    "author": "Subasri",
+    "company": "coursera",
+    "title": "Decryption with Python",
+    "date": "3/8/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 5,
+    "category": "mooc",
+    "author": "Subasri",
+    "company": "coursera",
+    "title": "Python Generators",
+    "date": "3/8/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 6,
+    "category": "mooc",
+    "author": "Subasri",
+    "company": "coursera",
+    "title": "Python 101: Develop your First Python Progran",
+    "date": "",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 7,
+    "category": "mooc",
+    "author": "Subasri",
+    "company": "Coursera",
+    "title": "Python 101: Develop Your First Python Program",
+    "date": "08/03/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 8,
+    "category": "mooc",
+    "author": "Hemapriya P",
+    "company": "Coursera",
+    "title": "Business Analysis & Process Management",
+    "date": "27/05/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 9,
+    "category": "mooc",
+    "author": "Ayisha Siddiqha H",
+    "company": "Coursera",
+    "title": "Business Analysis & Process Management",
+    "date": "27/05/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 10,
+    "category": "mooc",
+    "author": "Mohammed Aasif",
+    "company": "Great Learning",
+    "title": "Pygame Basics",
+    "date": "11/2024",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 11,
+    "category": "mooc",
+    "author": "R. Abrar-ul-haque",
+    "company": "Great Learning",
+    "title": "Java Programming",
+    "date": "11/2024",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 12,
+    "category": "mooc",
+    "author": "Pavithra J",
+    "company": "Great Learning",
+    "title": "Java Programming",
+    "date": "11/2024",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 13,
+    "category": "mooc",
+    "author": "Rajkumar S",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 14,
+    "category": "mooc",
+    "author": "Mohammed Ragid V",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 15,
+    "category": "mooc",
+    "author": "Syed Musthafa S",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 16,
+    "category": "mooc",
+    "author": "Syed Nouman A",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 17,
+    "category": "mooc",
+    "author": "Rishi Kumar B",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 18,
+    "category": "mooc",
+    "author": "Thanveerul Haqs",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "26/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 19,
+    "category": "mooc",
+    "author": "Vaishnavi D",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "27/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 20,
+    "category": "mooc",
+    "author": "Shawoor Saqib",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "03/03/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 21,
+    "category": "mooc",
+    "author": "Samnesh",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 22,
+    "category": "mooc",
+    "author": "Shahid Ahamed",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 23,
+    "category": "mooc",
+    "author": "Suresh",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 24,
+    "category": "mooc",
+    "author": "Vijaya Kumar",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "03/03/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 25,
+    "category": "mooc",
+    "author": "Santhosh Kumar",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "03/03/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 26,
+    "category": "mooc",
+    "author": "Muhammed Khursheed Ahmed",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 27,
+    "category": "mooc",
+    "author": "B. Mohammed Sakheer",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "01/06/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 28,
+    "category": "mooc",
+    "author": "Pooja Sri",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "03/03/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 29,
+    "category": "mooc",
+    "author": "Syed Rabbani",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "04/02/2025",
+    "year": "Academic Year (2024-2025)"
+  },
+  {
+    "id": 30,
+    "category": "mooc",
+    "author": "Naseeruddeen S",
+    "company": "CodeSignal",
+    "title": "Introduction to HTML",
+    "date": "01/06/2025",
+    "year": "Academic Year (2024-2025)"
+  }
+]

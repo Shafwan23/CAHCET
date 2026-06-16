@@ -155,6 +155,13 @@ const RegistrationPage2026 = () => {
         <Helmet>
           <title>Admission 2026 Portal | CAHCET</title>
           <meta name="description" content="Join the league of excellence. Complete your registration for CAHCET Admission 2026. Explore premium programs and download application resources." />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+          <style>{`
+            .font-sans { font-family: 'Inter', sans-serif !important; }
+            .font-display { font-family: 'Outfit', sans-serif !important; }
+          `}</style>
         </Helmet>
 
         {/* Premium ambient background (light theme compatible) */}
@@ -324,7 +331,7 @@ const RegistrationPage2026 = () => {
         {/* ========================================================
             2. CINEMATIC HERO SECTION
            ======================================================== */}
-        <header className="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden z-10">
+        <header className="relative min-h-[90vh] flex items-center justify-center pt-24 overflow-hidden z-10 rounded-b-[4rem] shadow-luxury mb-20">
           {/* Background parallax container */}
           <div className="absolute inset-0 z-0">
             <img 
@@ -332,43 +339,93 @@ const RegistrationPage2026 = () => {
               alt="Premium College Gate" 
               className="w-full h-full object-cover object-center scale-105 transform-gpu motion-safe:animate-[pulse_20s_ease-in-out_infinite_alternate]"
             />
-            {/* Cinematic dark gradient overlay ensuring high sharpness */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary-950/80 via-primary-950/60 to-primary-950" />
+            {/* Cinematic dark gradient overlay ensuring high sharpness while keeping image beautifully visible */}
+            <div className="absolute inset-0 bg-gradient-to-b from-primary-950/60 via-primary-950/30 to-primary-950/95" />
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] mix-blend-overlay" />
           </div>
  
-          <div className="relative z-10 text-center max-w-4xl px-6 flex flex-col items-center">
+          <div className="relative z-10 text-center max-w-6xl px-6 flex flex-col items-center">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="flex flex-col items-center"
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="flex flex-col items-center w-full"
             >
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full bg-white/15 border border-white/20 text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] sm:tracking-[0.3em] text-accent-gold mb-6">
-                <GraduationCap className="w-4 h-4" />
-                Admission Registration 2026-27 Open
+              <div className="flex flex-wrap justify-center gap-4 mb-8 w-full">
+                <motion.div 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.8 }}
+                  className="px-6 py-2.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold uppercase tracking-widest text-white backdrop-blur-md flex items-center gap-2"
+                >
+                  <GraduationCap className="w-4 h-4 text-accent-gold" />
+                  Admissions 2026
+                </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="px-6 py-2.5 rounded-full bg-accent-gold/20 border border-accent-gold/40 text-xs font-bold uppercase tracking-widest text-accent-gold backdrop-blur-md hidden sm:flex items-center gap-2"
+                >
+                  <Award className="w-4 h-4" />
+                  NAAC Accredited
+                </motion.div>
+              </div>
+
+              <div className="mb-12 w-full" style={{ perspective: "1000px" }}>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-black tracking-tight leading-[1.2] mb-8 text-white w-full text-center">
+                  <motion.div
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      hidden: { opacity: 0 },
+                      visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } }
+                    }}
+                    className="flex flex-col items-center justify-center gap-3 w-full"
+                  >
+                    <motion.span
+                      variants={{
+                        hidden: { opacity: 0, y: 80, rotateX: -60 },
+                        visible: { opacity: 1, y: 0, rotateX: 0, transition: { type: "spring", stiffness: 100, damping: 20, mass: 1 } }
+                      }}
+                      className="inline-block origin-bottom text-transparent bg-clip-text bg-gradient-to-b from-white to-white/80 pb-2 drop-shadow-sm"
+                    >
+                      C. Abdul Hakeem
+                    </motion.span>
+                    <motion.span
+                      variants={{
+                        hidden: { opacity: 0, y: 80, rotateX: -60 },
+                        visible: { opacity: 1, y: 0, rotateX: 0, transition: { type: "spring", stiffness: 100, damping: 20, mass: 1 } }
+                      }}
+                      className="inline-block origin-bottom pb-2 text-transparent bg-clip-text bg-gradient-to-r from-accent-gold via-yellow-200 to-accent-gold"
+                    >
+                      College of Engineering & Technology
+                    </motion.span>
+                  </motion.div>
+                </h1>
+   
+                <motion.p 
+                  initial={{ opacity: 0, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)" }}
+                  transition={{ delay: 0.8, duration: 1 }}
+                  className="text-xl md:text-2xl text-white/70 font-light leading-relaxed max-w-3xl mx-auto"
+                >
+                  Transforming futures through innovation and excellence in education. Join the league of extraordinary minds.
+                </motion.p>
               </div>
  
-              <h1 className="text-4xl md:text-6xl font-display font-extrabold text-white tracking-tight leading-tight mb-8">
-                C. Abdul Hakeem College of Engineering and Technology
-              </h1>
- 
-              <p className="text-lg md:text-xl text-white/90 font-light leading-relaxed max-w-2xl mb-12">
-                Transforming futures through innovation and excellence in education.
-              </p>
- 
-              <div className="flex flex-col sm:flex-row gap-5 items-center justify-center w-full max-w-sm sm:max-w-none sm:w-auto mx-auto">
+              <div className="flex flex-col sm:flex-row gap-6 items-center justify-center w-full max-w-sm sm:max-w-none sm:w-auto mx-auto">
                 <button
                   onClick={() => scrollToSection('apply-process')}
-                  className="w-full sm:w-auto bg-accent-gold hover:bg-amber-600 text-white font-extrabold px-8 py-4.5 rounded-full shadow-[0_4px_20px_rgba(212,175,55,0.3)] hover:scale-[1.03] transition-all flex items-center justify-center gap-2 group active:scale-98"
+                  className="w-full sm:w-auto bg-gradient-to-r from-accent-gold to-yellow-600 text-white font-extrabold px-10 py-5 rounded-full shadow-[0_10px_30px_rgba(212,175,55,0.4)] hover:shadow-[0_10px_40px_rgba(212,175,55,0.6)] hover:-translate-y-1 transition-all flex items-center justify-center gap-3 group active:scale-95 text-lg"
                 >
                   <span>Apply Now 2026</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
                 </button>
  
                 <button
                   onClick={() => scrollToSection('courses-section')}
-                  className="w-full sm:w-auto bg-white/10 border border-white/20 text-white font-bold px-8 py-4.5 rounded-full hover:bg-white/20 transition-all flex items-center justify-center gap-2 active:scale-98 shadow-md"
+                  className="w-full sm:w-auto bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold px-10 py-5 rounded-full hover:bg-white/20 hover:-translate-y-1 transition-all flex items-center justify-center gap-2 active:scale-95 shadow-lg text-lg"
                 >
                   Explore Courses
                 </button>
@@ -380,24 +437,42 @@ const RegistrationPage2026 = () => {
         {/* ========================================================
             3. DYNAMIC COURSES OFFERED SECTION
            ======================================================== */}
-        <section id="courses-section" className="py-24 md:py-32 px-6 md:px-12 relative z-10 max-w-7xl mx-auto w-full">
-          <div className="text-center max-w-3xl mx-auto mb-16 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-accent-gold/20 rounded-full blur-3xl -z-10" />
-            <h2 className="text-4xl md:text-6xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-950 to-primary-800 mb-6 tracking-tight">
+        <section id="courses-section" className="py-24 md:py-32 px-6 md:px-12 relative z-10 w-full bg-white border-y border-gray-100">
+          <div className="max-w-7xl mx-auto w-full">
+            <div className="text-center max-w-3xl mx-auto mb-20 relative">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-accent-gold/20 rounded-full blur-[100px] -z-10" />
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-4xl md:text-6xl lg:text-7xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-950 to-primary-800 mb-8 tracking-tight"
+            >
               Programs of Excellence
-            </h2>
-            <p className="text-gray-600 md:text-lg font-light leading-relaxed">
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-primary-600 md:text-xl font-light leading-relaxed"
+            >
               Explore our comprehensive range of undergraduate engineering domains and professional postgraduate courses, designed for the innovators of tomorrow.
-            </p>
+            </motion.p>
 
-            {/* Segmented Filter Control (Light theme styled) */}
-            <div className="mt-10 flex bg-gray-200/60 border border-gray-300/40 rounded-2xl p-1.5 max-w-md mx-auto relative backdrop-blur-md">
+            {/* Segmented Filter Control (Premium Glassmorphism) */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="mt-12 flex bg-white/90 border border-gray-200 rounded-full p-2 max-w-md mx-auto relative backdrop-blur-3xl shadow-[0_8px_30px_rgba(0,0,0,0.06)]"
+            >
               {['all', 'ug', 'pg'].map((filter) => (
                 <button
                   key={filter}
                   onClick={() => handleFilterClick(filter)}
-                  className={`flex-1 py-3 text-xs md:text-sm font-bold uppercase tracking-wider rounded-xl transition-all relative z-10 duration-200 ${
-                    activeFilter === filter ? 'text-white' : 'text-gray-600 hover:text-gray-900'
+                  className={`flex-1 py-4 text-xs md:text-sm font-bold uppercase tracking-wider rounded-full transition-all relative z-10 duration-500 ${
+                    activeFilter === filter ? 'text-white' : 'text-primary-600 hover:text-primary-900'
                   }`}
                 >
                   {filter === 'all' && 'All Courses'}
@@ -407,19 +482,19 @@ const RegistrationPage2026 = () => {
                   {activeFilter === filter && (
                     <motion.div
                       layoutId="filterPill"
-                      className="absolute inset-0 bg-primary-950 rounded-xl -z-10 shadow-md border border-primary-900"
-                      transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                      className="absolute inset-0 bg-gradient-to-r from-primary-900 to-primary-950 rounded-full -z-10 shadow-[0_4px_20px_rgba(30,58,138,0.3)] border border-primary-800"
+                      transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     />
                   )}
                 </button>
               ))}
-            </div>
+            </motion.div>
           </div>
 
           {/* Courses grid */}
           <motion.div 
             layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           >
             <AnimatePresence mode="popLayout">
               {filteredCourses.map((course, idx) => {
@@ -429,40 +504,58 @@ const RegistrationPage2026 = () => {
                   <motion.div
                     key={course.id || idx}
                     layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
-                    whileHover={{ y: -8 }}
-                    className={`bg-white border ${course.featured ? 'border-accent-gold shadow-lg' : 'border-gray-200'} rounded-3xl p-6 md:p-8 transition-all duration-300 relative overflow-hidden group shadow-md hover:border-accent-gold/50 hover:shadow-[0_15px_30px_rgba(0,0,0,0.05)] flex flex-col justify-between min-h-[280px] md:min-h-[360px]`}
+                    initial={{ opacity: 0, scale: 0.9, rotateY: -15 }}
+                    whileInView={{ opacity: 1, scale: 1, rotateY: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, delay: idx * 0.05 }}
+                    className={`bg-white rounded-[2.5rem] transition-all duration-500 relative overflow-hidden group flex flex-col justify-between min-h-[380px] shadow-[0_15px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_30px_60px_rgba(0,0,0,0.12)] hover:-translate-y-3 cursor-pointer border ${course.featured ? 'border-accent-gold/40' : 'border-gray-100 hover:border-gray-300'}`}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-b from-accent-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                    {/* Architect Dot Pattern Background */}
+                    <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1.5px,transparent_1.5px)] [background-size:20px_20px] opacity-40 pointer-events-none z-0" />
                     
-                    <div>
-                      <div className="p-4 bg-primary-50 border border-primary-100 rounded-2xl w-fit text-primary-900 group-hover:bg-accent-gold/15 group-hover:text-accent-gold duration-300 shadow-inner mb-6">
-                        <Icon className="w-6 h-6" />
+                    {/* Corner Accent Shape */}
+                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-gradient-to-br from-gray-100 to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700 pointer-events-none z-0" />
+
+                    {/* Inner 3D Highlight */}
+                    <div className="absolute inset-0 rounded-[2.5rem] border-[3px] border-white/50 pointer-events-none z-20 mix-blend-overlay" />
+                    {/* Subtle top gradient */}
+                    <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-gray-50/80 to-transparent pointer-events-none z-0" />
+
+                    {/* Glowing glassmorphism hover effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/5 via-transparent to-cyan-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0" />
+                    
+                    {/* A massive watermark icon that rotates and scales on hover */}
+                    <Icon className="absolute -bottom-10 -right-10 w-64 h-64 text-slate-100 group-hover:text-yellow-400/10 transition-all duration-700 -rotate-45 group-hover:rotate-0 group-hover:scale-110 z-0 pointer-events-none" />
+
+                    <div className="relative z-10 p-8 flex-1 flex flex-col">
+                      <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center text-primary-500 group-hover:bg-accent-gold group-hover:text-white transition-colors duration-500 mb-8 border border-gray-100 group-hover:border-accent-gold/50 relative overflow-hidden shadow-sm">
+                        <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-[shimmer_1.5s_ease-in-out] z-0" />
+                        <Icon className="w-6 h-6 relative z-10" />
                       </div>
  
-                      <span className="text-xs font-bold tracking-[0.2em] text-accent-gold block mb-2 uppercase font-display">
+                      <span className="text-[10px] font-black tracking-widest text-gray-400 group-hover:text-accent-gold block mb-3 uppercase font-display transition-colors duration-500">
                         {isUg ? 'UG' : 'PG'} • {course.department}
                       </span>
-                      <h3 className="text-lg font-bold text-primary-950 mb-3 group-hover:text-accent-gold transition-colors duration-300 min-h-[3.5rem] leading-snug">
+                      <h3 className="text-xl md:text-2xl font-display font-bold text-primary-950 group-hover:text-primary-700 transition-colors duration-500 mb-4 leading-tight">
                         {course.name}
                       </h3>
-                      <p className="text-sm text-gray-600 font-light leading-relaxed mb-6">
+                      <p className="text-sm text-gray-500 group-hover:text-gray-700 transition-colors duration-500 font-light leading-relaxed mb-6 line-clamp-3">
                         {course.description}
                       </p>
                     </div>
 
-                    <div className="pt-4 border-t border-gray-100 mt-auto flex items-center justify-between relative z-10">
+                    <div className="p-8 pt-0 relative z-10 mt-auto flex items-center justify-between">
                       <a 
                         href={getDepartmentPath(course.department)}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary-950 hover:text-accent-gold transition-colors duration-300 group/link"
+                        className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary-950 group-hover:text-accent-gold transition-colors duration-500 group/link"
                       >
-                        <span>Know More</span>
-                        <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1.5 transition-transform duration-300 text-accent-gold" />
+                        <span className="relative">
+                          Know More
+                          <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-accent-gold group-hover/link:w-full transition-all duration-300" />
+                        </span>
+                        <ArrowRight className="w-4 h-4 group-hover/link:translate-x-2 transition-transform duration-300" />
                       </a>
-                      <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-md">
+                      <span className="text-xs font-bold text-gray-400 group-hover:text-white/50 transition-colors duration-500">
                         {course.duration || (isUg ? '4 Years' : '2 Years')}
                       </span>
                     </div>
@@ -471,12 +564,13 @@ const RegistrationPage2026 = () => {
               })}
             </AnimatePresence>
           </motion.div>
+          </div>
         </section>
 
         {/* ========================================================
             4. ACCREDITATIONS SECTION (Light background)
            ======================================================== */}
-        <section className="py-24 md:py-32 bg-white border-y border-gray-100 relative z-10 px-6 md:px-12 w-full overflow-hidden">
+        <section className="py-24 md:py-32 bg-slate-50 relative z-10 px-6 md:px-12 w-full overflow-hidden">
           {/* Subtle grid background */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
           
@@ -491,35 +585,54 @@ const RegistrationPage2026 = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl mx-auto">
               {accreditations.map((item, idx) => {
                 return (
                   <motion.div
                     key={item.id || idx}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1, duration: 0.6 }}
-                    whileHover={{ y: -5 }}
-                    className="bg-white/60 backdrop-blur-xl border border-gray-100 rounded-[2rem] p-8 relative overflow-hidden group shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] flex flex-col transition-all duration-500"
+                    initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ 
+                      delay: idx * 0.15, 
+                      type: "spring", 
+                      stiffness: 100, 
+                      damping: 20 
+                    }}
+                    whileHover={{ 
+                      y: -15, 
+                      rotateY: idx === 0 ? 5 : idx === 2 ? -5 : 0, 
+                      scale: 1.05 
+                    }}
+                    className="bg-white rounded-[2.5rem] p-10 relative group shadow-[0_30px_60px_rgba(30,58,138,0.08)] hover:shadow-[0_40px_80px_rgba(30,58,138,0.15)] hover:-translate-y-3 flex flex-col items-center text-center transition-all duration-500 cursor-pointer border-2 border-gray-200 hover:border-accent-gold"
                   >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-accent-gold/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="p-4 bg-white shadow-sm border border-gray-50 rounded-2xl w-fit text-accent-gold mb-6 relative z-10 group-hover:scale-110 transition-transform duration-500">
+                    {/* Spinning dashed ring on hover */}
+                    <div className="absolute top-8 left-1/2 -translate-x-1/2 w-28 h-28 border-2 border-dashed border-accent-gold/0 rounded-full group-hover:border-accent-gold/40 group-hover:animate-[spin_4s_linear_infinite] transition-colors duration-500" />
+                    
+                    {/* Glowing Orb */}
+                    <div className="absolute top-12 left-1/2 -translate-x-1/2 w-16 h-16 bg-accent-gold/20 rounded-full blur-xl group-hover:bg-accent-gold/40 transition-colors duration-500" />
+
+                    <div className="w-20 h-20 bg-white shadow-md border border-gray-100 rounded-full flex items-center justify-center text-accent-gold mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500">
                       {item.logoUrl ? (
-                        <img src={item.logoUrl} alt={item.title} className="w-12 h-12 object-contain mix-blend-multiply" />
+                        <img src={item.logoUrl} alt={item.title} className="w-10 h-10 object-contain mix-blend-multiply" />
                       ) : (
-                        <Award className="w-7 h-7" />
+                        <Award className="w-8 h-8" />
                       )}
                     </div>
-                    <h3 className="text-2xl font-bold text-primary-950 mb-4">
+                    
+                    <h3 className="text-2xl font-black text-primary-950 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary-950 group-hover:to-accent-gold transition-all duration-500">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-600 font-light leading-relaxed mb-6 flex-1">
+                    
+                    <div className="w-8 h-1 bg-gray-200 rounded-full mb-5 group-hover:w-16 group-hover:bg-accent-gold transition-all duration-500" />
+                    
+                    <p className="text-sm text-gray-500 font-medium leading-relaxed mb-6 flex-1">
                       {item.description}
                     </p>
+                    
                     {item.pdfUrl && (
-                      <a href={item.pdfUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-2 text-sm font-bold text-accent-gold hover:text-amber-600 transition-colors">
-                        View Approval Letter <ArrowRight className="w-4 h-4" />
+                      <a href={item.pdfUrl} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center justify-center w-full py-3 rounded-xl bg-gray-50 text-sm font-bold text-gray-500 group-hover:bg-accent-gold group-hover:text-white transition-colors duration-500">
+                        View Approval Letter
                       </a>
                     )}
                   </motion.div>
@@ -532,91 +645,126 @@ const RegistrationPage2026 = () => {
         {/* ========================================================
             5. APPLY NOW PROCESS SECTION
            ======================================================== */}
-        <section id="apply-process" className="py-24 md:py-32 px-6 md:px-12 relative z-10 max-w-6xl mx-auto w-full">
-          <div className="text-center max-w-3xl mx-auto mb-12 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-display font-extrabold text-primary-950 mb-6">
-              How to Apply
-            </h2>
-            <p className="text-gray-600 font-light leading-relaxed">
-              Our streamlined admissions portal enables you to register, submit particulars, and pay the fee digitally.
-            </p>
-          </div>
+        <section id="apply-process" className="py-24 md:py-32 px-6 md:px-12 relative z-10 w-full overflow-hidden">
+          <div className="absolute inset-0 bg-primary-950 z-0" />
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=2000')] opacity-10 bg-cover bg-center mix-blend-overlay z-0" />
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
+            className="absolute top-1/4 -right-1/4 w-[1000px] h-[1000px] bg-accent-gold/10 rounded-full blur-[150px] pointer-events-none z-0" 
+          />
 
-          {/* Timeline steps */}
-          <div className="relative flex flex-col gap-8 md:gap-12">
-            {/* Vertical connector line */}
-            <div className="absolute left-[31px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-accent-gold via-primary-500 to-gray-200 hidden md:block" />
+          <div className="max-w-6xl mx-auto relative z-10">
+            <div className="text-center max-w-3xl mx-auto mb-20">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-4xl md:text-6xl lg:text-7xl font-display font-extrabold text-white mb-6 tracking-tight"
+              >
+                How to <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold to-yellow-600">Apply</span>
+              </motion.h2>
+              <motion.div 
+                initial={{ width: 0 }}
+                whileInView={{ width: "6rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="h-1.5 bg-gradient-to-r from-accent-gold to-yellow-500 mx-auto mb-8 rounded-full shadow-glow-sm" 
+              />
+              <motion.p 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="text-primary-200 text-lg md:text-xl font-light leading-relaxed"
+              >
+                Our streamlined admissions portal enables you to register, submit particulars, and pay the fee digitally in 5 easy steps.
+              </motion.p>
+            </div>
 
-            {steps.map((step, idx) => {
-              const Icon = Icons[step.icon] || CheckCircle;
-              return (
-                <motion.div
-                  key={step.id || idx}
-                  initial={{ opacity: 0, x: -40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="flex items-start gap-4 md:gap-12 relative group"
-                >
-                  {/* Step circle */}
-                  <motion.div 
-                    whileHover={{ 
-                      scale: 1.15, 
-                      rotate: 360,
-                      backgroundColor: "#0f172a",
-                      color: "#f59e0b",
-                      borderColor: "#f59e0b"
-                    }}
-                    transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                    className="w-12 h-12 md:w-16 md:h-16 rounded-full shrink-0 flex items-center justify-center text-base md:text-xl font-black bg-white border-2 border-accent-gold shadow-[0_0_15px_rgba(212,175,55,0.25)] text-accent-gold z-10 relative cursor-pointer overflow-hidden"
+            {/* Timeline steps */}
+            <div className="relative flex flex-col gap-10 md:gap-16 max-w-4xl mx-auto">
+              {/* Vertical connector line */}
+              <div className="absolute left-[39px] md:left-[47px] top-10 bottom-10 w-1 bg-gradient-to-b from-accent-gold via-primary-500 to-primary-900 hidden md:block rounded-full shadow-[0_0_10px_rgba(212,175,55,0.5)]" />
+
+              {steps.map((step, idx) => {
+                const Icon = Icons[step.icon] || CheckCircle;
+                return (
+                  <motion.div
+                    key={step.id || idx}
+                    initial={{ opacity: 0, x: idx % 2 === 0 ? -40 : 40 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.7, delay: idx * 0.15 }}
+                    className="flex items-start gap-6 md:gap-14 relative group"
                   >
-                    <span className="group-hover:opacity-0 transition-opacity absolute">{step.stepNumber}</span>
-                    <Icon className="w-6 h-6 absolute opacity-0 group-hover:opacity-100 transition-opacity" />
+                    {/* Step circle */}
+                    <div className="relative z-10 shrink-0">
+                      <div className="absolute inset-0 bg-accent-gold/40 rounded-full blur-xl group-hover:bg-accent-gold/60 transition-colors duration-500" />
+                      <motion.div 
+                        whileHover={{ 
+                          scale: 1.15, 
+                          rotate: 360,
+                        }}
+                        transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                        className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center text-2xl md:text-3xl font-black bg-primary-950 border-4 border-accent-gold shadow-glow-md text-accent-gold relative cursor-pointer overflow-hidden z-20 group-hover:bg-accent-gold group-hover:text-primary-950 transition-colors duration-500"
+                      >
+                        <span className="group-hover:opacity-0 transition-opacity duration-300 absolute">{step.stepNumber}</span>
+                        <Icon className="w-10 h-10 absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </motion.div>
+                    </div>
+    
+                    <motion.div 
+                      whileHover={{ 
+                        scale: 1.02, 
+                        x: 10,
+                        backgroundColor: "rgba(255,255,255,0.05)"
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                      className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-8 md:p-10 flex-1 shadow-2xl duration-500 transition-all cursor-pointer group/card hover:border-accent-gold/50 relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-accent-gold/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                      <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-4 group-hover/card:text-accent-gold duration-300 transition-colors">
+                        {step.title}
+                      </h3>
+                      <p className="text-base md:text-lg text-primary-200 font-light leading-relaxed">
+                        {step.description}
+                      </p>
+                    </motion.div>
                   </motion.div>
-  
-                  <motion.div 
-                    whileHover={{ 
-                      scale: 1.025, 
-                      x: 10,
-                      borderColor: "rgba(212, 175, 55, 0.4)",
-                      boxShadow: "0 20px 40px rgba(0,0,0,0.06)"
-                    }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className="bg-white border border-gray-200 rounded-3xl p-6 md:p-8 flex-1 shadow-md duration-300 transition-all cursor-pointer"
-                  >
-                    <h3 className="text-xl font-bold text-primary-950 mb-2 group-hover:text-accent-gold duration-300 transition-colors">
-                      {step.title}
-                    </h3>
-                    <p className="text-sm md:text-base text-gray-600 font-light leading-relaxed">
-                      {step.description}
-                    </p>
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
 
-          {/* Begin Application Button */}
-          <div className="mt-20 text-center flex flex-col items-center gap-5">
-            <button
-              onClick={() => navigate('/admissions/register')}
-              className="bg-primary-950 hover:bg-primary-900 text-white font-extrabold text-base md:text-lg px-8 md:px-12 py-4 md:py-5 rounded-2xl shadow-lg hover:scale-[1.03] transition-all inline-flex items-center gap-3 active:scale-98"
+            {/* Begin Application Button */}
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="mt-28 text-center flex flex-col items-center gap-6 relative z-10"
             >
-              <span>Begin Application</span>
-              <ArrowRight className="w-5 h-5" />
-            </button>
-            
-            <a 
-              href="/contact" 
-              className="text-gray-500 hover:text-accent-gold font-semibold text-sm transition-colors duration-300 flex items-center gap-1.5 mt-3 hover:underline"
-            >
-              Need assistance? Contact our admissions team
-              <ArrowRight className="w-4 h-4 text-accent-gold" />
-            </a>
+              <button
+                onClick={() => navigate('/admissions/register')}
+                className="bg-gradient-to-r from-accent-gold to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white font-extrabold text-lg md:text-2xl px-12 md:px-16 py-6 rounded-full shadow-[0_15px_40px_rgba(212,175,55,0.4)] hover:shadow-[0_20px_50px_rgba(212,175,55,0.6)] hover:-translate-y-2 transition-all inline-flex items-center gap-4 active:scale-95 group"
+              >
+                <span>Begin Application</span>
+                <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform duration-300" />
+              </button>
+              
+              <a 
+                href="/contact" 
+                className="text-primary-300 hover:text-accent-gold font-medium text-base transition-colors duration-300 flex items-center gap-2 mt-4 hover:underline"
+              >
+                Need assistance? Contact our admissions team
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </motion.div>
           </div>
         </section>
         {/* Footer (Matches main site dark navy styling) */}
-        <footer className="bg-primary-950 border-t border-white/5 py-12 px-6 text-center text-sm text-white/50 relative z-10 w-full">
+        <footer className="bg-primary-950 border-t border-white/20 py-12 px-6 text-center text-sm text-white/50 relative z-10 w-full shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent" />
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2">
               <img src={logoImg} alt="CAHCET" className="w-8 h-8 object-contain opacity-70" />

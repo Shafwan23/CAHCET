@@ -41,7 +41,7 @@ const HOMEPAGE_ITEMS = [
   { label: 'Footer',                       icon: Footprints,   path: '/admin/dashboard/homepage/footer' },
   { label: 'Gallery Section',              icon: Images,       path: '/admin/dashboard/homepage/gallery' },
   { label: 'Video Showcase',               icon: Video,        path: '/admin/dashboard/homepage/videos' },
-  { label: 'Campus Facilities',            icon: Layers,       path: '/admin/dashboard/homepage/facilities' },
+
 ];
 
 const UPDATES_ITEMS = [

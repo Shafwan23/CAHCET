@@ -23,9 +23,7 @@ import FloatingParticles from '../../components/ui/FloatingParticles';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 
-// Import PDF assets so Vite processes and compiles them correctly
-import prospectusPdf from '../../assets/documents/prospectus.pdf';
-import applicationPdf from '../../assets/documents/application.pdf';
+// Removed PDF imports to use direct public paths as requested
 
 // Data fetched from CMS
 
@@ -95,10 +93,7 @@ const AdmissionProcedurePage = () => {
 
   const heroTitle = cmsData['admissions.hero']?.title || 'Admission Procedure';
 
-  const handleRegisterClick = () => {
-    // Navigate to homepage registration section anchor
-    window.location.href = '/#registration';
-  };
+  // Direct links will be used instead of this handler
 
   return (
     <HelmetProvider>
@@ -121,54 +116,93 @@ const AdmissionProcedurePage = () => {
         {/* Main Content */}
         <main className="flex-grow pt-32 pb-24 relative z-10 w-full">
           
-          {/* Header/Hero Section */}
-          <header className="relative pt-20 pb-20 overflow-hidden bg-gradient-to-r from-primary-950 via-primary-900 to-primary-950 text-white text-center rounded-b-[2.5rem] shadow-xl z-10 mb-16">
-            {/* Geometric structural circles/effects */}
-            <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
-              <div className="absolute -left-16 -top-16 w-64 h-64 border border-white rounded-full" />
-              <div className="absolute right-10 bottom-5 w-80 h-80 border border-white/40 rounded-full" />
-              <div className="absolute left-1/3 top-10 w-96 h-96 border border-white/20 rounded-full" />
+          {/* Premium Parallax Header */}
+          <header className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-primary-950 flex items-center min-h-[40vh] md:min-h-[50vh] rounded-b-[3rem] shadow-luxury z-10 mb-20">
+            {/* Background Elements */}
+            <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-950/90 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
+              <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+              <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
             </div>
 
-            <div className="relative z-10 max-w-4xl px-6 mx-auto flex flex-col items-center">
-              <div className="inline-flex items-center gap-2 text-accent-gold text-xs md:text-sm mb-4 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md font-bold uppercase tracking-wider">
-                <GraduationCap className="w-4 h-4" />
-                Admissions Portal
-              </div>
-              <h1 className="text-4xl md:text-6xl font-display font-extrabold text-white mb-4 tracking-tight leading-tight">
-                {heroTitle}
-              </h1>
+            <div className="container mx-auto px-4 md:px-8 relative z-10 max-w-5xl">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="inline-flex items-center gap-2 text-accent-gold text-xs md:text-sm mb-6 px-5 py-2.5 rounded-full bg-accent-gold/10 border border-accent-gold/20 backdrop-blur-md font-bold uppercase tracking-widest shadow-glow-sm">
+                  <GraduationCap className="w-4 h-4" />
+                  Admissions Portal
+                </div>
+                <h1 className="text-5xl md:text-7xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-accent-gold mb-6 tracking-tight leading-tight">
+                  {heroTitle}
+                </h1>
+                <p className="text-xl text-primary-200 font-light leading-relaxed max-w-2xl mx-auto">
+                  Take the first step towards your future. Explore our comprehensive procedure for both undergraduate and postgraduate admissions.
+                </p>
+              </motion.div>
             </div>
           </header>
 
-          <div className="max-w-5xl mx-auto px-4 md:px-8 space-y-16">
+          <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-24">
             {/* Section 1: Introduction Content */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="w-full max-w-4xl mx-auto"
+              className="w-full relative"
             >
-              <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-14 shadow-sm relative overflow-hidden group">
-                <div className="absolute top-0 left-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl -translate-x-10 -translate-y-10 group-hover:bg-blue-500/10 transition-all duration-700" />
-                <p className="text-base md:text-xl text-slate-600 font-light leading-relaxed relative z-10 max-w-3xl mx-auto whitespace-pre-wrap text-center">
-                  The College is approved by the All India Council for Technical Education(AICTE), New Delhi and affiliated to the Anna University, Chennai. The College offers 8 Under-Graduate Courses and 2 Post-Graduate Courses.
-                </p>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 via-transparent to-accent-gold/5 pointer-events-none rounded-[3rem]" />
+              <div className="bg-white/90 backdrop-blur-3xl border border-primary-100 rounded-[3rem] p-10 md:p-16 shadow-[0_20px_50px_rgba(0,0,0,0.05)] relative overflow-hidden group">
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                  className="absolute -top-32 -left-32 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl group-hover:bg-accent-gold/10 transition-all duration-700 z-0 pointer-events-none" 
+                />
+                <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
+                  <div className="p-6 bg-gradient-to-br from-primary-950 to-primary-800 rounded-[2rem] shadow-luxury shrink-0">
+                    <Compass className="w-12 h-12 text-accent-gold" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-display font-extrabold text-primary-950 mb-4">Accredited Excellence</h2>
+                    <p className="text-xl md:text-2xl text-primary-700 font-light leading-relaxed">
+                      The College is approved by the <strong className="font-bold text-primary-950">All India Council for Technical Education (AICTE)</strong>, New Delhi and affiliated to <strong className="font-bold text-primary-950">Anna University</strong>, Chennai. The College offers 8 Under-Graduate Courses and 2 Post-Graduate Courses.
+                    </p>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
             {/* Section 2: UG Courses */}
-            <div className="py-8">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-display font-bold text-primary-950">Under-Graduate Courses</h2>
-                <div className="w-16 h-1 bg-accent-gold mx-auto mt-4 rounded-full" />
+            <div className="relative">
+              <div className="text-center mb-16">
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-4xl md:text-5xl font-display font-extrabold text-primary-950 tracking-tight"
+                >
+                  Under-Graduate Courses
+                </motion.h2>
+                <motion.div 
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "6rem" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="h-1.5 bg-gradient-to-r from-accent-gold to-yellow-500 mx-auto mt-6 rounded-full shadow-glow-sm" 
+                />
               </div>
               <motion.div 
                 variants={containerVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto relative"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10"
               >
                 {ugCourses.map((course, idx) => {
                   const Icon = Icons[course.icon] || FileText;
@@ -176,17 +210,23 @@ const AdmissionProcedurePage = () => {
                     <motion.div
                       key={course.id || idx}
                       variants={itemVariants}
-                      className="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-5 transition-all duration-300 relative overflow-hidden shadow-sm hover:border-primary-600/30 hover:shadow-md group/card"
+                      whileHover={{ y: -8 }}
+                      className="bg-white border border-primary-100 rounded-[2.5rem] p-8 transition-all duration-500 relative overflow-hidden shadow-sm hover:shadow-luxury hover:border-accent-gold/40 group/card flex flex-col"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary-50/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                      <div className="p-4 bg-primary-50 border border-primary-100 rounded-2xl text-primary-600 shrink-0 group-hover/card:bg-primary-600 group-hover/card:text-white transition-colors duration-300">
-                        <Icon className="w-6 h-6" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-accent-gold/5 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                      
+                      <div className="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center mb-6 group-hover/card:scale-110 group-hover/card:bg-accent-gold/10 transition-all duration-500 shadow-inner border border-primary-100 group-hover/card:border-accent-gold/30">
+                        <Icon className="w-8 h-8 text-primary-500 group-hover/card:text-accent-gold transition-colors duration-500" />
                       </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-primary-950 group-hover/card:text-primary-600 transition-colors duration-300 leading-snug">
-                          {course.name}
-                        </h3>
-                      </div>
+                      <h3 className="text-xl md:text-2xl font-display font-bold text-primary-950 mb-3 group-hover/card:text-transparent group-hover/card:bg-clip-text group-hover/card:bg-gradient-to-r group-hover/card:from-primary-950 group-hover/card:to-primary-700 transition-colors leading-tight">
+                        {course.name}
+                      </h3>
+                      <p className="text-sm font-bold text-primary-400 uppercase tracking-widest mb-4 bg-primary-50 px-3 py-1 rounded-lg w-fit">
+                        Duration: {course.duration}
+                      </p>
+                      <p className="text-base text-primary-600 font-light leading-relaxed flex-1">
+                        {course.description}
+                      </p>
                     </motion.div>
                   );
                 })}
@@ -194,17 +234,30 @@ const AdmissionProcedurePage = () => {
             </div>
 
             {/* Section 3: PG Courses */}
-            <div className="py-4">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-display font-bold text-primary-950">Post-Graduate Courses</h2>
-                <div className="w-16 h-1 bg-accent-gold mx-auto mt-4 rounded-full" />
+            <div className="relative">
+              <div className="text-center mb-16">
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-4xl md:text-5xl font-display font-extrabold text-primary-950 tracking-tight"
+                >
+                  Post-Graduate Courses
+                </motion.h2>
+                <motion.div 
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "6rem" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="h-1.5 bg-gradient-to-r from-accent-gold to-yellow-500 mx-auto mt-6 rounded-full shadow-glow-sm" 
+                />
               </div>
               <motion.div 
                 variants={containerVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto relative"
+                className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto relative z-10"
               >
                 {pgCourses.map((course, idx) => {
                   const Icon = Icons[course.icon] || FileText;
@@ -212,17 +265,24 @@ const AdmissionProcedurePage = () => {
                     <motion.div
                       key={course.id || idx}
                       variants={itemVariants}
-                      className="bg-white border border-slate-200 rounded-3xl p-6 flex items-center gap-5 transition-all duration-300 relative overflow-hidden shadow-sm hover:border-accent-gold/30 hover:shadow-md group/card"
+                      whileHover={{ y: -8 }}
+                      className="bg-primary-950 text-white border border-primary-800 rounded-[2.5rem] p-10 transition-all duration-500 relative overflow-hidden shadow-luxury hover:shadow-[0_20px_50px_rgba(212,175,55,0.15)] hover:border-accent-gold/40 group/card flex flex-col"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-accent-gold/5 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                      <div className="p-4 bg-accent-gold/10 border border-accent-gold/20 rounded-2xl text-accent-gold shrink-0 group-hover/card:bg-accent-gold group-hover/card:text-white transition-colors duration-300">
-                        <Icon className="w-6 h-6" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-accent-gold/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                      <div className="absolute top-0 right-0 w-48 h-48 bg-accent-gold/10 rounded-full blur-3xl pointer-events-none" />
+                      
+                      <div className="w-16 h-16 bg-primary-900 rounded-2xl flex items-center justify-center mb-6 group-hover/card:scale-110 group-hover/card:bg-accent-gold/20 transition-all duration-500 border border-primary-800 group-hover/card:border-accent-gold/50 shadow-inner">
+                        <Icon className="w-8 h-8 text-accent-gold transition-colors duration-500" />
                       </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-primary-950 group-hover/card:text-accent-gold transition-colors duration-300 leading-snug">
-                          {course.name}
-                        </h3>
-                      </div>
+                      <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-3 group-hover/card:text-accent-gold transition-colors leading-tight">
+                        {course.name}
+                      </h3>
+                      <p className="text-xs font-bold text-accent-gold uppercase tracking-widest mb-4 bg-accent-gold/10 px-3 py-1 rounded-lg w-fit border border-accent-gold/20">
+                        Duration: {course.duration}
+                      </p>
+                      <p className="text-base text-primary-200 font-light leading-relaxed flex-1 relative z-10">
+                        {course.description}
+                      </p>
                     </motion.div>
                   );
                 })}
@@ -235,47 +295,55 @@ const AdmissionProcedurePage = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="w-full max-w-4xl mx-auto"
+              className="w-full relative z-20"
             >
-              <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-16 shadow-sm relative overflow-hidden text-center group">
-                <h2 className="text-2xl md:text-3xl font-display font-extrabold text-primary-950 mb-4 tracking-tight">
-                  Ready to take the next step?
+              <div className="bg-white/95 backdrop-blur-3xl border border-primary-100 rounded-[3rem] p-12 md:p-20 shadow-luxury relative overflow-hidden text-center group">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-accent-gold/5 z-0 pointer-events-none" />
+                <motion.div 
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                  className="absolute top-0 right-0 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl pointer-events-none" 
+                />
+
+                <h2 className="text-4xl md:text-6xl font-display font-extrabold text-primary-950 mb-6 tracking-tight relative z-10">
+                  Ready to take the <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold to-yellow-600">Next Step?</span>
                 </h2>
-                <p className="text-sm md:text-base text-slate-500 font-light mb-12 max-w-xl mx-auto leading-relaxed">
+                <p className="text-xl text-primary-700 font-light mb-12 max-w-3xl mx-auto leading-relaxed relative z-10">
                   Download the official admission materials or complete your online registration in just a few clicks to lock in your seat for the academic year 2026.
                 </p>
 
-                <div className="flex flex-col md:flex-row gap-6 justify-center items-center relative z-10 w-full">
+                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center relative z-10 w-full max-w-4xl mx-auto">
                   {/* Download Prospectus */}
                   <a 
-                    href={prospectusPdf}
+                    href="/pdf/FINAL-PROSPECTUS-CAHCET.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto bg-accent-gold text-primary-950 font-extrabold px-6 py-4.5 rounded-2xl shadow-md hover:bg-primary-950 hover:text-white transition-all flex items-center justify-center gap-3 group active:scale-98 text-sm md:text-base"
+                    className="relative overflow-hidden w-full sm:w-auto bg-white border border-primary-200 text-primary-800 font-bold px-8 py-5 rounded-[1.5rem] shadow-sm hover:shadow-[0_10px_25px_rgba(0,0,0,0.05)] hover:border-accent-gold hover:text-accent-gold transition-all duration-500 flex items-center justify-center gap-3 group/btn text-base"
                   >
-                    <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-300" />
+                    <Download className="w-5 h-5 group-hover/btn:-translate-y-1 transition-transform duration-300 text-primary-400 group-hover/btn:text-accent-gold" />
                     <span>Download Prospectus</span>
                   </a>
 
                   {/* Download Application Form */}
                   <a 
-                    href={applicationPdf}
+                    href="/pdf/application.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto bg-white border border-slate-250 text-slate-800 hover:text-primary-600 font-bold px-6 py-4.5 rounded-2xl hover:bg-slate-50 transition-all flex items-center justify-center gap-3 group active:scale-98 shadow-sm text-sm md:text-base"
+                    className="relative overflow-hidden w-full sm:w-auto bg-white border border-primary-200 text-primary-800 font-bold px-8 py-5 rounded-[1.5rem] shadow-sm hover:shadow-[0_10px_25px_rgba(0,0,0,0.05)] hover:border-accent-gold hover:text-accent-gold transition-all duration-500 flex items-center justify-center gap-3 group/btn text-base"
                   >
-                    <FileText className="w-5 h-5 group-hover:scale-105 transition-transform duration-300" />
-                    <span>Download Application</span>
+                    <FileText className="w-5 h-5 group-hover/btn:scale-110 transition-transform duration-300 text-primary-400 group-hover/btn:text-accent-gold" />
+                    <span>Application Form</span>
                   </a>
 
                   {/* Register Now */}
-                  <button 
-                    onClick={handleRegisterClick}
-                    className="w-full sm:w-auto bg-primary-900 text-white font-extrabold px-6 py-4.5 rounded-2xl shadow-md hover:bg-primary-950 transition-all flex items-center justify-center gap-3 group active:scale-98 text-sm md:text-base"
+                  <a 
+                    href="/admissions/registration-2026#apply-process"
+                    className="relative overflow-hidden w-full sm:w-auto bg-primary-950 text-white font-bold px-10 py-5 rounded-[1.5rem] shadow-luxury hover:shadow-glow-lg transition-all duration-500 flex items-center justify-center gap-3 group/btn text-base hover:bg-accent-gold hover:-translate-y-1"
                   >
-                    <span>Register Now</span>
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                  </button>
+                    <div className="absolute inset-0 -translate-x-full group-hover/btn:animate-[shimmer_1.5s_ease-in-out] bg-gradient-to-r from-transparent via-white/20 to-transparent z-10" />
+                    <span className="relative z-20">Register Now</span>
+                    <ArrowRight className="w-5 h-5 relative z-20 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                  </a>
                 </div>
               </div>
             </motion.div>

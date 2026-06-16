@@ -227,13 +227,14 @@ export default function DataGrid({
                     variants={rowVariants}
                     initial="hidden"
                     animate="visible"
-                    className="group transition-all duration-200 cursor-default"
+                    whileHover={{ scale: 1.01, zIndex: 10 }}
+                    className="group transition-all duration-200 cursor-default relative z-0 hover:z-10 shadow-sm hover:shadow-md"
                     style={{
                       borderBottom: '1px solid #f1f5f9',
                       background: idx % 2 === 0 ? '#ffffff' : '#f8fafc',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#f1f5f9';
+                      e.currentTarget.style.background = '#ffffff';
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.background =

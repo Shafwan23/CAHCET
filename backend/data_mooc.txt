@@ -1,0 +1,287 @@
+Academic Year (2024-2025)
+1	R Abrar ul haque	coursera	Setup Python	3/13/2025
+2	Subasri	coursera	Setup Python	3/8/2025
+3	Subasri	coursera	Automate DOC Review with sharepoint & power Automate	3/12/2025
+4	Subasri	coursera	Decryption with Python	3/8/2025
+5	Subasri	coursera	Python Generators	3/8/2025
+6	Subasri	coursera	Python 101: Develop your First Python Program	
+7	Subasri	Coursera	Python 101: Develop Your First Python Program	08/03/2025
+8	Hemapriya P	Coursera	Business Analysis & Process Management	27/05/2025
+9	Ayisha Siddiqha H	Coursera	Business Analysis & Process Management	27/05/2025
+10	Mohammed Aasif	Great Learning	Pygame Basics	11/2024
+11	R. Abrar-ul-haque	Great Learning	Java Programming	11/2024
+12	Pavithra J	Great Learning	Java Programming	11/2024
+13	Rajkumar S	CodeSignal	Introduction to HTML	04/02/2025
+14	Mohammed Ragid V	CodeSignal	Introduction to HTML	04/02/2025
+15	Syed Musthafa S	CodeSignal	Introduction to HTML	04/02/2025
+16	Syed Nouman A	CodeSignal	Introduction to HTML	04/02/2025
+17	Rishi Kumar B	CodeSignal	Introduction to HTML	04/02/2025
+18	Thanveerul Haqs	CodeSignal	Introduction to HTML	26/02/2025
+19	Vaishnavi D	CodeSignal	Introduction to HTML	27/02/2025
+20	Shawoor Saqib	CodeSignal	Introduction to HTML	03/03/2025
+21	Samnesh	CodeSignal	Introduction to HTML	04/02/2025
+22	Shahid Ahamed	CodeSignal	Introduction to HTML	04/02/2025
+23	Suresh	CodeSignal	Introduction to HTML	04/02/2025
+24	Vijaya Kumar	CodeSignal	Introduction to HTML	03/03/2025
+25	Santhosh Kumar	CodeSignal	Introduction to HTML	03/03/2025
+26	Muhammed Khursheed Ahmed	CodeSignal	Introduction to HTML	04/02/2025
+27	B. Mohammed Sakheer	CodeSignal	Introduction to HTML	01/06/2025
+28	Pooja Sri	CodeSignal	Introduction to HTML	03/03/2025
+29	Syed Rabbani	CodeSignal	Introduction to HTML	04/02/2025
+30	Naseeruddeen S	CodeSignal	Introduction to HTML	01/06/2025
+31	Salman Faris T.S	CodeSignal	Introduction to HTML	01/06/2025
+32	Zuhair Abdul Wahid S	CodeSignal	Introduction to HTML	6/1/2025
+33	Rajkumar S	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+34	Alfiya Amreen. T	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+35	Alfiya Amreen. T	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+36	Jamal Be Fathima	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+37	Jamal Be Fathima	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+38	Farah Thasleem S	Simplilearn SkillUP	Machine Learning	5/31/2025
+39	Hemalatha. S	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+40	Kaviyashree . S	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+41	Jayashree. S	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+42	Mohammed Ragid V	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+43	Imran B	Simplilearn SkillUP	Introduction to CSS	5/29/2025
+44	Ashfaq Ahmed. M	Simplilearn SkillUP	Introduction to Cyber Security	6/2/2025
+45	Mohammed Musaddiq M	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+46	Mohammed Musaddiq M	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+47	Mohamed Abbas T A	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+48	Mohamed Abbas T A	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+49	Abraar A	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+50	Abraar A	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+51	Fateh Mohammed AR	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+52	Fateh Mohammed AR	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+53	Mohammed Ammar Saqib	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+54	Mohammed Ammar Saqib	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+55	MD Faazil Ammar. P	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+56	MD Faazil Ammar. P	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+57	Ghani Adnan Faiz	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+58	Ghani Adnan Faiz	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+59	Deepak	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+60	Deepak	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+61	Mohamad Rayees	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+62	Syed Musthafa. S	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+63	Rishi Kumar. B	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+64	Syed Nouman.A	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+65	Syed Zaid Ahmed	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+66	Rohan Emmanuel. A	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+67	Rohan Emmanuel. A	Simplilearn SkillUP	Introduction to Prompt Engineering with GitHub Copilot	5/31/2025
+68	Kavipriya. A.M	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+69	Almas Banu	Simplilearn SkillUP	Introduction to Artificial Intelligence	6/1/2025
+70	Jamal S	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/31/2025
+71	Jebaraj	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+72	Mohammed Aamir T	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+73	Thanveerul Haq S	Simplilearn SkillUP	AI Agents for Beginners	6/1/2025
+74	Harini Radhakrishnan	Simplilearn SkillUP	Digital Marketing Strategy	5/31/2025
+75	Vaishnavi D	Simplilearn SkillUP	AI Agents for Beginners	5/28/2025
+76	Aswiya Thaslim	Simplilearn SkillUP	Introduction to Generative AI Studio	6/2/2025
+77	Durgalakshmi. S	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+78	Jayalakshmi. K	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+79	Gulnas Abdulsamad	Simplilearn SkillUP	Introduction to Artificial Intelligence	6/1/2025
+80	Fouziya	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+81	Madhumitha.R	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+82	Malini.R	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+83	Jeevitha J	Simplilearn SkillUP	Introduction to Prompt Engineering with GitHub Copilot	5/28/2025
+84	Irahim K	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+85	Irahim K	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+86	Samnesh.S	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+87	Shawoor Saqib.SK	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+88	Nadeem Baig.M	Simplilearn SkillUP	ChatGPT 101 : What is ChatGPT?	6/1/2025
+89	Shahid Ahamed. VS	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+90	Jansirani K S	Simplilearn SkillUP	Get Started with Databricks for Machine Learning	5/29/2025
+91	Suresh V	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+92	Vijaya Kumar . M	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+93	Devi Priya . J	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+94	Sharmila Y	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+95	Santhosh Kumar. S	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+96	Brindha Selva Kumar	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/31/2025
+97	B. Mohammed Sakhee	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+98	Pooja Sri . S	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+99	Trisha M	Simplilearn SkillUP	AI Agents for Beginners	5/1/2025
+100	Muhammed Kursheed Ahmed	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+101	Mohammed Zaid K	Simplilearn SkillUP	DeepSeek for Beginners	6/1/2025
+102	Mohammed Zaid K	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+103	Balamurugan. M.K	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+104	Mohammed Azhan U	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+105	Sruthi L	Simplilearn SkillUP	Website UI/UX Designing using ChatGPT	3/28/2025
+106	Mohammed Ayaz. A	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+107	Mohammed Ayaz. A	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+108	Kashif Ulhaq.K	Simplilearn SkillUP	Excel Automation using ChatGPT	5/21/2025
+109	Kashif Ulhaq.K	Simplilearn SkillUP	Generative AI for Beginners	5/21/2025
+110	Priyanka	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+111	Sugesh B	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+112	Adnan Tanzeel K	Simplilearn SkillUP	Generative AI for Beginners	5/26/2025
+113	Faseeh Mohammed A	Simplilearn SkillUP	Generative AI for Beginners	5/27/2025
+114	Faheem ur Rahman M	Simplilearn SkillUP	Generative AI for Beginners	5/27/2025
+115	Mohammed Saad K	Simplilearn SkillUP	AI Agents for Beginners	
+116	Naseeruddeen S	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+117	Salman Faris T.S	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+118	Zuhair Abdul Wahid S	Simplilearn SkillUP	AI Agents for Beginners	5/31/2025
+119	Mubarak Basha S	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+120	Sufiya Firdouse	Infosys	Basics of Python	5/31/2025
+121	Joshika MR	Infosys	Introduction to Java	5/24/2025
+122	Mohammed Saad K	Infosys	Web Development Training(Module#1) - PHP for Web Development	6/1/2025
+123	Syed Zaid Ahmed	Simplilearn	Introduction to Generative AI Studio	5/31/2025
+124	Jeevitha J	Simplilearn	Introduction to Generative AI Studio	5/29/2025
+125	Nadeem Baig M	Simplilearn	Introduction to Generative AI Studio	6/1/2025
+126	Trisha M	Simplilearn	Introduction to Generative AI Studio	5/1/2025
+127	Sruthi L	Simplilearn	Introduction to Generative AI Studio	4/20/2025
+128	Sandhiya S	Simplilearn	Introduction to Generative AI Studio	6/2/2025
+129	Sandhiya S	Simplilearn	Get Started with SQL Analytics and BI	6/2/2025
+130	Mohammed Saad V	Infosys	Web Development Training (PHP Module #1)	6/1/2025
+131	Tej Ashwini	Infosys	Networking and Web Technology	5/12/2025
+132	Pavithra J	Infosys	Generative AI for All	4/1/2025
+133	Sandhiya Suresh	Infosys	Networking and Web Technology	5/6/2025
+134	Priya Dharshini R	Infosys	Networking and Web Technology	5/13/2025
+135	R Preethi Ramesh	Infosys	Networking and Web Technology	6/1/2025
+136	R Preethi Ramesh	Infosys	Artificial Intelligence for All	6/2/2025
+137	R Preethi Ramesh	Infosys	Generative AI for All	6/2/2025
+138	Mohamed Adnan. F	NPTEL - IIT Madras	Programming in Java	10/1/2024
+139	Abinesh Godwin.D	NPTEL - IIT Madras	Programming in Java	3/1/2025
+140	S Dhanush	NPTEL - IIT Kharagpur	Cloud Computing	4/1/2025
+141	Bharath S	Great Learning	Front End Development - HTML	
+142	Mohammed Abubakkari	Great Learning	Java Programming	
+143	Swetha K	Great Learning	Introduction to Digital Marketing	
+144	M. Sharumathi	Great Learning	Java Programming	12/1/2024
+145	Ashfaq Ahmed M	SWIZZ CODES	Marketing Team Contribution	1/1/2025
+146	Deenesh A	Cybrary	Network Basics	1/22/2025
+147	Deenesh A	Cybrary	Cybersecurity Incident Investigation	1/21/2025
+148	Bhuvanesh S	Cybrary	Careers in Cybersecurity	1/26/2025
+149	S. Logith	Simplilearn	Introduction to Large Language Models	6/2/2025
+150	Dhuushyandh N	Cybrary	MITRE ATT&CK Defender	2/18/2023
+151	Mohammed Sharuk	Oracle	Oracle Cloud Infrastructure AI Foundations	5/8/2025
+152	Mohammed Sharuk	Oracle	Oracle Cloud Infrastructure AI Foundations	5/9/2025
+153	Mohammed Sharuk	Codesignal	Introduction to HTML, CSS and Web Fundamentals	
+154	Monisha J	Simplilearn SkillUP	Introduction to Artificial Intelligence	5/29/2025
+155	Sruthi L	CIQ	Basics of cyber attacks & threats	3/31/2025
+156	Roshini B	Oracle	Oracle Cloud Infrastructure	5/4/2025
+157	Roshini B	simplelearn skillup	Introduction to graphic design: Basics of UI/UX	1/22/2025
+158	Roshini B	CIQ	Basics of Microsoft Power BI	3/31/2025
+159	U Mohammed Azhan	Great Learning	Introduction to Artificial intelligence	11/22/2024
+160	Ashfaq Ahmed.M	Great learning	Java programming	8/16/2024
+161	Mohammed Nabeel T	Great learning	Html	7/17/2024
+162	Kashif Ulhaq K	Simplelearn SkillUP	Artificial intelligence	11/21/2024
+163	ASHFAQ AHMED.M	Great learning	Intro to Graphic Design with Photoshop	8/30/2024
+164	MOHAMMED ABUBAKKAR I	Great Learning App	Java Programming	12/22/2024
+165	Madhumitha. R	Great learning	Java programming	11/22/2024
+166	Deenesh A	CYBRARY	MITRE ATT&CK Defender ATT&CK Fundamentals Badge Training	5/28/2024
+167	S.BHUVANESH	CYBRARY	SOC ANALYST	22.11.2024
+168	Jamal S	Great learning academy	Java programming	11/21/2024
+169	Bharath s	Great Learning	Frontend development -HTML	11/22/2024
+170	Mohamed Abbas T A	Great Learning	Pygame	11/22/2024
+171	K MOHAMED RAYEES	Great learning	Frontend development-html	11/22/2024
+172	Dharshini NG	Infosys springboard	Computer vision 101	11/22/2024
+173	Dharshini NG	Infosys springboard	Website development tutorial	11/21/2024
+174	Dharshini NG	Infosys springboard	Introduction to OPEN AI GPT models	11/21/2024
+175	Kavipriya.A.M.	Great learning app	Java programming	11/22/2024
+176	Abraar A	Great learning app	Oops in java	11/22/2024
+177	JAYALAKSHMI.K	GREAT LEARNING	Python for Data Analysis	8/7/2024
+178	JAYALAKSHMI.K	Great learning	Introduction to Analytics	8/18/2024
+179	JAYALAKSHMI.K	Great Learning	Application of Analytics	8/29/2024
+180	JAYALAKSHMI.K	Great learning	Java Programming	8/12/2024
+181	Dhushyandh N	Great learning app	Java programming	11/22/2024
+182	K.S.Jansirani	Great learning academy	Java programming	11/22/2024
+183	S.Farah Thasleem	Great learning academy	Java programming	12/22/2024
+184	DURGALAKSHMI S	Great learning	Java	11/24/2024
+185	H.Ayisha Siddiqha	Great learning	Java programming	11/24/2024
+186	MOHAMMED AASIF	GREAT LEARNING	PYGAME BASICS	10/22/2024
+187	Mohammad Ammar Saqib	Great learning	Programming basics	11/25/2024
+188	Dharshini NG	Coursera	Business analysis and process management	11/20/2024
+189	Jamal Be Fathima	Great learning academy	Java programming	11/24/2024
+190	S.Hemalatha	Great learning app	Java programming	11/22/2024
+191	Alfiya Amreen T	Great learning academy	Java programming	12/23/2024
+192	K.Magizharasi	Great learning	Java program	11/25/2024
+193	Hemapriya. P	Great learning	Java program	11/25/2024
+194	Y Mohammed shaaz	Infosys	Devops	11/12/2024
+195	M mohammed usaid	Infosys	Dev ops	9/12/2024
+196	H Abubaker Siddique	Infosys	CI/CD Devops	11/12/2024
+197	Y Mohammed shaaz	Infosys	Agile methodology	9/16/2024
+198	M mohammed usaid	Infosys	Agile methodology	9/16/2024
+199	DEVENDRAN V T	GREAT LEARNING	UI/UX	8/14/2024
+200	NAVEEN RS	Infosys Spring Board	DevOps	31/09/2024
+201	Thamizharasan K	Infosys and Guvi	Java, Neural networks and deep learning	8/13/2024
+202	Balamurugan P	Infosys	Dev ops, Agile methodology	9/16/2024
+203	Akash N	Infosys	Dev oops	9/13/2024
+204	Deepak	Infosys	Devops	9/23/2024
+205	SUDHAKAR V	Infosys	Devops	9/13/2024
+206	Abdul mujeeb.k	Infosys	Devops	9/13/2024
+207	Salman S	Simple learn	Data Structure	11/25/2024
+208	Mohammad Raiyan f	Infosys	Devops	11/25/2024
+209	Akilan V	Great learning	Front end development HTML	7/1/2024
+210	Akilan V	Infosys	Agile methodologies	9/13/2024
+211	Harish k	Great learning	Devops	11/12/2024
+212	Harish K	Great learning	Front end development HTML	10/1/2024
+213	Karthik.s	Online certificate	Devops	11/25/2024
+214	Karthik.S	Online certificate	Agile and methodology	11/25/2024
+215	Kareem wasique G	Infosys spring board	Introduction to agile methodology	9/16/2024
+216	S.k shawoor saqib	IBM	Python101 for data science	11/25/2024
+217	Yumnah Safiya A	Simplilearn	Website UI/UX Designing using ChatGPT	11/25/2024
+218	Thaseem M	Simplilearn Skillup	Website UI/UX designing using Chatgpt	25/11/2024
+219	Sanjay R	Great Learning	Front End Development-HTML	8/8/2024
+220	Mohammed Thalha J	Guvi Geeks	Neural networks	4/2/2024
+221	Bharani kumar A	Besant Technologies	Python	7/5/2024
+222	Mohammad Ali khan	Infosys	Agile methodology	9/13/2024
+223	Mohammad ziya sn	Infosys	Agile methodologies	
+224	Mohammed Arshad	Guvi	Neural network and deep learning	3/26/2024
+225	Santhosh TL	PWC	Power BI virtual case experience	6/14/2024
+226	Santhosh TL	Accenture	Strategy consulting virtual experience	7/11/2024
+227	Mubarak ali	Infosys	Agile methodology	9/20/2024
+228	Kishore kumar K	Coursera	Supervised machine learning: Regression and Classification	7/7/2024
+229	Janani K.S	Infosys	Data science	8/13/2024
+230	Janani K.S	Infosys	Artificial intelligence	8/14/2024
+231	SHAIK VASIUDDIN	INFOSYS	DEVOPS	9/19/2024
+232	Seneha S	Simpli Learn	SQL	11/22/2024
+233	Sharmila Y	Great learning	Java programming	11/25/2024
+234	SWARNA U	Infosys Springboard	Introduction to artificial intelligence	8/19/2024
+235	SWARNA U	Infosys springboard	Introduction to robotic process automation	8/19/2024
+236	SWARNA U	Infosys Springboard	Introduction to openai gpt model	8/20/2024
+237	NAHIDA MARYAM C K	Infosys	Deep learning for developers	8/18/2024
+238	NAHIDA MARYAM C K	Infosys	Principles of generative ai	8/20/2024
+239	NAHIDA MARYAM C K	Infosys	Agile scrum in practice	8/20/2024
+240	Rakshana K	Infosys	Learning microsoft power BI	8/18/2024
+241	Rogini G	Infosys	Python	8/20/2024
+242	Rakshana K	Infosys	Introduction to business intelligence	8/7/2024
+243	Sangavi .B	Infosys	Angular	9/13/2024
+244	Rakshana K	Besant technologies	Python training	7/5/2024
+245	Mohanapriya M	Udemy	Git and GitHub	9/11/2024
+246	Abdul Rahman	Infosys	Devops	11/12/2024
+247	Vijayalakshmi S	Infosys	Continuous integration and delivery- DevOps	9/18/2024
+248	S.vijayalakshmi	Infosys	Introduction to agile methodology	9/18/2024
+249	Priya darshenee.k	Uniathena	Basics of python	5/29/2024
+250	Yogalingam S	Besant technologies	Python	7/5/2024
+251	M.Sakthi	The Digital Adda	Java programming	11/27/2024
+252	ALMAS BANU N	GREAT LEARNING ACADEMY	JAVA	11/22/2024
+253	S.Jabin Sultana	Infosys	Devops	18/09/2024
+254	Ghani adnan faiz	Great learning	Google analysis	11/17/2024
+255	Deepak	Great learning	Programming basics	11/20/2024
+256	M.Faheem Ur Rahman	GREAT LEARNING	Pygame basics	11/29/2024
+257	Syed Nouman A	IBM	Python 101 for Data Science	12/1/2024
+258	Syed Ameen Ahmed	Infosys	Continuous Integration and Delivery - DevOps	11/9/2024
+259	Harini Radhakrishnan	Great learning	Java	11/22/2024
+260	SHAIK MOHAMMAD PARVEZ	Infosys Spring Board	DevOps	11/11/2024
+261	SYED MUSTHAFA.S	IBM developer skill network	Python101 for Data Science	12/17/2023
+262	Pavithra J	Great learning	Python programming	11/25/2024
+263	Sharmila Y	Great learning	Python programming	11/27/2024
+264	Abinesh Godwin.D	Great learning	Java programming	12/2/2024
+265	GULNAS A	Great learning academy	Java	12/2/2024
+266	Suresh V	Cognitive class	Python	02/12/2024
+267	Devi priya. J	Great learning	Java	11/26/2024
+268	M.R.JOSHIKA	Great learning	Java programming	11/30/2024
+269	Muhammed Khursheed Ahmed N	IBM	Python in data Science	12/2/2024
+270	Pooja Sri	IBM	Python in data science	12/2/2024
+271	Syed Zaid Ahmed	Great learning	Java programming	11/27/2024
+272	MOHAMMED AYAZ. A	Great learning	Python for data science	12/2/2024
+273	MOHAMMED AYAZ. A	Great learning	Chatgpt for coders	8/10/2024
+274	Rhithish V	IBM	Python in data science	12/3/2024
+275	Barath Nath. P	Besant technologies	Python training	05/07/2024
+276	R. Abrar ul haque	Great learning academy	Java programming course	11/21/2024
+277	M Sharumathi	Great learning	Java program	05/12/2024
+278	S.y pavithra	Great learning	Java	12/7/2024
+279	SRUTHI L	Great learning	Prompt engineering for chatgpt	8/7/2024
+280	RISHI KUMAR.B	IBM	Python in Data Science	12/9/2024
+281	Swetha.j	Great learning	Ui/ux	6/2/2024
+282	Trisha M	Great learning	Java programming	12/8/2024
+283	LEQHA HARMAIN I R	DIGILABS	JAVA BASICS	6/12/2024
+284	SASANK SEKAR	IBM	INTRODUCTION TO CLOUD COMPUTING	6/24/2024
+285	SRIKANTH M	IBM	INTRODUCTION TO CLOUD COMPUTING	6/24/2024
+286	Mohammed Ziya S N	GUVI	NEURAL NETWORK DEEP LEARNING	3/19/2024

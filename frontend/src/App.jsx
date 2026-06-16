@@ -88,7 +88,6 @@ const ContactSectionEditor = lazy(() => import('./admin/components/editors/homep
 const FooterEditor = lazy(() => import('./admin/components/editors/homepage/FooterEditor'));
 const HomeGalleryEditor = lazy(() => import('./admin/components/editors/homepage/HomeGalleryEditor'));
 const VideoShowcaseEditor = lazy(() => import('./admin/components/editors/homepage/VideoShowcaseEditor'));
-const FacilitiesEditor = lazy(() => import('./admin/components/editors/homepage/FacilitiesEditor'));
 const DepartmentsOverviewEditor = lazy(() => import('./admin/components/editors/departments/DepartmentsOverviewEditor'));
 
 // Content & Admin (Placeholders)
@@ -187,7 +186,7 @@ function App() {
           <Route path="/departments/:deptKey" element={<DepartmentPage />} />
 
           {/* About Module Routes */}
-          <Route path="/about/institution" element={<AboutLayout hero={<InstitutionHero />}><InstitutionPage /></AboutLayout>} />
+          <Route path="/about/institution" element={<AboutLayout><InstitutionPage /></AboutLayout>} />
           <Route path="/about/teaching-methodology" element={<AboutLayout><TeachingMethodologyPage /></AboutLayout>} />
           <Route path="/about/peoples-message" element={<PeoplesMessagePage />} />
           <Route path="/about/anti-ragging-policy" element={<AntiRaggingPage />} />
@@ -271,7 +270,6 @@ function App() {
             <Route path="homepage/footer" element={<FooterEditor />} />
             <Route path="homepage/gallery" element={<HomeGalleryEditor />} />
             <Route path="homepage/videos" element={<VideoShowcaseEditor />} />
-            <Route path="homepage/facilities" element={<FacilitiesEditor />} />
 
             {/* Updates */}
             <Route path="updates/events" element={<LatestEventsEditor />} />
