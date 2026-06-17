@@ -183,7 +183,18 @@ export default function SportsPage() {
       case 'grounds': return 'Total Grounds';
       case 'players': return 'Active Players';
       case 'tournaments': return 'Tournaments Won';
-      case 'medals'    <div className="pb-32 bg-primary-50 min-h-screen">
+      case 'medals': return 'Total Medals';
+      default: return 'Total Awards';
+    }
+  };
+
+  const statsArray = stats.map(s => ({
+    ...s,
+    label: s.label || getStatLabel(s.key)
+  }));
+
+  return (
+    <div className="pb-32 bg-primary-50 min-h-screen">
       {/* Premium Parallax Header */}
       <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-primary-950 flex items-center min-h-[40vh] md:min-h-[50vh] rounded-b-[3rem] shadow-luxury z-10 mb-20">
         {/* Background Elements */}
@@ -268,6 +279,7 @@ export default function SportsPage() {
               ))}
             </div>
           </div>
+        </motion.div>
       </section>
     </div>
   );
