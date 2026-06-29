@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./middleware/errorMiddleware');
 const notFoundMiddleware = require('./middleware/notFoundMiddleware');
 
@@ -14,12 +15,14 @@ app.use(cors({
   origin: function (origin, callback) {
     // Clean trailing slash
     const originClean = origin ? origin.replace(/\/$/, '') : '';
+    const envFrontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.replace(/\/$/, '') : '';
     
-    // Allow any localhost, any Render subdomain, or the exact FRONTEND_URL
+    // Allow any localhost, any Render subdomain, the exact FRONTEND_URL, or the known custom domain
     if (!originClean || 
         /^http:\/\/localhost:\d+$/.test(originClean) || 
         /\.onrender\.com$/.test(originClean) || 
-        originClean === process.env.FRONTEND_URL) {
+        originClean === envFrontendUrl ||
+        originClean === 'https://cahcet.shafwan.in') {
       callback(null, true);
     } else {
       console.warn(`CORS blocked request from origin: ${origin}`);
@@ -28,6 +31,7 @@ app.use(cors({
   },
   credentials: true
 }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
