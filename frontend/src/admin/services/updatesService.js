@@ -40,13 +40,13 @@ export function createEmptyItem(type) {
 
   switch (type) {
     case UPDATE_TYPES.EVENTS:
-      return { ...base, eventDate: '', venue: '' };
+      return { ...base, eventDate: '', venue: '', eventStatus: 'Upcoming', galleryImages: [], pdfAttachments: [] };
     case UPDATE_TYPES.ANNOUNCEMENTS:
-      return { ...base };
+      return { ...base, priority: 'Medium', expiryDate: '', quickPublish: false };
     case UPDATE_TYPES.PLACEMENTS:
-      return { ...base, company: '', packageRange: '', driveDate: '' };
+      return { ...base, company: '', packageRange: '', driveDate: '', recruiterInfo: '', placementHighlights: [], placementStatistics: '' };
     case UPDATE_TYPES.NEWSLETTERS:
-      return { ...base, month: '', year: new Date().getFullYear().toString(), pdfUrl: '', thumbnailUrl: '' };
+      return { ...base, month: '', year: new Date().getFullYear().toString(), pdfUrl: '', thumbnailUrl: '', editionNumber: '', publishDate: '', downloadCount: 0 };
     default:
       return base;
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 // AdminInput - styled text/email/password/textarea input
 export const AdminInput = React.forwardRef(({
@@ -21,9 +22,9 @@ export const AdminInput = React.forwardRef(({
         type={type}
         className={`
           w-full rounded-xl border text-sm text-slate-800 placeholder-slate-400
-          focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all
+          focus:outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-400 transition-all duration-200
           ${Icon ? 'pl-10' : 'pl-4'} ${suffix ? 'pr-10' : 'pr-4'} py-2.5
-          ${error ? 'border-amber-400 bg-primary-50' : 'border-slate-200 bg-white hover:border-slate-300'}
+          ${error ? 'border-amber-400 bg-amber-50/30' : 'border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white'}
           ${className}
         `}
         {...props}
@@ -46,8 +47,8 @@ export const AdminTextarea = ({ label, error, hint, className = '', containerCla
       rows={rows}
       className={`
         w-full rounded-xl border text-sm text-slate-800 placeholder-slate-400 px-4 py-2.5 resize-none
-        focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all
-        ${error ? 'border-amber-400 bg-primary-50' : 'border-slate-200 bg-white hover:border-slate-300'}
+        focus:outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-400 transition-all duration-200
+        ${error ? 'border-amber-400 bg-amber-50/30' : 'border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white'}
         ${className}
       `}
       {...props}
@@ -63,9 +64,9 @@ export const AdminSelect = ({ label, error, hint, className = '', containerClass
     {label && <label className="text-sm font-semibold text-slate-700">{label}</label>}
     <select
       className={`
-        w-full rounded-xl border text-sm text-slate-800 px-4 py-2.5 bg-white
-        focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all
-        ${error ? 'border-amber-400' : 'border-slate-200 hover:border-slate-300'}
+        w-full rounded-xl border text-sm text-slate-800 px-4 py-2.5 
+        focus:outline-none focus:ring-4 focus:ring-amber-500/10 focus:border-amber-400 transition-all duration-200
+        ${error ? 'border-amber-400 bg-amber-50/30' : 'border-slate-200 bg-slate-50/50 hover:bg-white focus:bg-white'}
         ${className}
       `}
       {...props}
@@ -89,9 +90,13 @@ export const AdminToggle = ({ label, checked, onChange, hint }) => (
     <button
       type="button"
       onClick={() => onChange(!checked)}
-      className={`relative w-11 h-6 rounded-full transition-colors duration-300 ${checked ? 'bg-amber-500' : 'bg-slate-200'}`}
+      className={`relative w-11 h-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:ring-offset-2 ${checked ? 'bg-emerald-500' : 'bg-slate-200'}`}
     >
-      <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-300 ${checked ? 'translate-x-5' : 'translate-x-0'}`} />
+      <motion.span 
+        layout
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow-sm ${checked ? 'translate-x-5' : 'translate-x-0'}`} 
+      />
     </button>
   </div>
 );
@@ -99,21 +104,24 @@ export const AdminToggle = ({ label, checked, onChange, hint }) => (
 // AdminButton
 export const AdminButton = ({ variant = 'primary', size = 'md', loading, icon: Icon, children, className = '', ...props }) => {
   const variants = {
-    primary: 'bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold shadow-sm',
-    secondary: 'border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium',
-    danger: 'bg-amber-500 hover:bg-amber-600 text-white font-semibold',
-    success: 'bg-amber-500 hover:bg-amber-600 text-white font-semibold',
-    ghost: 'hover:bg-slate-100 text-slate-600 font-medium',
+    primary: 'bg-gradient-to-b from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 border border-amber-500/50 text-slate-900 font-bold shadow-sm',
+    secondary: 'border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold shadow-[0_2px_4px_rgba(0,0,0,0.02)]',
+    danger: 'bg-red-500 hover:bg-red-600 text-white font-bold shadow-sm',
+    success: 'bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-sm',
+    ghost: 'hover:bg-slate-100 text-slate-600 font-semibold',
   };
   const sizes = {
-    sm: 'px-3 py-1.5 text-xs rounded-lg',
+    sm: 'px-3.5 py-1.5 text-xs rounded-lg',
     md: 'px-4 py-2 text-sm rounded-xl',
     lg: 'px-6 py-2.5 text-sm rounded-xl',
   };
 
   return (
-    <button
-      className={`inline-flex items-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${className}`}
+    <motion.button
+      whileHover={!loading && !props.disabled ? { y: -1 } : {}}
+      whileTap={!loading && !props.disabled ? { scale: 0.97 } : {}}
+      transition={{ duration: 0.15 }}
+      className={`inline-flex items-center justify-center gap-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={loading || props.disabled}
       {...props}
     >
@@ -123,6 +131,6 @@ export const AdminButton = ({ variant = 'primary', size = 'md', loading, icon: I
         <Icon className="w-4 h-4" />
       ) : null}
       {children}
-    </button>
+    </motion.button>
   );
 };

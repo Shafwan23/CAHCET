@@ -1,244 +1,554 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Plus, Pencil, Trash2, X, Save, Building2, Calendar, Clock,
-  CheckCircle, Search, Pin, Eye, EyeOff
+  Plus, Pencil, Trash2, Search, Pin, CheckCircle, ArrowLeft, Building2, Upload, Calendar,
+  Filter, LayoutGrid, List as ListIcon, X, Eye, Briefcase, GraduationCap
 } from 'lucide-react';
-import { updatesService, UPDATE_TYPES, createEmptyItem } from '../../../services/updatesService';
+import { useToast } from '../../ui/Toast';
+import EditorPage, { EditorCard } from '../../ui/EditorPage';
+import { AdminInput, AdminToggle } from '../../ui/AdminInput';
+import { fileService } from '../../../services/fileService';
+import { cmsService } from '../../../../services/cmsService';
+import SectionPreviewModal from '../../ui/SectionPreviewModal';
+import { useEditorStatus } from '../../../utils/useEditorStatus';
+import { createEmptyItem, UPDATE_TYPES } from '../../../services/updatesService';
 import { useAdminAuth } from '../../../context/AdminAuthContext';
-import { ConfirmDialog } from '../../ui/Modal';
 
-const inputCls = "w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white text-slate-800";
+// Animation Variants
+const fadeUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+  transition: { duration: 0.3 }
+};
 
-const PlacementCard = ({ item, onEdit, onDelete, onTogglePin, onTogglePublish }) => (
-  <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-    className={`bg-white rounded-2xl border ${item.pinned ? 'border-amber-300 shadow-sm' : 'border-slate-200'} p-4 hover:shadow-md transition-all group relative overflow-hidden`}>
-    
-    {!item.published && (
-      <div className="absolute top-0 right-0 bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-1 rounded-bl-lg">DRAFT</div>
-    )}
+const parsePackage = (pkgStr) => {
+  if (!pkgStr) return 0;
+  const match = pkgStr.match(/(\d+(\.\d+)?)/);
+  return match ? parseFloat(match[1]) : 0;
+};
 
-    <div className="flex gap-4">
-      <div className="w-16 h-16 rounded-xl bg-blue-50 border border-blue-100 shrink-0 flex items-center justify-center text-blue-600 relative">
-        <Building2 className="w-8 h-8" />
-        {item.pinned && (
-          <div className="absolute -top-1.5 -left-1.5 bg-amber-500 text-white p-1 rounded-full shadow-sm">
-            <Pin className="w-3 h-3" />
-          </div>
-        )}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1 flex-wrap">
-          <span className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
-            <Clock className="w-3 h-3" /> {new Date(item.createdAt).toLocaleDateString()}
-          </span>
-          {item.lastEditedBy && (
-            <span className="text-[10px] text-amber-600 font-medium flex items-center gap-1 bg-amber-50 px-1.5 rounded border border-amber-100">
-              <Pencil className="w-2.5 h-2.5" /> Edited by {item.lastEditedBy} {item.lastEditedByDept ? `(${item.lastEditedByDept.toUpperCase()})` : (item.lastEditedByRole === 'SUPER_ADMIN' ? '(Super Admin)' : '')}
-            </span>
-          )}
-        </div>
-        <div className="flex items-center justify-between mb-1">
-          <h4 className="font-bold text-slate-800 text-base leading-snug truncate">{item.company || 'Unnamed Company'}</h4>
-        </div>
-        <p className="text-sm font-semibold text-amber-600">{item.packageRange}</p>
-        <div className="mt-2 space-y-1">
-          {item.driveDate && (
-            <p className="text-xs text-slate-500 flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> Drive: {item.driveDate}</p>
-          )}
-        </div>
-      </div>
-    </div>
-    
-    {item.description && <p className="mt-3 text-xs text-slate-500 line-clamp-2">{item.description}</p>}
-
-    <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100 opacity-0 group-hover:opacity-100 transition-opacity">
-      <button onClick={() => onTogglePublish(item)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${item.published ? 'text-amber-600 bg-primary-50 hover:bg-primary-100' : 'text-slate-500 bg-slate-100 hover:bg-slate-200'}`}>
-        {item.published ? <><Eye className="w-3.5 h-3.5" /> Published</> : <><EyeOff className="w-3.5 h-3.5" /> Draft</>}
-      </button>
-      <button onClick={() => onTogglePin(item)} className={`flex items-center justify-center p-1.5 rounded-lg transition-colors ${item.pinned ? 'text-amber-600 bg-amber-50 hover:bg-amber-100' : 'text-slate-400 bg-slate-50 hover:bg-slate-100'}`} title={item.pinned ? 'Unpin' : 'Pin to top'}>
-        <Pin className="w-3.5 h-3.5" />
-      </button>
-      <div className="flex-1" />
-      <button onClick={() => onEdit(item)} className="p-1.5 text-blue-500 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
-        <Pencil className="w-3.5 h-3.5" />
-      </button>
-      <button onClick={() => onDelete(item)} className="p-1.5 text-amber-500 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors">
-        <Trash2 className="w-3.5 h-3.5" />
-      </button>
-    </div>
-  </motion.div>
-);
-
-const PlacementModal = ({ initial, onSave, onClose }) => {
-  const { admin } = useAdminAuth();
-  const [form, setForm] = useState(initial?.id ? initial : { ...createEmptyItem(UPDATE_TYPES.PLACEMENTS), author: admin || '' });
-  const [saving, setSaving] = useState(false);
-
-  const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
-
-  const handleSave = async () => {
-    if (!form.company.trim()) return;
-    setSaving(true);
-    await new Promise(r => setTimeout(r, 300));
-    onSave(form);
-    setSaving(false);
-  };
-
+const PlacementCard = ({ item, onEdit, onDelete, onTogglePin, viewMode }) => {
+  const isList = viewMode === 'list';
+  
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto flex flex-col">
-        <div className="flex items-center justify-between p-5 border-b border-slate-100 sticky top-0 bg-white z-10 shrink-0">
-          <h3 className="text-base font-bold text-slate-800">{initial?.id ? 'Edit Placement Update' : 'New Placement Update'}</h3>
-          <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:bg-slate-100"><X className="w-4 h-4" /></button>
-        </div>
-        <div className="p-5 space-y-4 overflow-y-auto min-h-0 flex-1">
+    <motion.div 
+      layout 
+      initial={{ opacity: 0, scale: 0.95 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      exit={{ opacity: 0, scale: 0.95 }}
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      className={`group relative bg-white/70 backdrop-blur-xl border ${item.pinned ? 'border-amber-300 shadow-[0_8px_30px_rgb(251,191,36,0.15)]' : 'border-slate-200/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)]'} hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:border-slate-300 transition-all duration-300 overflow-hidden flex ${isList ? 'flex-row items-center p-3 gap-5 rounded-2xl' : 'flex-col p-5 rounded-[24px] h-full'}`}
+    >
+      
+      {isList ? (
+        <>
+          <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 border border-slate-100 shadow-sm bg-white overflow-hidden p-2">
+            {item.image ? (
+              <img src={item.image} alt="Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform" />
+            ) : (
+              <Building2 className="w-8 h-8 text-slate-300" />
+            )}
+          </div>
           
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Company Name *</label>
-              <input className={inputCls} value={form.company} onChange={e => update('company', e.target.value)} placeholder="e.g. Zoho Corporation" />
+          <div className="flex-1 min-w-0 flex items-center justify-between">
+             <div className="space-y-1">
+               <div className="flex items-center gap-2">
+                 <h4 className="font-bold text-slate-900 text-sm truncate">{item.company || 'Unnamed Company'}</h4>
+                 {item.pinned && <Pin className="w-3 h-3 text-amber-500 fill-amber-500" />}
+                 {!item.published && <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-slate-100 text-slate-500 uppercase">Draft</span>}
+               </div>
+               <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                 {item.driveDate && <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-blue-500" /> {item.driveDate}</span>}
+                 {item.placementStatistics && (
+                   <>
+                     <span className="w-1 h-1 rounded-full bg-slate-300" />
+                     <span className="text-emerald-600 font-bold">{item.placementStatistics}</span>
+                   </>
+                 )}
+               </div>
+             </div>
+             
+             <div className="flex items-center gap-4">
+                <span className="px-3 py-1.5 rounded-lg text-xs font-extrabold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-100/80 shadow-[inset_0_1px_0_white]">
+                  {item.packageRange || 'TBD Package'}
+                </span>
+                
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300">
+                  <button onClick={() => onTogglePin(item)} className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 rounded-xl transition-all" title="Pin">
+                    <Pin className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => onEdit(item)} className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-xl transition-all" title="Edit">
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => onDelete(item)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all" title="Delete">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+             </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="flex items-start justify-between mb-5">
+            <div className="w-16 h-16 rounded-[16px] bg-white border border-slate-100 shadow-[0_4px_12px_rgb(0,0,0,0.04)] flex items-center justify-center p-2.5 overflow-hidden group-hover:shadow-[0_8px_24px_rgb(0,0,0,0.08)] transition-all">
+              {item.image ? (
+                <img src={item.image} alt="Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+              ) : (
+                <Building2 className="w-8 h-8 text-slate-300" />
+              )}
             </div>
             
-            <div className="col-span-2">
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Package Details</label>
-              <input className={inputCls} value={form.packageRange} onChange={e => update('packageRange', e.target.value)} placeholder="e.g. 8.5 LPA" />
-            </div>
-
-            <div className="col-span-2">
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Drive Date</label>
-              <input type="date" className={inputCls} value={form.driveDate} onChange={e => update('driveDate', e.target.value)} />
-            </div>
-
-            <div className="col-span-2">
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Description / Roles</label>
-              <textarea className={`${inputCls} resize-none`} rows={3} value={form.description} onChange={e => update('description', e.target.value)} placeholder="Roles offered, eligible branches, etc." />
+            <div className="flex flex-col items-end gap-2">
+              <span className="px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest bg-emerald-50 text-emerald-700 border border-emerald-100/80 shadow-[inset_0_1px_0_white]">
+                {item.packageRange || 'TBD'}
+              </span>
+              <div className="flex gap-1.5">
+                {!item.published && (
+                  <span className="px-2 py-1 rounded-md text-[9px] font-bold bg-slate-100 text-slate-500 uppercase tracking-wider">Draft</span>
+                )}
+              </div>
             </div>
           </div>
+          
+          <div className="flex-1 flex flex-col relative">
+            <h4 className="font-extrabold text-slate-900 text-xl leading-tight mb-2 group-hover:text-blue-600 transition-colors">{item.company || 'Unnamed Company'}</h4>
+            <p className="text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed min-h-[40px]">{item.description}</p>
+            
+            <div className="grid grid-cols-2 gap-2 mt-auto text-[11px] font-bold">
+               <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex flex-col gap-1">
+                 <span className="text-slate-400 uppercase tracking-widest text-[9px]">Drive Date</span>
+                 <span className="text-slate-700 flex items-center gap-1.5"><Calendar className="w-3 h-3 text-blue-500" /> {item.driveDate || 'TBD'}</span>
+               </div>
+               <div className="bg-emerald-50/50 rounded-xl p-2.5 border border-emerald-50 flex flex-col gap-1">
+                 <span className="text-emerald-600/70 uppercase tracking-widest text-[9px]">Placement Stats</span>
+                 <span className="text-emerald-700 flex items-center gap-1.5"><GraduationCap className="w-3.5 h-3.5 text-emerald-500" /> {item.placementStatistics || 'Ongoing'}</span>
+               </div>
+            </div>
 
-          <div className="flex items-center gap-4 py-3 border-y border-slate-100">
-            <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-slate-700">
-              <input type="checkbox" checked={form.published} onChange={e => update('published', e.target.checked)} className="w-4 h-4 accent-emerald-500 rounded" />
-              Publish immediately
-            </label>
-            <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-slate-700">
-              <input type="checkbox" checked={form.pinned} onChange={e => update('pinned', e.target.checked)} className="w-4 h-4 accent-amber-500 rounded" />
-              Pin to top
-            </label>
+            <div className="mt-5 pt-4 flex items-center gap-2 border-t border-slate-100/60 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+              <button onClick={() => onTogglePin(item)} className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-colors ${item.pinned ? 'text-amber-700 bg-amber-50 hover:bg-amber-100' : 'text-slate-600 bg-slate-50 hover:bg-slate-100'}`}>
+                <Pin className="w-3.5 h-3.5" /> {item.pinned ? 'Unpin' : 'Pin'}
+              </button>
+              <button onClick={() => onEdit(item)} className="flex-1 flex items-center justify-center gap-1.5 py-2 text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-xl text-xs font-bold transition-colors">
+                <Pencil className="w-3.5 h-3.5" /> Edit
+              </button>
+              <button onClick={() => onDelete(item)} className="w-10 flex items-center justify-center py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors shrink-0">
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
-
-        </div>
-        <div className="flex gap-3 p-5 border-t border-slate-100 sticky bottom-0 bg-white shrink-0">
-          <button onClick={onClose} className="flex-1 py-2.5 border border-slate-200 rounded-xl text-sm hover:bg-slate-50">Cancel</button>
-          <button onClick={handleSave} disabled={!form.company.trim() || saving}
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-amber-500 text-white rounded-xl text-sm font-semibold hover:bg-amber-600 disabled:opacity-50">
-            {saving ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
-            {initial?.id ? 'Save Changes' : 'Create Update'}
-          </button>
-        </div>
-      </motion.div>
-    </div>
+        </>
+      )}
+    </motion.div>
   );
 };
 
-export default function PlacementUpdatesEditor() {
+const PlacementUpdatesEditor = () => {
+  const toast = useToast();
   const { admin } = useAdminAuth();
   const [items, setItems] = useState([]);
-  const [editing, setEditing] = useState(null);
-  const [search, setSearch] = useState('');
-  const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [confirmDelete, setConfirmDelete] = useState(null);
+  const [sectionsMap, setSectionsMap] = useState({});
+  const [pageId, setPageId] = useState(null);
+  const [previewSection, setPreviewSection] = useState(null);
+  
+  // Smart Filter State
+  const [search, setSearch] = useState('');
+  const [viewMode, setViewMode] = useState('grid');
+  
+  // Individual Editor State
+  const [editingItem, setEditingItem] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
-  const refresh = async () => {
+  const fetchPage = async () => {
+    try {
+      const res = await cmsService.getPage('updates');
+      setPageId(res.data?.id);
+      const sections = res.data?.sections || [];
+      const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
+      setSectionsMap(map);
+
+      if (map['updates.placements']) {
+        const dataStr = map['updates.placements'].draftContent || map['updates.placements'].content || '[]';
+        setItems(JSON.parse(dataStr));
+      }
+    } catch (err) {
+      toast({ type: 'error', title: 'Error', message: 'Failed to load Placements data.' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPage();
+  }, []);
+
+  const handleSaveDraft = async (isSilent = false, newItems = null) => {
     setLoading(true);
-    if (search) setItems(await updatesService.search(UPDATE_TYPES.PLACEMENTS, search));
-    else setItems(await updatesService.getAll(UPDATE_TYPES.PLACEMENTS));
-    setLoading(false);
+    const dataToSave = newItems || items;
+    try {
+      const content = JSON.stringify(dataToSave);
+      if (sectionsMap['updates.placements']) {
+        await cmsService.updateSection(sectionsMap['updates.placements'].id, { draftContent: content, _isSilentDraft: isSilent });
+      } else {
+        const newSec = await cmsService.createSection({
+          pageId, sectionKey: 'updates.placements', title: 'Placement Updates', draftContent: content, _isSilentDraft: isSilent
+        });
+        setSectionsMap(prev => ({ ...prev, 'updates.placements': newSec.data }));
+      }
+      if (!isSilent) toast({ type: 'success', title: 'Draft Saved', message: `Placements changes saved securely to draft.` });
+    } catch (err) {
+      toast({ type: 'error', title: 'Error', message: 'Failed to save Placements draft.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { refresh(); }, [search]);
-
-  const handleSave = async (form) => {
-    if (form.id) await updatesService.update(UPDATE_TYPES.PLACEMENTS, form.id, form, admin);
-    else await updatesService.add(UPDATE_TYPES.PLACEMENTS, form, admin);
-    await refresh();
-    setEditing(null);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const handlePublishClick = async () => {
+    await handleSaveDraft(true);
+    const res = await cmsService.getPage('updates');
+    const updatedSec = res.data.sections.find(s => s.sectionKey === 'updates.placements');
+    setPreviewSection(updatedSec);
   };
 
-  const handleDelete = async (item) => {
-    setConfirmDelete(item);
+  const handleReset = () => {
+    setItems([]);
+    toast({ type: 'info', title: 'Reset', message: 'Placements reverted to empty list.' });
   };
 
-  const executeDelete = async () => {
-    if (!confirmDelete) return;
-    await updatesService.delete(UPDATE_TYPES.PLACEMENTS, confirmDelete.id);
-    await refresh();
-    setConfirmDelete(null);
+  const saveIndividualEdit = (updatedItem) => {
+    let newItems;
+    const adminName = admin?.name || 'Admin';
+    const timestamp = new Date().toISOString();
+    updatedItem.lastEditedBy = adminName;
+    updatedItem.updatedAt = timestamp;
+
+    if (!updatedItem.id) {
+      updatedItem.id = `placements_${Date.now()}`;
+      updatedItem.createdAt = timestamp;
+      newItems = [updatedItem, ...items];
+    } else {
+      newItems = items.map(i => i.id === updatedItem.id ? updatedItem : i);
+    }
+    setItems(newItems);
+    setEditingItem(null);
+    handleSaveDraft(true, newItems);
+    toast({ type: 'success', title: 'Applied', message: 'Placement applied to draft list.' });
   };
+
+  const deleteItem = (itemToDelete) => {
+    if (!window.confirm(`Delete placement update for "${itemToDelete.company}"?`)) return;
+    const newItems = items.filter(i => i.id !== itemToDelete.id);
+    setItems(newItems);
+    handleSaveDraft(true, newItems);
+  };
+
+  const togglePin = (itemToToggle) => {
+    const newItems = items.map(i => i.id === itemToToggle.id ? { ...i, pinned: !i.pinned } : i);
+    setItems(newItems);
+    handleSaveDraft(true, newItems);
+  };
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files?.[0]; if (!file || !editingItem) return;
+    setUploadingImage(true);
+    try {
+      const compressed = await fileService.compressImage(file, 400, 0.9);
+      const rec = await fileService.upload(compressed, 'updates', 'placements');
+      setEditingItem(p => ({ ...p, image: rec.url }));
+    } catch (err) {
+      toast({ type: 'error', title: 'Upload Failed', message: 'Could not upload logo.' });
+    }
+    setUploadingImage(false);
+  };
+
+  const { status, lastModified, validationIssues } = useEditorStatus(sectionsMap, 'updates.placements', items);
+
+  const filteredItems = useMemo(() => {
+    return items.filter(i => {
+      return (i.company || '').toLowerCase().includes(search.toLowerCase()) || 
+             (i.description || '').toLowerCase().includes(search.toLowerCase());
+    });
+  }, [items, search]);
+
+  // Executive Metrics
+  const metrics = useMemo(() => {
+    let highest = 0;
+    items.forEach(i => {
+      const val = parsePackage(i.packageRange);
+      if (val > highest) highest = val;
+    });
+
+    return {
+      total: items.length,
+      published: items.filter(i => i.published).length,
+      highestPackage: highest > 0 ? `${highest} LPA` : 'N/A',
+      drafts: items.filter(i => !i.published).length,
+    };
+  }, [items]);
+
+  if (loading && !Object.keys(sectionsMap).length) return <div>Loading...</div>;
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-800">Placement Updates</h2>
-          <p className="text-sm text-slate-500 mt-1">Manage placement drives, offers, and training schedules.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          {saved && <div className="flex items-center gap-1.5 text-amber-600 text-xs bg-primary-50 px-3 py-1.5 rounded-lg border border-emerald-200"><CheckCircle className="w-3.5 h-3.5" /> Saved!</div>}
-          <button onClick={() => setEditing({})} className="flex items-center gap-2 px-5 py-2.5 bg-amber-500 text-white text-sm font-semibold rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/25">
-            <Plus className="w-4 h-4" /> Add Update
-          </button>
-        </div>
-      </div>
+    <EditorPage
+      title="Placement Updates Manager"
+      description="Manage upcoming recruitment drives, placement highlights, and offers."
+      breadcrumb={['Admin', 'Updates', 'Placements']}
+      onSave={() => handleSaveDraft(false)}
+      onPublish={handlePublishClick}
+      onReset={handleReset}
+      isLoading={loading}
+      status={status}
+      lastModified={lastModified}
+      validationIssues={validationIssues}
+    >
+      <AnimatePresence mode="wait">
+        {!editingItem ? (
+          <motion.div key="list" {...fadeUp} className="space-y-8">
+            
+            {/* Executive Header Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { label: 'Total Companies', value: metrics.total, color: 'bg-blue-50 text-blue-700 border-blue-100' },
+                { label: 'Published Live', value: metrics.published, color: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+                { label: 'Highest Package', value: metrics.highestPackage, color: 'bg-amber-50 text-amber-700 border-amber-100' },
+                { label: 'Drafts', value: metrics.drafts, color: 'bg-slate-100 text-slate-700 border-slate-200' }
+              ].map((stat, i) => (
+                <div key={i} className={`p-4 rounded-2xl border ${stat.color} flex flex-col justify-center`}>
+                  <span className="text-[10px] font-bold uppercase tracking-wider opacity-80 mb-1">{stat.label}</span>
+                  <span className="text-3xl font-extrabold tracking-tight">{stat.value}</span>
+                </div>
+              ))}
+            </div>
 
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-        <input className={`${inputCls} pl-10`} placeholder="Search placement updates..." value={search} onChange={e => setSearch(e.target.value)} />
-      </div>
+            {/* Smart Filter Bar */}
+            <div className="bg-white/80 backdrop-blur-xl border border-slate-200/80 p-3 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm sticky top-[132px] z-10">
+              <div className="flex flex-1 w-full gap-3">
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input 
+                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 bg-white shadow-sm transition-all" 
+                    placeholder="Search by company or role..." 
+                    value={search} 
+                    onChange={e => setSearch(e.target.value)} 
+                  />
+                  {search && (
+                    <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="flex p-1 bg-slate-100 rounded-xl border border-slate-200/60">
+                  <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500 hover:text-slate-700'}`}><LayoutGrid className="w-4 h-4" /></button>
+                  <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500 hover:text-slate-700'}`}><ListIcon className="w-4 h-4" /></button>
+                </div>
+                <button onClick={() => setEditingItem({ ...createEmptyItem(UPDATE_TYPES.PLACEMENTS) })} className="flex flex-1 md:flex-none items-center justify-center gap-2 px-5 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-bold rounded-xl shadow-[0_4px_14px_0_rgb(245,158,11,0.39)] hover:shadow-[0_6px_20px_rgba(245,158,11,0.23)] hover:-translate-y-0.5 transition-all">
+                  <Plus className="w-4 h-4" /> Add Company
+                </button>
+              </div>
+            </div>
 
-      {loading ? (
-        <div className="flex justify-center py-20">
-          <span className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
-        </div>
-      ) : items.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Building2 className="w-12 h-12 text-slate-200 mb-4" />
-          <p className="text-slate-500 font-medium">No placement updates found.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          <AnimatePresence>
-            {items.map(item => (
-              <PlacementCard
-                key={item.id}
-                item={item}
-                onEdit={setEditing}
-                onDelete={handleDelete}
-                onTogglePin={async (i) => { await updatesService.togglePin(UPDATE_TYPES.PLACEMENTS, i.id, admin); await refresh(); }}
-                onTogglePublish={async (i) => { await updatesService.togglePublish(UPDATE_TYPES.PLACEMENTS, i.id, admin); await refresh(); }}
-              />
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
+            {filteredItems.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-24 text-center bg-white/50 backdrop-blur-sm border border-slate-200 border-dashed rounded-3xl">
+                <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4"><Briefcase className="w-8 h-8 text-slate-300" /></div>
+                <h3 className="text-lg font-bold text-slate-900 mb-1">No placement records found</h3>
+                <p className="text-slate-500 font-medium text-sm">Add a new company or clear your search.</p>
+              </div>
+            ) : (
+              <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : "flex flex-col gap-3"}>
+                <AnimatePresence>
+                  {filteredItems.map(item => (
+                    <PlacementCard key={item.id} item={item} onEdit={setEditingItem} onDelete={deleteItem} onTogglePin={togglePin} viewMode={viewMode} />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
+          </motion.div>
+        ) : (
+          <motion.div key="editor" {...fadeUp} className="space-y-6">
+            <div className="flex items-center justify-between mb-4 bg-white/80 backdrop-blur-md border border-slate-200/60 p-3 rounded-2xl sticky top-[132px] z-10 shadow-sm">
+              <button onClick={() => setEditingItem(null)} className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors">
+                <ArrowLeft className="w-4 h-4" /> Back to Directory
+              </button>
+              <div className="flex gap-3">
+                <button onClick={() => saveIndividualEdit(editingItem)} className="flex items-center gap-2 px-6 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold rounded-xl shadow-lg shadow-slate-900/20 hover:-translate-y-0.5 transition-all">
+                  <CheckCircle className="w-4 h-4" /> Apply Changes
+                </button>
+              </div>
+            </div>
 
-      <AnimatePresence>
-        {editing && <PlacementModal initial={editing} onSave={handleSave} onClose={() => setEditing(null)} />}
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+              <div className="xl:col-span-8 space-y-6">
+                
+                <EditorCard title="Company Details" description="Configure the core company details and package offered.">
+                  <div className="space-y-6">
+                    
+                    <div className="flex flex-col sm:flex-row gap-6">
+                      <div className="w-full sm:w-32 aspect-square rounded-2xl bg-white border border-slate-200 shrink-0 overflow-hidden relative shadow-[0_8px_30px_rgb(0,0,0,0.06)] flex items-center justify-center group p-4">
+                        {editingItem.image ? (
+                          <>
+                            <img src={editingItem.image} alt="Logo" className="w-full h-full object-contain transition-transform group-hover:scale-105" />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
+                              <button onClick={() => setEditingItem(p => ({ ...p, image: '' }))} className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm">Remove</button>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex flex-col items-center gap-2 text-slate-400">
+                            <Upload className="w-6 h-6" />
+                            <span className="text-[10px] font-bold uppercase tracking-wider">No Logo</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 flex flex-col justify-center space-y-3">
+                        <div>
+                          <h4 className="text-sm font-bold text-slate-800 mb-1">Company Logo</h4>
+                          <p className="text-xs text-slate-500">Upload a transparent PNG logo. Clean logos look best on the cards.</p>
+                        </div>
+                        <label className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-slate-200 text-slate-700 text-sm font-bold rounded-xl cursor-pointer hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm w-max">
+                          <Upload className="w-4 h-4 text-blue-500" /> {uploadingImage ? 'Uploading...' : 'Browse Image'}
+                          <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} disabled={uploadingImage} />
+                        </label>
+                      </div>
+                    </div>
+
+                    <AdminInput 
+                      label="Company Name *" 
+                      value={editingItem.company} 
+                      onChange={e => setEditingItem(p => ({ ...p, company: e.target.value }))} 
+                      placeholder="e.g. Zoho Corporation" 
+                    />
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-5 bg-slate-50/50 rounded-2xl border border-slate-100">
+                      <AdminInput 
+                        label="Package Details (CTC)" 
+                        value={editingItem.packageRange || ''} 
+                        onChange={e => setEditingItem(p => ({ ...p, packageRange: e.target.value }))} 
+                        placeholder="e.g. 8.5 LPA" 
+                        hint="Include 'LPA' or currency format clearly."
+                      />
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Drive Date</label>
+                        <input 
+                          type="date" 
+                          className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 bg-white transition-all shadow-sm"
+                          value={editingItem.driveDate || ''} 
+                          onChange={e => setEditingItem(p => ({ ...p, driveDate: e.target.value }))} 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </EditorCard>
+
+                <EditorCard title="Statistics & Roles" description="Drive information and placement numbers.">
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <AdminInput 
+                        label="Recruiter Info" 
+                        value={editingItem.recruiterInfo || ''} 
+                        onChange={e => setEditingItem(p => ({ ...p, recruiterInfo: e.target.value }))} 
+                        placeholder="e.g. Off-Campus Drive, Direct Hiring" 
+                      />
+                      <AdminInput 
+                        label="Placement Statistics" 
+                        value={editingItem.placementStatistics || ''} 
+                        onChange={e => setEditingItem(p => ({ ...p, placementStatistics: e.target.value }))} 
+                        placeholder="e.g. 45 Students Placed" 
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Public Visibility</label>
+                      <AdminToggle 
+                        label="Publish to Live Site" 
+                        checked={editingItem.published !== false} 
+                        onChange={v => setEditingItem(p => ({ ...p, published: v }))} 
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">Job Roles / Highlights</label>
+                      <textarea 
+                        className="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 resize-none bg-white transition-all shadow-sm leading-relaxed" 
+                        rows={4} 
+                        value={editingItem.description || ''} 
+                        onChange={e => setEditingItem(p => ({ ...p, description: e.target.value }))} 
+                        placeholder="Mention the roles offered (e.g. SDE-1, Data Analyst) and eligible departments..." 
+                      />
+                    </div>
+                  </div>
+                </EditorCard>
+              </div>
+
+              {/* Right Panel: Live Preview Card */}
+              <div className="xl:col-span-4">
+                <div className="sticky top-40">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-6 h-6 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600"><Eye className="w-3.5 h-3.5" /></div>
+                    <h3 className="text-xs font-bold text-slate-700 uppercase tracking-widest">Public Preview</h3>
+                  </div>
+                  
+                  <div className="bg-white rounded-[24px] border border-slate-200/60 shadow-[0_20px_40px_rgb(0,0,0,0.06)] overflow-hidden flex flex-col transform origin-top hover:scale-[1.02] transition-transform duration-500">
+                    <div className="bg-slate-100/50 border-b border-slate-100 px-4 py-3 flex items-center gap-2 backdrop-blur-sm">
+                      <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-slate-300" /><div className="w-2.5 h-2.5 rounded-full bg-slate-300" /><div className="w-2.5 h-2.5 rounded-full bg-slate-300" /></div>
+                    </div>
+                    
+                    <div className="p-6 bg-white">
+                      <div className="flex gap-4 items-start mb-5">
+                        <div className="w-16 h-16 rounded-2xl border border-slate-100 p-2 flex items-center justify-center bg-white shadow-sm shrink-0">
+                          {editingItem.image ? (
+                            <img src={editingItem.image} alt="Logo" className="w-full h-full object-contain" />
+                          ) : (
+                            <Building2 className="w-8 h-8 text-slate-300" />
+                          )}
+                        </div>
+                        <div className="pt-1">
+                          <span className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-lg text-[10px] font-black uppercase tracking-widest mb-2 inline-block">
+                            {editingItem.packageRange || 'Package TBD'}
+                          </span>
+                          <h4 className="font-extrabold text-slate-900 text-xl leading-tight">{editingItem.company || 'Company Name'}</h4>
+                        </div>
+                      </div>
+                      
+                      <p className="text-sm text-slate-500 leading-relaxed line-clamp-3 mb-6 bg-slate-50 rounded-xl p-4 border border-slate-100">{editingItem.description || 'Roles and eligibility preview...'}</p>
+                      
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div className="flex items-center gap-2 text-slate-600 font-bold">
+                          <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500"><Calendar className="w-4 h-4" /></div>
+                          <span>{editingItem.driveDate || 'TBD'}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-slate-600 font-bold">
+                          <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500"><GraduationCap className="w-4 h-4" /></div>
+                          <span>{editingItem.placementStatistics || 'Ongoing'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
 
-      <ConfirmDialog 
-        isOpen={!!confirmDelete} 
-        onClose={() => setConfirmDelete(null)} 
-        onConfirm={executeDelete}
-        title="Delete Placement Update" 
-        message={`Are you sure you want to delete update for "${confirmDelete?.company}"?`} 
-        confirmText="Delete" 
-        confirmVariant="danger" 
-      />
-    </div>
+      {previewSection && (
+        <SectionPreviewModal 
+          section={previewSection}
+          onClose={() => setPreviewSection(null)}
+          onPublish={async (sec) => {
+            await cmsService.publishSection(sec.id);
+            setPreviewSection(null);
+            fetchPage();
+            toast({ type: 'success', title: 'Live', message: 'Placements pushed to production.' });
+          }}
+          onRestore={() => fetchPage()}
+        />
+      )}
+    </EditorPage>
   );
-}
+};
+
+export default PlacementUpdatesEditor;

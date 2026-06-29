@@ -17,6 +17,8 @@ const createSectionSchema = z.object({
   sectionKey: z.string().min(1, 'Section Key is required'),
   title: z.string().optional().nullable(),
   content: z.string().optional().nullable(),
+  draftContent: z.string().optional().nullable(),
+  isVisible: z.boolean().optional(),
   sortOrder: z.number().int().optional(),
 });
 

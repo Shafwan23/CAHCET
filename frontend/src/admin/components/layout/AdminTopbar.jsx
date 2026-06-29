@@ -11,6 +11,7 @@ const BREADCRUMB_MAP = {
   // Homepage
   '/admin/dashboard/homepage/navbar': 'Navbar Editor',
   '/admin/dashboard/homepage/hero': 'Hero Section Editor',
+  '/admin/dashboard/homepage/welcome': 'Welcome Message Editor',
   '/admin/dashboard/homepage/stats': 'Animation Numbers Editor',
   '/admin/dashboard/homepage/academic': 'Academic Department Section Editor',
   '/admin/dashboard/homepage/placement-excellence': 'Placement Excellence Section Editor',
@@ -18,6 +19,7 @@ const BREADCRUMB_MAP = {
   '/admin/dashboard/homepage/footer': 'Footer Editor',
   '/admin/dashboard/homepage/gallery': 'Homepage Gallery Editor',
   '/admin/dashboard/homepage/videos': 'Video Showcase Editor',
+  '/admin/dashboard/homepage/cta': 'CTA Section Editor',
   '/admin/dashboard/homepage/facilities': 'Campus Facilities Editor',
   '/admin/dashboard/departments/overview': 'Departments Overview Editor',
   

@@ -20,19 +20,28 @@ const ApplicationLoginPage = () => {
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    email: '',
+    email: localStorage.getItem('savedEmail') || '',
     password: '',
-    rememberMe: false
+    rememberMe: localStorage.getItem('savedEmail') ? true : false
   });
   
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Instant redirect if already logged in
+  React.useEffect(() => {
+    const applicant = localStorage.getItem('applicant');
+    if (applicant) {
+      navigate('/admissions/application');
+    }
+  }, [navigate]);
 
   // Forgot Password States
   const [isForgotMode, setIsForgotMode] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [resetSent, setResetSent] = useState(false);
+  const [isOtpVerified, setIsOtpVerified] = useState(false);
   const [resetError, setResetError] = useState('');
   const [isResetting, setIsResetting] = useState(false);
 
@@ -66,6 +75,12 @@ const ApplicationLoginPage = () => {
     try {
       await applicantAuthService.login(formData.email, formData.password, formData.rememberMe);
 
+      if (formData.rememberMe) {
+        localStorage.setItem('savedEmail', formData.email);
+      } else {
+        localStorage.removeItem('savedEmail');
+      }
+
       setIsSubmitting(false);
       navigate('/admissions/application');
     } catch (error) {
@@ -93,11 +108,30 @@ const ApplicationLoginPage = () => {
     }
   };
 
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setResetError('');
+    if (!otp) {
+      setResetError('Please enter OTP.');
+      return;
+    }
+
+    setIsResetting(true);
+    try {
+      await applicantAuthService.verifyOtp(resetEmail, otp);
+      setIsResetting(false);
+      setIsOtpVerified(true);
+    } catch (error) {
+      setIsResetting(false);
+      setResetError(error.response?.data?.message || 'Invalid or expired OTP');
+    }
+  };
+
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setResetError('');
     if (!otp || !newPassword) {
-      setResetError('Please enter OTP and new password.');
+      setResetError('Please enter a new password.');
       return;
     }
 
@@ -107,6 +141,7 @@ const ApplicationLoginPage = () => {
       setIsResetting(false);
       // Reset state and go back to login
       setResetSent(false);
+      setIsOtpVerified(false);
       setIsForgotMode(false);
       setResetEmail('');
       setOtp('');
@@ -115,6 +150,16 @@ const ApplicationLoginPage = () => {
       setIsResetting(false);
       setResetError(error.response?.data?.message || 'Failed to reset password');
     }
+  };
+
+  const resetForgotState = () => {
+    setIsForgotMode(false);
+    setResetSent(false);
+    setIsOtpVerified(false);
+    setResetEmail('');
+    setOtp('');
+    setNewPassword('');
+    setResetError('');
   };
 
   return (
@@ -302,8 +347,8 @@ const ApplicationLoginPage = () => {
                     </p>
                   </div>
 
-                  {resetSent ? (
-                    <form onSubmit={handleResetPassword} className="space-y-5">
+                  {resetSent && !isOtpVerified ? (
+                    <form onSubmit={handleVerifyOtp} className="space-y-5">
                       <div className="text-center mb-6">
                         <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
                           <CheckCircle className="w-8 h-8 text-green-500" />
@@ -321,8 +366,39 @@ const ApplicationLoginPage = () => {
                           placeholder="6-digit OTP" 
                           value={otp}
                           onChange={(e) => setOtp(e.target.value)}
-                          className={`w-full bg-gray-50 border rounded-xl py-3 px-4 text-center text-tracking-widest font-mono text-lg text-gray-900 focus:outline-none transition-colors ${resetError ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-accent-gold'}`}
+                          className={`w-full bg-gray-50 border rounded-xl py-3 px-4 text-center tracking-widest font-mono text-lg text-gray-900 focus:outline-none transition-colors ${resetError ? 'border-red-300 focus:border-red-500' : 'border-gray-200 focus:border-accent-gold'}`}
                         />
+                        {resetError && <p className="text-xs text-red-500 mt-1 text-center">{resetError}</p>}
+                      </div>
+
+                      <div className="pt-2">
+                        <button 
+                          type="submit" 
+                          disabled={isResetting}
+                          className="w-full bg-accent-gold hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-accent-gold/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-70 mb-4"
+                        >
+                          {isResetting ? (
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          ) : (
+                            <span>Verify OTP</span>
+                          )}
+                        </button>
+                        <button 
+                          type="button"
+                          onClick={resetForgotState}
+                          className="w-full bg-transparent hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition-all"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  ) : resetSent && isOtpVerified ? (
+                    <form onSubmit={handleResetPassword} className="space-y-5">
+                      <div className="text-center mb-6">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">Create New Password</h3>
+                        <p className="text-sm text-gray-500">
+                          OTP verified successfully. Please enter your new password below.
+                        </p>
                       </div>
 
                       <div className="space-y-1.5">
@@ -354,13 +430,7 @@ const ApplicationLoginPage = () => {
                         </button>
                         <button 
                           type="button"
-                          onClick={() => {
-                            setIsForgotMode(false);
-                            setResetSent(false);
-                            setResetEmail('');
-                            setOtp('');
-                            setNewPassword('');
-                          }}
+                          onClick={resetForgotState}
                           className="w-full bg-transparent hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition-all"
                         >
                           Cancel
@@ -398,7 +468,7 @@ const ApplicationLoginPage = () => {
                         </button>
                         <button 
                           type="button"
-                          onClick={() => setIsForgotMode(false)}
+                          onClick={resetForgotState}
                           className="w-full bg-transparent hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold py-3.5 rounded-xl transition-all"
                         >
                           Cancel

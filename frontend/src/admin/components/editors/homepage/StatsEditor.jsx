@@ -4,6 +4,8 @@ import { useToast } from '../../ui/Toast';
 import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { AdminInput, AdminToggle } from '../../ui/AdminInput';
 import { cmsService } from '../../../../services/cmsService';
+import SectionPreviewModal from '../../ui/SectionPreviewModal';
+import { useEditorStatus } from '../../../utils/useEditorStatus';
 
 const AVAILABLE_ICONS = [
   { id: 'users', icon: Users, label: 'Users/Students' },
@@ -21,39 +23,41 @@ const StatsEditor = () => {
   const [form, setForm] = useState({ title: 'By the Numbers', stats: [] });
   const [loading, setLoading] = useState(true);
   const [sectionsMap, setSectionsMap] = useState({});
+  const [previewSection, setPreviewSection] = useState(null);
+
+  const fetchPage = async () => {
+    try {
+      const res = await cmsService.getPage('home');
+      const sections = res.data?.sections || [];
+      const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
+      setSectionsMap(map);
+
+      if (map['home.statistics']) {
+        const dataStr = map['home.statistics'].draftContent || map['home.statistics'].content || '{}';
+        const statsData = JSON.parse(dataStr);
+        if (Array.isArray(statsData)) {
+          setForm({ title: 'By the Numbers', stats: statsData });
+        } else {
+          setForm(statsData || { title: 'By the Numbers', stats: [] });
+        }
+      }
+    } catch (err) {
+      toast({ type: 'error', title: 'Error', message: 'Failed to load Stats data.' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPage = async () => {
-      try {
-        const res = await cmsService.getPage('home');
-        const sections = res.data?.sections || [];
-        const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
-        setSectionsMap(map);
-
-        if (map['home.statistics']) {
-          const statsData = JSON.parse(map['home.statistics'].content);
-          if (Array.isArray(statsData)) {
-            setForm({ title: 'By the Numbers', stats: statsData });
-          } else {
-            setForm(statsData || { title: 'By the Numbers', stats: [] });
-          }
-        }
-      } catch (err) {
-        toast({ type: 'error', title: 'Error', message: 'Failed to load Stats data.' });
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchPage();
   }, []);
 
   const change = (field, value) => setForm(p => ({ ...p, [field]: value }));
 
-  const handleSave = async (publish = false) => {
+  const handleSave = async (isSilent = false) => {
     setLoading(true);
     try {
       let contentToSave;
-      // Depending on whether it expects an array or object
       if (Array.isArray(form)) {
         contentToSave = form;
       } else {
@@ -61,17 +65,27 @@ const StatsEditor = () => {
       }
 
       if (sectionsMap['home.statistics']) {
-        await cmsService.updateSection(sectionsMap['home.statistics'].id, { content: JSON.stringify(contentToSave) });
+        await cmsService.updateSection(sectionsMap['home.statistics'].id, { draftContent: JSON.stringify(contentToSave), _isSilentDraft: isSilent });
       } else {
-        // If the section doesn't exist yet, we'd need its ID, but usually it's seeded.
-        // For safety, we use the raw update method if available, but assuming it exists:
+        const res = await cmsService.getPage('home');
+        const newSec = await cmsService.createSection({
+          pageId: res.data.id, sectionKey: 'home.statistics', title: 'Statistics', draftContent: JSON.stringify(contentToSave), _isSilentDraft: isSilent
+        });
+        setSectionsMap(prev => ({ ...prev, 'home.statistics': newSec.data }));
       }
-      toast({ type: 'success', title: publish ? 'Published!' : 'Draft saved', message: `Statistics changes ${publish ? 'are now live' : 'saved'}.` });
+      if (!isSilent) toast({ type: 'success', title: 'Draft Saved', message: `Statistics changes saved securely to draft.` });
     } catch (err) {
-      toast({ type: 'error', title: 'Error', message: 'Failed to save Stats data.' });
+      toast({ type: 'error', title: 'Error', message: 'Failed to save Stats draft.' });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePublishClick = async () => {
+    await handleSave(true);
+    const res = await cmsService.getPage('home');
+    const updatedSec = res.data.sections.find(s => s.sectionKey === 'home.statistics');
+    setPreviewSection(updatedSec);
   };
 
   const handleReset = () => {
@@ -100,8 +114,7 @@ const StatsEditor = () => {
   };
 
   const statsList = Array.isArray(form) ? form : (form.stats || []);
-
-  if (loading && !Object.keys(sectionsMap).length) return <div>Loading...</div>;
+  const { status, lastModified, validationIssues } = useEditorStatus(sectionsMap, 'home.statistics', form);
 
   return (
     <EditorPage
@@ -109,11 +122,16 @@ const StatsEditor = () => {
       description="Manage the dynamic counter statistics displayed on the homepage."
       breadcrumb={['Admin', 'Homepage', 'Animation Numbers']}
       onSave={() => handleSave(false)}
-      onPublish={() => handleSave(true)}
+      onPublish={handlePublishClick}
       onReset={handleReset}
       isLoading={loading}
+      status={status}
+      lastModified={lastModified}
+      validationIssues={validationIssues}
     >
-      <EditorCard title="Section Visibility & Title" description="Controls whether these stats are shown on the public site.">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        <div className="xl:col-span-8 space-y-6">
+          <EditorCard title="Section Visibility & Title" description="Controls whether these stats are shown on the public site.">
         <div className="space-y-4">
           <AdminToggle
             label="Section Visibility"
@@ -203,14 +221,69 @@ const StatsEditor = () => {
           </button>
         </div>
       </EditorCard>
+        </div>
 
-      <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-600">
-        <Monitor className="w-5 h-5 shrink-0" />
-        <div>
-          <p className="text-sm font-semibold">Live Preview</p>
-          <p className="text-xs mt-0.5">After publishing, visit the <a href="/" target="_blank" rel="noopener noreferrer" className="underline font-semibold">home page</a> to see the animated counters.</p>
+        {/* Lightweight Preview Card */}
+        <div className="xl:col-span-4">
+          <div className="sticky top-24">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Monitor className="w-4 h-4" /> Live Preview</h3>
+            
+            <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden">
+              {/* Browser/Device Chrome */}
+              <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                </div>
+                <div className="mx-auto bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono flex-1 max-w-[200px] text-center truncate shadow-sm">
+                  cahcet.edu.in
+                </div>
+              </div>
+
+              <div className="bg-slate-900 overflow-hidden relative">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500 opacity-20 blur-3xl rounded-full" />
+               <div className="p-6 relative z-10">
+                 <h4 className="text-center text-sm font-semibold text-white mb-6 uppercase tracking-widest">{form.title || 'By the Numbers'}</h4>
+                 <div className="grid grid-cols-2 gap-4">
+                   {statsList.slice(0, 4).map((stat, i) => {
+                     const IconComponent = AVAILABLE_ICONS.find(ic => ic.id === stat.icon)?.icon || AVAILABLE_ICONS[0].icon;
+                     return (
+                       <div key={i} className="text-center p-3 bg-white/5 rounded-xl border border-white/10">
+                         <div className="w-8 h-8 mx-auto bg-amber-500/20 text-amber-400 flex items-center justify-center rounded-lg mb-2">
+                           <IconComponent className="w-4 h-4" />
+                         </div>
+                         <div className="text-xl font-bold text-white leading-none">
+                           {stat.prefix}{stat.value}{stat.suffix}
+                         </div>
+                         <div className="text-[10px] text-slate-400 mt-1 uppercase tracking-wider">{stat.label}</div>
+                       </div>
+                     )
+                   })}
+                 </div>
+                 {statsList.length > 4 && (
+                   <p className="text-center text-xs text-slate-500 mt-4 italic">+ {statsList.length - 4} more items hidden in preview</p>
+                 )}
+               </div>
+            </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {previewSection && (
+        <SectionPreviewModal 
+          section={previewSection}
+          onClose={() => setPreviewSection(null)}
+          onPublish={async (sec) => {
+            await cmsService.publishSection(sec.id);
+            setPreviewSection(null);
+            fetchPage();
+            toast({ type: 'success', title: 'Live', message: 'Changes pushed to production.' });
+          }}
+          onRestore={() => fetchPage()}
+        />
+      )}
     </EditorPage>
   );
 };

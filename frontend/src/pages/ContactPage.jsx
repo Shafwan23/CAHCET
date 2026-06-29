@@ -5,6 +5,7 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { cn } from '../utils/cn';
 import { cmsService } from '../services/cmsService';
+import apiClient from '../services/authService';
 
 const ContactPage = () => {
   const [cmsData, setCmsData] = useState({});
@@ -58,21 +59,28 @@ const ContactPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     setIsSubmitting(true);
+    setErrors({ ...errors, submit: '' });
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await apiClient.post('/contact', {
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        email: formData.email,
+        subject: formData.subject || 'General Inquiry',
+        message: formData.message
+      });
       setIsSuccess(true);
       setFormData({ firstName: '', lastName: '', email: '', subject: '', message: '' });
-      
-      // Reset success state after a while
       setTimeout(() => setIsSuccess(false), 5000);
-    }, 2000);
+    } catch (err) {
+      setErrors({ ...errors, submit: err.response?.data?.message || 'Failed to send message. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -238,6 +246,11 @@ const ContactPage = () => {
                   <p className="text-slate-600 font-medium mb-10 text-base">Fill out the form below and our team will get back to you within 24 hours.</p>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
+                    {errors.submit && (
+                      <div className="bg-red-50 text-red-500 p-3 rounded-xl text-sm font-semibold border border-red-100">
+                        {errors.submit}
+                      </div>
+                    )}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       {/* First Name */}
                       <div className="relative group">

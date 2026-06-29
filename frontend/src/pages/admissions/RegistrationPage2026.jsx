@@ -351,23 +351,31 @@ const RegistrationPage2026 = () => {
               transition={{ duration: 1, ease: "easeOut" }}
               className="flex flex-col items-center w-full"
             >
-              <div className="flex flex-wrap justify-center gap-4 mb-8 w-full">
+              <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 mb-8 w-full">
                 <motion.div 
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4, duration: 0.8 }}
-                  className="px-6 py-2.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold uppercase tracking-widest text-white backdrop-blur-md flex items-center gap-2"
+                  className="flex items-center gap-2 text-white/90 text-sm font-bold uppercase tracking-widest drop-shadow-md"
                 >
-                  <GraduationCap className="w-4 h-4 text-accent-gold" />
+                  <GraduationCap className="w-5 h-5 text-accent-gold" />
                   Admissions 2026
                 </motion.div>
+                
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.45, duration: 0.5 }}
+                  className="w-1.5 h-1.5 rounded-full bg-accent-gold hidden sm:block shadow-[0_0_8px_rgba(212,175,55,0.8)]"
+                />
+
                 <motion.div 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.5, duration: 0.8 }}
-                  className="px-6 py-2.5 rounded-full bg-accent-gold/20 border border-accent-gold/40 text-xs font-bold uppercase tracking-widest text-accent-gold backdrop-blur-md hidden sm:flex items-center gap-2"
+                  className="hidden sm:flex items-center gap-2 text-accent-gold text-sm font-bold uppercase tracking-widest drop-shadow-md"
                 >
-                  <Award className="w-4 h-4" />
+                  <Award className="w-5 h-5" />
                   NAAC Accredited
                 </motion.div>
               </div>

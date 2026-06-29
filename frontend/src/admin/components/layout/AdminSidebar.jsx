@@ -34,6 +34,7 @@ const HOMEPAGE_ITEMS = [
   { label: 'Full Homepage Editor',         icon: Home,         path: '/admin/dashboard/home' },
   { label: 'Navbar',                       icon: AlignJustify, path: '/admin/dashboard/homepage/navbar' },
   { label: 'Hero Section',                 icon: ImageIcon,    path: '/admin/dashboard/homepage/hero' },
+  { label: 'Welcome Message',              icon: Info,         path: '/admin/dashboard/homepage/welcome' },
   { label: 'Animation Numbers Section',    icon: Binary,       path: '/admin/dashboard/homepage/stats' },
   { label: 'Academic Department Section',  icon: BookOpen,     path: '/admin/dashboard/homepage/academic' },
   { label: 'Placement Excellence Section', icon: TrendingUp,   path: '/admin/dashboard/homepage/placement-excellence' },
@@ -41,7 +42,7 @@ const HOMEPAGE_ITEMS = [
   { label: 'Footer',                       icon: Footprints,   path: '/admin/dashboard/homepage/footer' },
   { label: 'Gallery Section',              icon: Images,       path: '/admin/dashboard/homepage/gallery' },
   { label: 'Video Showcase',               icon: Video,        path: '/admin/dashboard/homepage/videos' },
-
+  { label: 'Admissions CTA',               icon: Megaphone,    path: '/admin/dashboard/homepage/cta' },
 ];
 
 const UPDATES_ITEMS = [

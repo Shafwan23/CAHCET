@@ -78,19 +78,35 @@ model ContentPage {
 }
 
 model ContentSection {
-  id          String       @id @default(uuid())
-  pageId      String
-  sectionKey  String
-  title       String?
-  content     String?
-  sortOrder   Int          @default(0)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id           String       @id @default(uuid())
+  pageId       String
+  sectionKey   String
+  title        String?
+  content      String?
+  draftContent String?      // NEW: Additive field for un-published changes
+  isVisible    Boolean      @default(true) // NEW: Additive field for dynamic show/hide. Defaults to true to ensure backward compatibility.
+  sortOrder    Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
-  page        ContentPage  @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  page         ContentPage  @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  versions     ContentVersion[] // NEW: Relation to new version history table
 
   @@unique([pageId, sectionKey])
   @@index([pageId])
+}
+
+// NEW: Additive model for Version History Engine (Phase 12)
+model ContentVersion {
+  id               String   @id @default(uuid())
+  contentSectionId String
+  content          String?
+  publishedBy      String?
+  createdAt        DateTime @default(now())
+
+  contentSection   ContentSection @relation(fields: [contentSectionId], references: [id], onDelete: Cascade)
+
+  @@index([contentSectionId])
 }
 
 model Applicant {
@@ -102,6 +118,7 @@ model Applicant {
   
   resetOtp          String?
   resetOtpExpiry    DateTime?
+  refreshToken      String?
 
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt

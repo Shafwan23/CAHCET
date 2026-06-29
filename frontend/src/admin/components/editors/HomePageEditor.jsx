@@ -1,349 +1,300 @@
 import React, { useState, useEffect } from 'react';
-import { Monitor, Save, RefreshCw, Layers, Upload } from 'lucide-react';
+import { Reorder, AnimatePresence, motion } from 'framer-motion';
+import { 
+  GripVertical, Eye, EyeOff, Edit3, Clock, 
+  CheckCircle2, AlertCircle, PlaySquare, Copy, Settings,
+  LayoutDashboard, Webhook, History, ChevronRight, Save
+} from 'lucide-react';
 import { useToast } from '../ui/Toast';
-import EditorPage, { EditorCard } from '../ui/EditorPage';
-import { AdminInput, AdminTextarea, AdminToggle } from '../ui/AdminInput';
 import { cmsService } from '../../../services/cmsService';
-import { fileService } from '../../services/fileService';
+import { useNavigate } from 'react-router-dom';
+import SectionPreviewModal from '../ui/SectionPreviewModal';
+
+const DEFAULT_SECTIONS = [
+  { key: 'home.hero', name: 'Hero Video', path: 'homepage/hero' },
+  { key: 'home.welcome', name: 'Welcome Message', path: 'homepage/welcome' },
+  { key: 'home.dynamicinfo', name: 'Dynamic Information', path: 'homepage/stats' },
+  { key: 'home.departments', name: 'Academic Departments', path: 'homepage/academic' },
+  { key: 'home.gallery', name: 'Campus Gallery', path: 'homepage/gallery' },
+  { key: 'home.placements', name: 'Placement Excellence', path: 'homepage/placement-excellence' },
+  { key: 'home.videos', name: 'Video Showcase', path: 'homepage/videos' },
+  { key: 'home.cta', name: 'Admissions CTA', path: 'homepage/cta' },
+  { key: 'home.contact', name: 'Contact Section', path: 'homepage/contact' }
+];
 
 const HomePageEditor = () => {
   const toast = useToast();
+  const navigate = useNavigate();
+  const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [uploadingPrincipal, setUploadingPrincipal] = useState(false);
-
-  const [sectionsMap, setSectionsMap] = useState({});
-  const [formHero, setFormHero] = useState({});
-  const [formWelcome, setFormWelcome] = useState({});
-  const [formStats, setFormStats] = useState([]);
-  const [formCTA, setFormCTA] = useState({});
+  const [savingOrder, setSavingOrder] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview'); // overview, layout, history
+  const [previewSection, setPreviewSection] = useState(null);
 
   useEffect(() => {
-    fetchHomeData();
+    fetchData();
   }, []);
 
-  const fetchHomeData = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       const res = await cmsService.getPage('home');
-      const sectionsArray = res.data?.sections || [];
+      const dbSections = res.data?.sections || [];
       
-      const sMap = {};
-      sectionsArray.forEach(sec => {
-        sMap[sec.sectionKey] = sec;
+      // Merge DB state with Default registry to ensure all are visible
+      let merged = DEFAULT_SECTIONS.map((def, idx) => {
+        const dbEntry = dbSections.find(s => s.sectionKey === def.key);
+        return {
+          id: dbEntry?.id || `new-${def.key}`,
+          sectionKey: def.key,
+          name: def.name,
+          path: def.path,
+          isVisible: dbEntry ? dbEntry.isVisible : true,
+          sortOrder: dbEntry && dbEntry.sortOrder !== 0 ? dbEntry.sortOrder : idx * 10,
+          status: dbEntry?.draftContent ? 'DRAFT' : (dbEntry?.content ? 'PUBLISHED' : 'EMPTY'),
+          updatedAt: dbEntry?.updatedAt || new Date().toISOString(),
+          isNew: !dbEntry,
+          rawDbEntry: dbEntry
+        };
       });
-      setSectionsMap(sMap);
 
-      if (sMap['home.hero']) setFormHero(JSON.parse(sMap['home.hero'].content || '{}'));
-      if (sMap['home.welcome']) setFormWelcome(JSON.parse(sMap['home.welcome'].content || '{}'));
-      if (sMap['home.statistics']) setFormStats(JSON.parse(sMap['home.statistics'].content || '[]'));
-      if (sMap['home.cta']) setFormCTA(JSON.parse(sMap['home.cta'].content || '{}'));
-
+      merged.sort((a, b) => a.sortOrder - b.sortOrder);
+      setSections(merged);
     } catch (err) {
-      toast({ type: 'error', title: 'Error', message: 'Failed to load homepage CMS data' });
+      toast({ type: 'error', title: 'Error', message: 'Failed to load sections' });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSave = async () => {
+  const handleReorder = async (newOrder) => {
+    setSections(newOrder);
+  };
+
+  const saveLayout = async () => {
+    setSavingOrder(true);
     try {
-      setSaving(true);
-      
-      const updates = [];
-      if (sectionsMap['home.hero']) {
-        updates.push(cmsService.updateSection(sectionsMap['home.hero'].id, { content: JSON.stringify(formHero) }));
-      }
-      if (sectionsMap['home.welcome']) {
-        updates.push(cmsService.updateSection(sectionsMap['home.welcome'].id, { content: JSON.stringify(formWelcome) }));
-      }
-      if (sectionsMap['home.statistics']) {
-        updates.push(cmsService.updateSection(sectionsMap['home.statistics'].id, { content: JSON.stringify(formStats) }));
-      }
-      if (sectionsMap['home.cta']) {
-        updates.push(cmsService.updateSection(sectionsMap['home.cta'].id, { content: JSON.stringify(formCTA) }));
-      }
+      const updates = sections.map((sec, idx) => {
+        if (sec.isNew) {
+          // If it's new, we skip for layout saving for now
+          return null;
+        }
+        return cmsService.updateSection(sec.id, { 
+          sortOrder: idx * 10,
+          _isSilentDraft: true // Tell service not to prompt
+        });
+      }).filter(Boolean);
 
       await Promise.all(updates);
-      
-      toast({ type: 'success', title: 'Saved!', message: 'Homepage changes saved directly to the database.' });
+      toast({ type: 'success', title: 'Layout Saved', message: 'The homepage layout order has been successfully updated.' });
     } catch (err) {
       toast({ type: 'error', title: 'Save Failed', message: err.message });
     } finally {
-      setSaving(false);
+      setSavingOrder(false);
     }
   };
 
-  const handlePrincipalUpload = async (e) => {
-    const file = e.target.files?.[0]; if (!file) return;
-    setUploadingPrincipal(true);
+  const toggleVisibility = async (section) => {
+    if (section.isNew) {
+      toast({ type: 'info', title: 'Notice', message: 'Cannot hide a section that hasn\'t been created yet. Edit it first.' });
+      return;
+    }
+    
     try {
-      const rec = await fileService.upload(file, 'homepage', 'principal');
-      setFormWelcome(p => ({ ...p, principalImage: rec.url }));
-      toast({ type: 'success', title: 'Image Uploaded', message: 'Principal photo uploaded successfully.' });
-    } catch {
-      toast({ type: 'error', title: 'Upload Failed', message: 'Failed to upload principal photo.' });
+      const newVisible = !section.isVisible;
+      setSections(prev => prev.map(s => s.id === section.id ? { ...s, isVisible: newVisible } : s));
+      
+      await cmsService.updateSection(section.id, { 
+        isVisible: newVisible,
+        _isSilentDraft: true 
+      });
+      toast({ type: 'success', title: 'Visibility Updated', message: `${section.name} is now ${newVisible ? 'visible' : 'hidden'}.` });
+    } catch (err) {
+      toast({ type: 'error', title: 'Update Failed', message: err.message });
     }
-    setUploadingPrincipal(false);
   };
 
-  const updateStat = (index, field, value) => {
-    setFormStats(prev => prev.map((s, i) => i === index ? { ...s, [field]: value } : s));
+  const publishSection = async (section) => {
+    if (section.isNew || section.status !== 'DRAFT') return;
+    try {
+      await cmsService.publishSection(section.id);
+      setSections(prev => prev.map(s => s.id === section.id ? { ...s, status: 'PUBLISHED' } : s));
+      toast({ type: 'success', title: 'Published', message: `${section.name} changes are now live.` });
+    } catch (err) {
+      toast({ type: 'error', title: 'Publish Failed', message: err.message });
+    }
   };
 
-  if (loading) {
-    return <div className="p-8 text-center">Loading Database CMS...</div>;
-  }
+  const handleEdit = (section) => {
+    if (section.path) {
+      navigate(`../${section.path}`);
+    } else {
+      toast({ type: 'info', title: 'Notice', message: 'Standalone editor for this section is under construction. Please use the legacy editor.' });
+    }
+  };
+
+  if (loading) return <div className="p-8 text-center text-slate-500">Loading CMS Architecture...</div>;
 
   return (
-    <EditorPage
-      title="Home Page Editor (Database)"
-      description="Edit the hero section, welcome message, call-to-action, and statistics. Saves directly to MySQL CMS."
-      breadcrumb={['Admin', 'Content', 'Home Page']}
-      onSave={handleSave}
-      isLoading={saving}
-    >
-      {/* Hero Section */}
-      <EditorCard
-        title="Hero Section"
-        description="Controls the fullscreen video hero at the top of the home page."
-      >
-        <AdminToggle
-          label="Show Text Overlay"
-          checked={formHero.showTextOverlay !== false}
-          onChange={v => setFormHero(p => ({ ...p, showTextOverlay: v }))}
-          hint="Display a title and subtitle over the hero video."
-        />
-        {formHero.showTextOverlay !== false && (
-          <div className="mt-4 space-y-4 pt-4 border-t border-slate-50">
-            <AdminInput
-              label="Hero Title"
-              value={formHero.title || ''}
-              onChange={e => setFormHero(p => ({ ...p, title: e.target.value }))}
-              placeholder="Engineering Excellence"
-            />
-            <AdminTextarea
-              label="Hero Subtitle"
-              value={formHero.subtitle || ''}
-              onChange={e => setFormHero(p => ({ ...p, subtitle: e.target.value }))}
-              placeholder="Inspiring the next generation of engineers..."
-              rows={2}
-            />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <AdminInput
-                label="CTA Button Text"
-                value={formHero.ctaText || ''}
-                onChange={e => setFormHero(p => ({ ...p, ctaText: e.target.value }))}
-                placeholder="Apply Now 2026"
-              />
-              <AdminInput
-                label="CTA Button Link"
-                value={formHero.ctaLink || ''}
-                onChange={e => setFormHero(p => ({ ...p, ctaLink: e.target.value }))}
-                placeholder="/admissions"
-              />
-            </div>
-          </div>
-        )}
-      </EditorCard>
-
-      {/* Welcome Section */}
-      <EditorCard
-        title="Welcome Section"
-        description="The welcoming message from the principal/institution."
-      >
-        <div className="space-y-4">
-          <AdminInput
-            label="Welcome Subtitle"
-            value={formWelcome.title || ''}
-            onChange={e => setFormWelcome(p => ({ ...p, title: e.target.value }))}
-            placeholder="Welcome to CAHCET"
-          />
-          <AdminInput
-            label="Welcome Title"
-            value={formWelcome.subtitle || ''}
-            onChange={e => setFormWelcome(p => ({ ...p, subtitle: e.target.value }))}
-            placeholder="A Legacy of Engineering Excellence Since 1998"
-          />
-          <AdminTextarea
-            label="Main Description"
-            value={formWelcome.description || ''}
-            onChange={e => setFormWelcome(p => ({ ...p, description: e.target.value }))}
-            rows={4}
-            placeholder="C. Abdul Hakeem College of Engineering and Technology..."
-          />
-          <AdminTextarea
-            label="Principal's Mission/Quote"
-            value={formWelcome.mission || ''}
-            onChange={e => setFormWelcome(p => ({ ...p, mission: e.target.value }))}
-            rows={2}
-            placeholder="Our mission is to nurture engineers..."
-          />
-
-          <div className="pt-4 border-t border-slate-100">
-            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Principal Information</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <AdminInput
-                label="Principal Name"
-                value={formWelcome.principalName || ''}
-                onChange={e => setFormWelcome(p => ({ ...p, principalName: e.target.value }))}
-                placeholder="Dr. M. Sasikumar"
-              />
-              <AdminInput
-                label="Principal Designation"
-                value={formWelcome.principalDesignation || ''}
-                onChange={e => setFormWelcome(p => ({ ...p, principalDesignation: e.target.value }))}
-                placeholder="Principal, CAHCET"
-              />
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">Principal Photo</label>
-                <div className="flex items-center gap-4">
-                  <div className="flex-1">
-                    <input 
-                      type="text" 
-                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white text-slate-800"
-                      value={formWelcome.principalImage || ''}
-                      onChange={e => setFormWelcome(p => ({ ...p, principalImage: e.target.value }))}
-                      placeholder="URL to principal image..."
-                    />
-                  </div>
-                  <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl cursor-pointer hover:bg-slate-200 transition-colors shrink-0 border border-slate-200">
-                    <Upload className="w-4 h-4" /> {uploadingPrincipal ? 'Uploading...' : 'Upload Photo'}
-                    <input type="file" accept="image/*" className="hidden" onChange={handlePrincipalUpload} disabled={uploadingPrincipal} />
-                  </label>
-                </div>
-                {formWelcome.principalImage && (
-                  <div className="mt-3 w-32 h-32 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
-                     <img src={formWelcome.principalImage} alt="Principal Preview" className="w-full h-full object-cover" />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
-              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Legacy Stat 1</h4>
-              <AdminInput
-                label="Value"
-                value={formWelcome.stat1Value || ''}
-                onChange={e => setFormWelcome(p => ({ ...p, stat1Value: e.target.value }))}
-                placeholder="25+"
-              />
-              <AdminInput
-                label="Label"
-                value={formWelcome.stat1Label || ''}
-                onChange={e => setFormWelcome(p => ({ ...p, stat1Label: e.target.value }))}
-                placeholder="Years of Legacy"
-              />
-              <AdminInput
-                label="Description"
-                value={formWelcome.stat1Desc || ''}
-                onChange={e => setFormWelcome(p => ({ ...p, stat1Desc: e.target.value }))}
-                placeholder="Excellence in education"
-              />
-            </div>
-
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
-              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Legacy Stat 2</h4>
-              <AdminInput
-                label="Value"
-                value={formWelcome.stat2Value || ''}
-                onChange={e => setFormWelcome(p => ({ ...p, stat2Value: e.target.value }))}
-                placeholder="15k+"
-              />
-              <AdminInput
-                label="Label"
-                value={formWelcome.stat2Label || ''}
-                onChange={e => setFormWelcome(p => ({ ...p, stat2Label: e.target.value }))}
-                placeholder="Alumni Globally"
-              />
-              <AdminInput
-                label="Description"
-                value={formWelcome.stat2Desc || ''}
-                onChange={e => setFormWelcome(p => ({ ...p, stat2Desc: e.target.value }))}
-                placeholder="Shaping the future"
-              />
-            </div>
-          </div>
-        </div>
-      </EditorCard>
-
-      {/* Stats */}
-      <EditorCard
-        title="Statistics Section"
-        description="The 4 highlight stats displayed on the home page."
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {formStats.map((stat, i) => (
-            <div key={i} className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-3">
-              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Stat {i + 1}</p>
-              <AdminInput
-                label="Label"
-                value={stat.label || ''}
-                onChange={e => updateStat(i, 'label', e.target.value)}
-                placeholder="Students Enrolled"
-              />
-              <div className="grid grid-cols-2 gap-3">
-                <AdminInput
-                  label="Value"
-                  value={stat.value || ''}
-                  onChange={e => updateStat(i, 'value', e.target.value)}
-                  placeholder="5000"
-                />
-                <AdminInput
-                  label="Suffix"
-                  value={stat.suffix || ''}
-                  onChange={e => updateStat(i, 'suffix', e.target.value)}
-                  placeholder="+"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </EditorCard>
-
-      {/* CTA Section */}
-      <EditorCard
-        title="Admissions CTA Section"
-        description="The bold call to action block."
-      >
-        <div className="space-y-4">
-          <AdminInput
-            label="CTA Title"
-            value={formCTA.title || ''}
-            onChange={e => setFormCTA(p => ({ ...p, title: e.target.value }))}
-          />
-          <AdminTextarea
-            label="CTA Subtitle"
-            value={formCTA.subtitle || ''}
-            onChange={e => setFormCTA(p => ({ ...p, subtitle: e.target.value }))}
-            rows={2}
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <AdminInput
-              label="Button Text"
-              value={formCTA.buttonText || ''}
-              onChange={e => setFormCTA(p => ({ ...p, buttonText: e.target.value }))}
-            />
-            <AdminInput
-              label="Button Link"
-              value={formCTA.buttonLink || ''}
-              onChange={e => setFormCTA(p => ({ ...p, buttonLink: e.target.value }))}
-            />
-          </div>
-        </div>
-      </EditorCard>
-
-      {/* Preview hint */}
-      <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-600">
-        <Monitor className="w-5 h-5 shrink-0" />
+    <div className="max-w-6xl mx-auto p-6 min-h-screen pb-24">
+      {/* Header */}
+      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <p className="text-sm font-semibold">Live Preview</p>
-          <p className="text-xs mt-0.5">Your changes are instantly saved to the database. Visit the <a href="/" target="_blank" rel="noopener noreferrer" className="underline font-semibold">home page</a> to see them live.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
+            <LayoutDashboard className="w-8 h-8 text-amber-500" />
+            Homepage CMS
+          </h1>
+          <p className="text-slate-500 mt-2">Enterprise Content Management & Layout Engine</p>
+        </div>
+        
+        <div className="flex bg-slate-100/80 p-1 rounded-xl shadow-inner border border-slate-200">
+          <button 
+            onClick={() => setActiveTab('overview')}
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'overview' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            Overview
+          </button>
+          <button 
+            onClick={() => setActiveTab('layout')}
+            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'layout' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            Layout Manager
+          </button>
         </div>
       </div>
-    </EditorPage>
+
+      <AnimatePresence mode="wait">
+        {activeTab === 'overview' && (
+          <motion.div 
+            key="overview"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {sections.map((sec) => (
+              <div key={sec.id} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col relative overflow-hidden group">
+                
+                {/* Status Indicator */}
+                <div className={`absolute top-0 left-0 w-full h-1 ${sec.status === 'PUBLISHED' ? 'bg-emerald-500' : sec.status === 'DRAFT' ? 'bg-amber-400' : 'bg-slate-300'}`} />
+                
+                <div className="flex justify-between items-start mb-4 mt-1">
+                  <div>
+                    <h3 className="font-bold text-slate-900">{sec.name}</h3>
+                    <p className="text-xs text-slate-500 mt-0.5 font-mono">{sec.sectionKey}</p>
+                  </div>
+                  <div className={`px-2 py-1 rounded text-[10px] font-bold tracking-wider ${sec.status === 'PUBLISHED' ? 'bg-emerald-50 text-emerald-600' : sec.status === 'DRAFT' ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500'}`}>
+                    {sec.status}
+                  </div>
+                </div>
+
+                <div className="flex-1 space-y-3 mb-6">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-slate-500 flex items-center gap-1.5"><Eye className="w-4 h-4" /> Visibility</span>
+                    <span className="font-medium text-slate-900">{sec.isVisible ? 'Visible' : 'Hidden'}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-slate-500 flex items-center gap-1.5"><Clock className="w-4 h-4" /> Updated</span>
+                    <span className="font-medium text-slate-900">{new Date(sec.updatedAt).toLocaleDateString()}</span>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 grid grid-cols-2 gap-2 mt-auto">
+                  <button onClick={() => handleEdit(sec)} className="flex items-center justify-center gap-2 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200">
+                    <Edit3 className="w-4 h-4" /> Edit
+                  </button>
+                  {sec.status === 'DRAFT' ? (
+                    <button onClick={() => setPreviewSection(sec)} className="flex items-center justify-center gap-2 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm shadow-amber-500/20">
+                      <Webhook className="w-4 h-4" /> Review & Publish
+                    </button>
+                  ) : (
+                    <button className="flex items-center justify-center gap-2 py-2 bg-slate-50 text-slate-400 text-sm font-semibold rounded-lg border border-slate-100 cursor-not-allowed">
+                      <CheckCircle2 className="w-4 h-4" /> Live
+                    </button>
+                  )}
+                </div>
+
+              </div>
+            ))}
+          </motion.div>
+        )}
+
+        {activeTab === 'layout' && (
+          <motion.div
+            key="layout"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="max-w-3xl mx-auto"
+          >
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6">
+              <div className="mb-6 flex justify-between items-center">
+                <div>
+                  <h3 className="font-bold text-slate-900">Drag to Reorder</h3>
+                  <p className="text-sm text-slate-500">Changes here affect the live public homepage layout instantly.</p>
+                </div>
+                <button 
+                  onClick={saveLayout}
+                  disabled={savingOrder}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl transition-all shadow-sm shadow-slate-900/10"
+                >
+                  <Save className="w-4 h-4" />
+                  {savingOrder ? 'Saving...' : 'Save Layout'}
+                </button>
+              </div>
+
+              <Reorder.Group axis="y" values={sections} onReorder={handleReorder} className="space-y-3">
+                {sections.map((sec) => (
+                  <Reorder.Item 
+                    key={sec.id} 
+                    value={sec}
+                    className={`flex items-center gap-4 p-4 bg-white border rounded-xl shadow-sm cursor-grab active:cursor-grabbing transition-colors hover:border-amber-300 ${!sec.isVisible ? 'opacity-50 grayscale' : 'border-slate-200'}`}
+                  >
+                    <GripVertical className="w-5 h-5 text-slate-400" />
+                    
+                    <div className="flex-1">
+                      <p className="font-bold text-slate-800">{sec.name}</p>
+                      <p className="text-xs text-slate-400 font-mono">{sec.sectionKey}</p>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                       <button
+                        onClick={() => toggleVisibility(sec)}
+                        className={`p-2 rounded-lg transition-colors ${sec.isVisible ? 'text-emerald-600 hover:bg-emerald-50' : 'text-slate-400 hover:bg-slate-100'}`}
+                        title={sec.isVisible ? 'Hide Section' : 'Show Section'}
+                      >
+                        {sec.isVisible ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                      </button>
+                      <button 
+                        onClick={() => handleEdit(sec)}
+                        className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                        title="Edit Content"
+                      >
+                        <Edit3 className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {previewSection && (
+        <SectionPreviewModal 
+          section={previewSection}
+          onClose={() => setPreviewSection(null)}
+          onPublish={async (sec) => {
+            await publishSection(sec);
+            setPreviewSection(null);
+          }}
+          onRestore={() => {
+            fetchData(); // Refresh overview to pull draft updates
+          }}
+        />
+      )}
+    </div>
   );
 };
 

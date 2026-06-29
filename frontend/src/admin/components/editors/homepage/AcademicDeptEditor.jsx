@@ -5,49 +5,60 @@ import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { AdminInput, AdminToggle } from '../../ui/AdminInput';
 import { DEPARTMENTS } from '../../../services/departmentService';
 import { cmsService } from '../../../../services/cmsService';
+import SectionPreviewModal from '../../ui/SectionPreviewModal';
+import { useEditorStatus } from '../../../utils/useEditorStatus';
+import { ArrowRight } from 'lucide-react';
 
 const AcademicDeptEditor = () => {
   const toast = useToast();
   const [form, setForm] = useState({ visible: true, title: 'Academic Excellence', subtitle: '', highlightedDepts: [] });
   const [loading, setLoading] = useState(true);
   const [sectionsMap, setSectionsMap] = useState({});
+  const [previewSection, setPreviewSection] = useState(null);
+
+  const fetchPage = async () => {
+    try {
+      const res = await cmsService.getPage('home');
+      const sections = res.data?.sections || [];
+      const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
+      setSectionsMap(map);
+
+      if (map['home.academic']) {
+        const dataStr = map['home.academic'].draftContent || map['home.academic'].content || '{}';
+        setForm(JSON.parse(dataStr));
+      }
+    } catch (err) {
+      toast({ type: 'error', title: 'Error', message: 'Failed to load Academic Dept data.' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPage = async () => {
-      try {
-        const res = await cmsService.getPage('home');
-        const sections = res.data?.sections || [];
-        const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
-        setSectionsMap(map);
-
-        if (map['home.academic']) {
-          setForm(JSON.parse(map['home.academic'].content));
-        }
-      } catch (err) {
-        toast({ type: 'error', title: 'Error', message: 'Failed to load Academic Dept data.' });
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchPage();
   }, []);
 
   const change = (field, value) => setForm(p => ({ ...p, [field]: value }));
 
-  const handleSave = async (publish = false) => {
+  const handleSave = async (isSilent = false) => {
     setLoading(true);
     try {
       if (sectionsMap['home.academic']) {
-        await cmsService.updateSection(sectionsMap['home.academic'].id, { content: JSON.stringify(form) });
-      } else {
-        // Fallback for missing seed
+        await cmsService.updateSection(sectionsMap['home.academic'].id, { draftContent: JSON.stringify(form), _isSilentDraft: isSilent });
       }
-      toast({ type: 'success', title: publish ? 'Published!' : 'Draft saved', message: `Academic changes ${publish ? 'are now live' : 'saved'}.` });
+      if (!isSilent) toast({ type: 'success', title: 'Draft Saved', message: `Academic changes saved securely to draft.` });
     } catch (err) {
       toast({ type: 'error', title: 'Error', message: 'Failed to save Academic data.' });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePublishClick = async () => {
+    await handleSave(true); // silent save draft
+    const res = await cmsService.getPage('home');
+    const updatedSec = res.data.sections.find(s => s.sectionKey === 'home.academic');
+    setPreviewSection(updatedSec);
   };
 
   const handleReset = () => {
@@ -64,6 +75,8 @@ const AcademicDeptEditor = () => {
     }
   };
 
+  const { status, lastModified, validationIssues } = useEditorStatus(sectionsMap, 'home.academic', form);
+
   if (loading && !Object.keys(sectionsMap).length) return <div>Loading...</div>;
 
   return (
@@ -72,11 +85,16 @@ const AcademicDeptEditor = () => {
       description="Manage the featured departments showcased on the homepage."
       breadcrumb={['Admin', 'Homepage', 'Academic Departments']}
       onSave={() => handleSave(false)}
-      onPublish={() => handleSave(true)}
+      onPublish={handlePublishClick}
       onReset={handleReset}
       isLoading={loading}
+      status={status}
+      lastModified={lastModified}
+      validationIssues={validationIssues}
     >
-      <EditorCard title="Section Settings" description="General configuration for the Academic section.">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        <div className="xl:col-span-8 space-y-6">
+          <EditorCard title="Section Settings" description="General configuration for the Academic section.">
         <div className="space-y-4">
           <AdminToggle
             label="Section Visibility"
@@ -135,14 +153,70 @@ const AcademicDeptEditor = () => {
           })}
         </div>
       </EditorCard>
+        </div>
 
-      <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-600">
-        <Monitor className="w-5 h-5 shrink-0" />
-        <div>
-          <p className="text-sm font-semibold">Live Preview</p>
-          <p className="text-xs mt-0.5">The homepage automatically loads the latest HOD name, images, and descriptions directly from the <b>Departments CMS</b> for any featured department.</p>
+        {/* Lightweight Preview Card */}
+        <div className="xl:col-span-4">
+          <div className="sticky top-24">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Monitor className="w-4 h-4" /> Live Preview</h3>
+            
+            <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden">
+              {/* Browser/Device Chrome */}
+              <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                </div>
+                <div className="mx-auto bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono flex-1 max-w-[200px] text-center truncate shadow-sm">
+                  cahcet.edu.in
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-6">
+               <h4 className="text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1">Departments</h4>
+               <h3 className="text-lg font-bold text-slate-800 mb-6">{form.title || 'Academic Excellence'}</h3>
+               
+               <div className="flex gap-4 overflow-x-hidden pb-4">
+                 {(form.highlightedDepts || []).slice(0, 2).map((key, i) => {
+                   const dept = DEPARTMENTS.find(d => d.key === key) || { label: 'Unknown', color: '#ccc' };
+                   return (
+                     <div key={i} className="min-w-[160px] bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex-shrink-0">
+                       <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold mb-3" style={{ backgroundColor: dept.color }}>
+                         {dept.label.slice(0,2)}
+                       </div>
+                       <h5 className="font-bold text-slate-800 text-sm mb-1">{dept.label}</h5>
+                       <p className="text-xs text-amber-500 font-semibold flex items-center gap-1 mt-3">Explore <ArrowRight className="w-3 h-3" /></p>
+                     </div>
+                   );
+                 })}
+                 {(form.highlightedDepts || []).length === 0 && (
+                   <p className="text-xs text-slate-400 italic">No departments selected.</p>
+                 )}
+               </div>
+               
+               {form.subtitle && (
+                 <p className="text-xs text-slate-600 border-t border-slate-200 pt-4">{form.subtitle}</p>
+               )}
+            </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {previewSection && (
+        <SectionPreviewModal 
+          section={previewSection}
+          onClose={() => setPreviewSection(null)}
+          onPublish={async (sec) => {
+            await cmsService.publishSection(sec.id);
+            setPreviewSection(null);
+            fetchPage();
+            toast({ type: 'success', title: 'Live', message: 'Changes pushed to production.' });
+          }}
+          onRestore={() => fetchPage()}
+        />
+      )}
     </EditorPage>
   );
 };

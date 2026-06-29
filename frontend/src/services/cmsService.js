@@ -1,6 +1,11 @@
 import apiClient from './authService';
 
 export const cmsService = {
+  getAdminDashboardStats: async () => {
+    const response = await apiClient.get(`/cms/admin-dashboard-stats?t=${new Date().getTime()}`);
+    return response.data;
+  },
+
   getPages: async () => {
     const response = await apiClient.get(`/cms/pages?t=${new Date().getTime()}`);
     return response.data;
@@ -41,14 +46,39 @@ export const cmsService = {
   },
   
   createSection: async (sectionData) => {
-    if (!window.confirm("Are you sure you want to save these changes?")) throw new Error("Cancelled by user");
-    const response = await apiClient.post('/cms/sections', sectionData);
+    if (!sectionData._isSilentDraft && !window.confirm("Are you sure you want to save these changes?")) throw new Error("Cancelled by user");
+    
+    const payload = { ...sectionData };
+    delete payload._isSilentDraft;
+
+    const response = await apiClient.post('/cms/sections', payload);
     return response.data;
   },
   
   updateSection: async (id, sectionData) => {
-    if (!window.confirm("Are you sure you want to save these changes?")) throw new Error("Cancelled by user");
-    const response = await apiClient.put(`/cms/sections/${id}`, sectionData);
+    // Only prompts if we're not running the new silent draft save workflow
+    if (!sectionData._isSilentDraft && !window.confirm("Are you sure you want to save these changes?")) throw new Error("Cancelled by user");
+    
+    // Clean up internal flags before sending
+    const payload = { ...sectionData };
+    delete payload._isSilentDraft;
+
+    const response = await apiClient.put(`/cms/sections/${id}`, payload);
+    return response.data;
+  },
+  
+  publishSection: async (id) => {
+    const response = await apiClient.patch(`/cms/sections/${id}/publish`);
+    return response.data;
+  },
+
+  getSectionVersions: async (id) => {
+    const response = await apiClient.get(`/cms/sections/${id}/versions`);
+    return response.data;
+  },
+
+  restoreSectionVersion: async (sectionId, versionId) => {
+    const response = await apiClient.post(`/cms/sections/${sectionId}/versions/${versionId}/restore`);
     return response.data;
   },
   

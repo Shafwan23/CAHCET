@@ -7,8 +7,6 @@ import apiClient from '../../services/authService';
 
 const ContactSection = ({ data }) => {
   const visible = data?.visible ?? true;
-  if (!visible) return null;
-
   const title = data?.title || "We're Here to Help You Grow";
   const address = data?.address || "Hakeem Nagar, Melvisharam - 632 509, Ranipet District, Tamil Nadu, India.";
   const phone = data?.phone || "+91 4172 267387 / 266487";
@@ -18,6 +16,8 @@ const ContactSection = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  if (!visible) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();

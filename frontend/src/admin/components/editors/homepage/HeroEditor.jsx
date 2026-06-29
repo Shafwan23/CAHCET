@@ -5,6 +5,8 @@ import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { AdminInput, AdminTextarea, AdminToggle } from '../../ui/AdminInput';
 import { fileService } from '../../../services/fileService';
 import { cmsService } from '../../../../services/cmsService';
+import SectionPreviewModal from '../../ui/SectionPreviewModal';
+import { useEditorStatus } from '../../../utils/useEditorStatus';
 
 const HeroEditor = () => {
   const toast = useToast();
@@ -18,41 +20,51 @@ const HeroEditor = () => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [sectionsMap, setSectionsMap] = useState({});
+  const [previewSection, setPreviewSection] = useState(null);
+
+  const fetchPage = async () => {
+    try {
+      const res = await cmsService.getPage('home');
+      const sections = res.data?.sections || [];
+      const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
+      setSectionsMap(map);
+
+      if (map['home.hero']) {
+        const dataStr = map['home.hero'].draftContent || map['home.hero'].content || '{}';
+        setForm(JSON.parse(dataStr));
+      }
+    } catch (err) {
+      toast({ type: 'error', title: 'Error', message: 'Failed to load Hero data.' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPage = async () => {
-      try {
-        const res = await cmsService.getPage('home');
-        const sections = res.data?.sections || [];
-        const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
-        setSectionsMap(map);
-
-        if (map['home.hero']) {
-          setForm(JSON.parse(map['home.hero'].content));
-        }
-      } catch (err) {
-        toast({ type: 'error', title: 'Error', message: 'Failed to load Hero data.' });
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchPage();
   }, []);
 
   const change = (field, value) => setForm(p => ({ ...p, [field]: value }));
 
-  const handleSave = async (publish = false) => {
+  const handleSave = async (isSilent = false) => {
     setLoading(true);
     try {
       if (sectionsMap['home.hero']) {
-        await cmsService.updateSection(sectionsMap['home.hero'].id, { content: JSON.stringify(form) });
+        await cmsService.updateSection(sectionsMap['home.hero'].id, { draftContent: JSON.stringify(form), _isSilentDraft: isSilent });
       }
-      toast({ type: 'success', title: publish ? 'Published!' : 'Draft saved', message: `Hero changes ${publish ? 'are now live' : 'saved'}.` });
+      if (!isSilent) toast({ type: 'success', title: 'Draft Saved', message: `Hero changes saved securely to draft.` });
     } catch (err) {
-      toast({ type: 'error', title: 'Error', message: 'Failed to save Hero data.' });
+      toast({ type: 'error', title: 'Error', message: 'Failed to save Hero draft.' });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePublishClick = async () => {
+    await handleSave(true); // silent save draft
+    const res = await cmsService.getPage('home');
+    const updatedHero = res.data.sections.find(s => s.sectionKey === 'home.hero');
+    setPreviewSection(updatedHero);
   };
 
   const handleReset = () => {
@@ -70,6 +82,8 @@ const HeroEditor = () => {
     setUploading(false);
   };
 
+  const { status, lastModified, validationIssues } = useEditorStatus(sectionsMap, 'home.hero', form);
+
   if (loading && !Object.keys(sectionsMap).length) return <div>Loading...</div>;
 
   return (
@@ -78,11 +92,16 @@ const HeroEditor = () => {
       description="Manage the main landing banner on the homepage. Change texts, call-to-actions, and background media."
       breadcrumb={['Admin', 'Homepage', 'Hero Section']}
       onSave={() => handleSave(false)}
-      onPublish={() => handleSave(true)}
+      onPublish={handlePublishClick}
       onReset={handleReset}
       isLoading={loading}
+      status={status}
+      lastModified={lastModified}
+      validationIssues={validationIssues}
     >
-      <EditorCard title="Hero Visibility & Behavior" description="Core settings for the hero section.">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        <div className="xl:col-span-8 space-y-6">
+          <EditorCard title="Hero Visibility & Behavior" description="Core settings for the hero section.">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <AdminToggle
             label="Section Visibility"
@@ -217,14 +236,62 @@ const HeroEditor = () => {
           </div>
         </div>
       </EditorCard>
+        </div>
 
-      <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl text-blue-600">
-        <Monitor className="w-5 h-5 shrink-0" />
-        <div>
-          <p className="text-sm font-semibold">Live Preview</p>
-          <p className="text-xs mt-0.5">After publishing, visit the <a href="/" target="_blank" rel="noopener noreferrer" className="underline font-semibold">home page</a> to see your changes live in a responsive layout.</p>
+        {/* Live Preview Panel */}
+        <div className="xl:col-span-4">
+          <div className="sticky top-24">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2"><Monitor className="w-4 h-4" /> Live Preview</h3>
+            
+            <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden">
+              <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                </div>
+                <div className="mx-auto bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono flex-1 max-w-[200px] text-center truncate shadow-sm">
+                  cahcet.edu.in
+                </div>
+              </div>
+
+              <div className="relative aspect-[4/5] sm:aspect-video xl:aspect-[3/4] bg-slate-900 overflow-hidden flex flex-col items-center justify-center text-center p-6">
+                {form.bgImageUrl && (
+                  <img src={form.bgImageUrl} alt="Hero" className="absolute inset-0 w-full h-full object-cover opacity-60" style={{ opacity: 1 - (form.overlayOpacity || 60) / 100 }} />
+                )}
+                {form.showTextOverlay && (
+                  <div className="relative z-10 flex flex-col items-center">
+                    <h3 className="text-white font-bold text-2xl leading-tight mb-2 drop-shadow-md">{form.title || 'Hero Title'}</h3>
+                    <p className="text-white/90 text-xs mb-6 max-w-[80%] drop-shadow">{form.subtitle || 'Hero Subtitle'}</p>
+                    <div className="flex flex-col sm:flex-row gap-2 w-full max-w-[200px]">
+                      {form.primaryCtaText && (
+                        <div className="px-4 py-2 bg-amber-500 text-slate-900 text-[10px] font-bold rounded shadow-sm w-full">{form.primaryCtaText}</div>
+                      )}
+                      {form.secondaryCtaText && (
+                        <div className="px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-[10px] font-bold rounded shadow-sm w-full">{form.secondaryCtaText}</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {previewSection && (
+        <SectionPreviewModal 
+          section={previewSection}
+          onClose={() => setPreviewSection(null)}
+          onPublish={async (sec) => {
+            await cmsService.publishSection(sec.id);
+            setPreviewSection(null);
+            fetchPage();
+            toast({ type: 'success', title: 'Live', message: 'Changes pushed to production.' });
+          }}
+          onRestore={() => fetchPage()}
+        />
+      )}
     </EditorPage>
   );
 };
