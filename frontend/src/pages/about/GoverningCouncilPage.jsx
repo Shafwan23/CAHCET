@@ -39,7 +39,7 @@ export default function GoverningCouncilPage() {
         const sections = res.data?.sections || [];
         const sec = sections.find(s => s.sectionKey === 'about.governing_policy');
         if (sec) {
-          const parsed = JSON.parse(sec.content);
+          let parsed = {}; try { if(sec && sec.content) { parsed = JSON.parse(sec.content); } } catch(e){}
           if (parsed.members && parsed.members.length > 0) {
             setData({ members: parsed.members });
           }

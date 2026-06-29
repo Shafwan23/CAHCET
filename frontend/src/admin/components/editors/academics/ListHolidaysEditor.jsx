@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Search, Calendar as CalendarIcon } from 'lucide-react';
 import { cmsService } from '../../../../services/cmsService';
+import SectionPreviewModal from '../../ui/SectionPreviewModal';
+import { useEditorStatus } from '../../../utils/useEditorStatus';
+import { motion } from 'framer-motion';
+import { ShieldAlert, Monitor } from 'lucide-react';
 import { useToast } from '../../ui/Toast';
 import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { AdminInput } from '../../ui/AdminInput';
@@ -10,6 +14,8 @@ const ListHolidaysEditor = () => {
   const [form, setForm] = useState({ title: '', holidays: [] });
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+  const [sectionsMap, setSectionsMap] = useState({});
+  const [previewSection, setPreviewSection] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [yearFilter, setYearFilter] = useState('All');
 
@@ -22,17 +28,16 @@ const ListHolidaysEditor = () => {
 
   const loadData = async () => {
     try {
-      const page = await cmsService.getPage('academics');
-      setPageId(page.data?.id);
-      const section = page.data?.sections?.find(s => s.sectionKey === 'academics.holidays');
-      if (section) {
-        setSectionId(section.id);
-        if (section.content) {
-          setForm(typeof section.content === 'string' ? JSON.parse(section.content) : section.content);
-        }
+      const res = await cmsService.getPage('academics');
+      setPageId(res.data?.id);
+      const map = (res.data?.sections || []).reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
+      setSectionsMap(map);
+      if (map['academics.holidays']) {
+        setSectionId(map['academics.holidays'].id);
+        setForm(JSON.parse(map['academics.holidays'].draftContent || map['academics.holidays'].content || '{}') || { title: '', holidays: [] });
       }
     } catch (err) {
-      toast({ type: 'error', title: 'Failed to load data' });
+      toast({ type: 'error', title: 'Error', message: 'Failed to load.' });
     } finally {
       setPageLoading(false);
     }
@@ -40,30 +45,34 @@ const ListHolidaysEditor = () => {
 
   const change = (field, value) => setForm(p => ({ ...p, [field]: value }));
 
-  const handleSave = async () => {
+  const handleSaveDraft = async (isSilent = false) => {
     setLoading(true);
     try {
       const content = JSON.stringify(form);
-      if (sectionId) {
-        await cmsService.updateSection(sectionId, { content });
+      if (sectionId || sectionsMap['academics.holidays']) {
+        const targetId = sectionId || sectionsMap['academics.holidays'].id;
+        await cmsService.updateSection(targetId, { draftContent: content, _isSilentDraft: isSilent });
       } else {
         const newSec = await cmsService.createSection({
           pageId,
           sectionKey: 'academics.holidays',
-          title: 'List of Holidays',
-          content
+          title: 'ListHolidays',
+          type: 'json',
+          draftContent: content,
+          _isSilentDraft: isSilent
         });
         setSectionId(newSec.data?.id);
+        setSectionsMap(prev => ({ ...prev, ['academics.holidays']: newSec.data }));
       }
-      toast({ type: 'success', title: 'Changes published' });
+      if (!isSilent) toast({ type: 'success', title: 'Saved', message: 'Draft saved securely.' });
     } catch (err) {
-      toast({ type: 'error', title: 'Failed to save' });
+      toast({ type: 'error', title: 'Error', message: 'Failed to save.' });
     } finally {
       setLoading(false);
     }
   };
 
-  const handlePublish = handleSave;
+  
 
   const addHoliday = () => {
     const today = new Date().toISOString().split('T')[0];
@@ -86,17 +95,24 @@ const ListHolidaysEditor = () => {
     return matchesSearch && matchesYear;
   });
 
+  const { status, lastModified, validationIssues } = useEditorStatus(sectionsMap, 'academics.holidays', form);
+
   return (
     <EditorPage
       title="List of Holidays"
       description="Manage the official list of holidays observed by the institution."
       breadcrumb={['Admin', 'Academics', 'List of Holidays']}
-      onSave={handleSave}
-      onPublish={handlePublish}
+      onSave={() => handleSaveDraft(false)}
+      onPublish={async () => { await handleSaveDraft(true); setPreviewSection(sectionsMap['academics.holidays'] || {id: sectionId}); }}
+      status={status}
+      lastModified={lastModified}
+      validationIssues={validationIssues}
       onReset={() => loadData()}
       isLoading={loading || pageLoading}
     >
-      <div className="space-y-6">
+      <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.3}} className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        <div className="xl:col-span-8 space-y-6">
+          <div className="p-5 rounded-2xl border bg-slate-50 text-slate-700 border-slate-200 flex justify-between items-center"><div className="flex items-center gap-3"><ShieldAlert className="w-8 h-8 text-slate-400"/><span className="font-bold">Enterprise Module Manager</span></div><div className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold">academics.holidays</div></div>
         <EditorCard title="Page Title">
           <AdminInput value={form.title || ''} onChange={e => change('title', e.target.value)} placeholder="e.g. Official Holidays" />
         </EditorCard>
@@ -166,6 +182,19 @@ const ListHolidaysEditor = () => {
           </div>
         </EditorCard>
       </div>
+          <div className="xl:col-span-4 hidden xl:block">
+           <div className="sticky top-40 bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden">
+             <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2"><Monitor className="w-4 h-4 text-slate-400"/><span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Live Preview</span></div>
+             <div className="p-6 prose prose-sm max-w-none text-slate-600">
+               <h3 className="text-xl font-bold text-slate-900 mb-1">{form.title || 'Module Title'}</h3>
+               <div className="line-clamp-[12] whitespace-pre-wrap">{form.content || 'Start typing to see content preview here...'}</div>
+               {form.methods && <div className="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs font-mono">{form.methods.length} items configured</div>}
+               {form.facilities && <div className="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs font-mono">{form.facilities.length} items configured</div>}
+             </div>
+           </div>
+        </div>
+      </motion.div>
+      {previewSection && <SectionPreviewModal section={previewSection} onClose={()=>setPreviewSection(null)} onPublish={async (sec)=>{await cmsService.publishSection(sec.id); setPreviewSection(null); loadData();}} onRestore={loadData} />}
     </EditorPage>
   );
 };

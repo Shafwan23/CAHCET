@@ -24,7 +24,7 @@ export default function RefundPolicyPage() {
         const sections = res.data?.sections || [];
         const sec = sections.find(s => s.sectionKey === 'about.refund_policy');
         if (sec) {
-          const parsed = JSON.parse(sec.content);
+          let parsed = {}; try { if(sec && sec.content) { parsed = JSON.parse(sec.content) || {}; } } catch(e){}
           setData(prev => ({
             ...prev,
             contact: {

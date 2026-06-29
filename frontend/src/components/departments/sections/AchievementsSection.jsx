@@ -28,8 +28,8 @@ const SUB_TABS = {
 const AchievementCard = ({ item }) => {
   return (
     <motion.div 
-      variants={departmentAnimations.fadeUp}
-      className="bg-white/80 backdrop-blur-md p-8 rounded-[2rem] border border-white/40 shadow-luxury hover:shadow-glow-lg hover:-translate-y-2 transition-all duration-700 relative overflow-hidden group will-change-transform z-10"
+      variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}
+      className="bg-white/70 backdrop-blur-2xl border-white/80 p-8 rounded-[2.5rem] border border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:shadow-glow-lg hover:-translate-y-3 hover:scale-[1.02] transition-all duration-700 relative overflow-hidden group will-change-transform z-10"
     >
       {/* Animated Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-primary-50/50 -z-10" />
@@ -45,11 +45,11 @@ const AchievementCard = ({ item }) => {
       <div className="flex gap-4 items-start relative z-10">
         {item.image && (
           <div className="relative group/img">
-            <div className="absolute inset-0 bg-accent-gold/20 blur-md rounded-2xl opacity-0 group-hover/img:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-accent-gold/20 blur-md rounded-3xl opacity-0 group-hover/img:opacity-100 transition-opacity" />
             <img 
               src={item.image} 
               alt={item.title} 
-              className="w-20 h-20 rounded-2xl object-cover shrink-0 border border-primary-100 shadow-sm relative z-10"
+              className="w-20 h-20 rounded-3xl object-cover shrink-0 border border-primary-100 shadow-sm relative z-10"
             />
           </div>
         )}
@@ -129,7 +129,7 @@ const AchievementsSection = ({ data }) => {
 
   return (
     <div>
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl pb-4 mb-8 border-b border-primary-100/50 pt-2">
+      <div className="sticky top-0 z-30 bg-white/70 backdrop-blur-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] pb-4 mb-8 border-b border-primary-100/50 pt-2">
         <div className="flex items-center gap-2 text-primary-400 text-xs font-bold tracking-widest uppercase mb-2">
           <span>Department</span>
           <ChevronRight className="w-3 h-3" />
@@ -163,7 +163,7 @@ const AchievementsSection = ({ data }) => {
         </div>
 
         {/* Sub Tabs */}
-        <div className="inline-flex p-1.5 bg-primary-50/80 backdrop-blur-sm rounded-2xl border border-primary-100 overflow-x-auto max-w-full hide-scrollbar">
+        <div className="inline-flex p-1.5 bg-primary-50/80 backdrop-blur-sm rounded-3xl border border-primary-100 overflow-x-auto max-w-full hide-scrollbar">
           {SUB_TABS[activeMainTab].map((tab) => {
             const isActive = activeSubTab === tab.id;
             return (
@@ -228,7 +228,7 @@ const AchievementsSection = ({ data }) => {
             isTableView ? (
               <div className="col-span-full space-y-8">
                 {Array.from(new Set(displayedData.map(item => item.year || 'Unknown Year'))).sort((a, b) => b.localeCompare(a)).map(year => (
-                  <div key={year} className="bg-white rounded-[2rem] border border-primary-100 shadow-luxury overflow-hidden">
+                  <div key={year} className="bg-white rounded-[2.5rem] border border-primary-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] overflow-hidden">
                     <div className="bg-primary-900 text-white px-6 py-4">
                       <h3 className="font-display font-bold text-lg flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-accent-gold" />
@@ -268,7 +268,7 @@ const AchievementsSection = ({ data }) => {
                         </thead>
                         <tbody>
                           {displayedData.filter(item => (item.year || 'Unknown Year') === year).map((item, index) => (
-                            <tr key={item.id} className="group bg-white hover:bg-gradient-to-r hover:from-white hover:to-accent-gold/5 transition-all duration-300 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] hover:shadow-luxury hover:-translate-y-1 relative">
+                            <tr key={item.id} className="group bg-white hover:bg-gradient-to-r hover:from-white hover:to-accent-gold/5 transition-all duration-300 shadow-[0_4px_20px_-10px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-1 relative">
                               {['internship', 'mooc'].includes(activeSubTab) ? (
                                 <>
                                   <td className="p-5 text-sm text-primary-400 font-bold whitespace-nowrap align-top rounded-l-2xl border-y border-l border-primary-100 group-hover:border-accent-gold/30">{String(index + 1).padStart(2, '0')}</td>

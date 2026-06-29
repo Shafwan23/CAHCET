@@ -1,172 +1,260 @@
-/**
- * DeptContactEditor.jsx — Department Contact CMS Editor
- * HOD info, email, phone, location, timings, and Google Map embed.
- */
 import React, { useState, useEffect } from 'react';
+import { Monitor, Upload, User, Mail, Phone, MapPin, Clock, Eye, EyeOff, Map, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import {
-  Save, RotateCcw, MapPin, Mail, Phone, Clock, User,
-  Map, CheckCircle, Eye, EyeOff,
-} from 'lucide-react';
-
-const inputCls = "w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white text-slate-800";
-const textareaCls = `${inputCls} resize-none`;
-
-const Field = ({ label, hint, icon: Icon, children }) => (
-  <div>
-    <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-1.5">
-      {Icon && <Icon className="w-3.5 h-3.5 text-slate-400" />}
-      {label}
-    </label>
-    {hint && <p className="text-xs text-slate-400 mb-2">{hint}</p>}
-    {children}
-  </div>
-);
+import { useToast } from '../../ui/Toast';
+import EditorPage from '../../ui/EditorPage';
+import { AdminInput, AdminTextarea } from '../../ui/AdminInput';
+import { cmsService } from '../../../../services/cmsService';
+import { fileService } from '../../../services/fileService';
+import VersionHistoryModal from './shared/VersionHistoryModal';
+import ContactSection from '../../../../components/departments/sections/ContactSection';
 
 const DeptContactEditor = ({ deptKey, dept, cms, session }) => {
+  const { addToast } = useToast?.() || { addToast: () => {} };
   const [form, setForm] = useState(cms.data?.contact || {});
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [showMapPreview, setShowMapPreview] = useState(false);
 
   useEffect(() => {
-    if (cms.data?.contact) setForm(cms.data.contact);
-  }, [deptKey]);
+    if (cms.data?.contact) {
+      setForm(cms.data.contact);
+    }
+  }, [deptKey, cms.data]);
 
-  const update = (k, v) => {
-    const next = { ...form, [k]: v };
-    setForm(next);
-    cms.setSection('contact', next);
+  const update = (field, value) => {
+    const updated = { ...form, [field]: value };
+    setForm(updated);
+    cms.setSection('contact', updated);
   };
 
-  const handleSave = async () => {
-    setSaving(true);
-    await new Promise(r => setTimeout(r, 300));
-    cms.saveSection('contact', session?.username, session?.name);
-    setSaved(true);
-    setSaving(false);
-    setTimeout(() => setSaved(false), 2500);
+  const handleSave = async (isSilent = false) => {
+    setLoading(true);
+    try {
+      cms.setSection('contact', form);
+      await cms.saveSection('contact', session?.username, session?.name, isSilent);
+      if (!isSilent) addToast({ type: 'success', title: 'Draft Saved', message: `Contact details saved to draft.` });
+    } catch(e) {
+      addToast({ type: 'error', title: 'Error', message: 'Failed to save draft.' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePublishClick = async () => {
+    await handleSave(true);
+    if (cms.publishSection) {
+       await cms.publishSection('contact');
+       addToast({ type: 'success', title: 'Live', message: 'Contact details published to production.' });
+    }
   };
 
   const handleReset = () => {
     const fresh = cms.data?.contact || {};
     setForm(fresh);
+    cms.setSection('contact', fresh);
+    addToast({ type: 'info', title: 'Reset', message: 'Discarded unsaved changes.' });
   };
 
-  // Extract src from iframe embed code if pasted
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files?.[0]; if (!file) return;
+    setUploading(true);
+    try {
+      const compressed = await fileService.compressImage(file, 600, 0.85);
+      const rec = await fileService.upload(compressed, deptKey, 'contact');
+      update('hodPhoto', rec.url);
+      addToast({ type: 'success', title: 'Uploaded!', message: 'HOD Photo uploaded successfully.' });
+    } catch {
+      addToast({ type: 'error', title: 'Failed', message: 'Upload failed.' });
+    }
+    setUploading(false);
+  };
+
   const mapSrcFromEmbed = (embed) => {
     if (!embed) return null;
     if (embed.startsWith('http')) return embed;
     const match = embed.match(/src="([^"]+)"/);
     return match ? match[1] : null;
   };
-
   const mapSrc = mapSrcFromEmbed(form.mapEmbed);
 
+  const validationIssues = [];
+  if (!form.hodName?.trim()) validationIssues.push("HOD Name is required.");
+  if (!form.email?.trim()) validationIssues.push("Department Email is required.");
+  if (!form.phone?.trim()) validationIssues.push("Phone Number is required.");
+
+  // Transform form data to match ContactSection expectation
+  const previewData = form.hodName ? [
+    {
+      role: 'Head of Department',
+      name: form.hodName,
+      email: form.email || `${deptKey}@cahcet.edu.in`,
+      phone: form.phone || '+91 XXXXX XXXXX',
+      photo: form.hodPhoto || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400'
+    }
+  ] : [];
+
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6">
-      <div>
-        <h2 className="text-xl font-bold text-slate-800">Contact Information</h2>
-        <p className="text-sm text-slate-400 mt-0.5">Department contact details shown on the Contact Us page</p>
-      </div>
+    <EditorPage
+      title="Contact Editor"
+      description="Manage department contact information, HOD details, and location maps."
+      breadcrumb={['Admin', 'Departments', dept.abbr, 'Contact Us']}
+      onSave={() => handleSave(false)}
+      onPublish={handlePublishClick}
+      onReset={handleReset}
+      isLoading={loading}
+      status={cms.status?.contact || 'DRAFT'}
+      lastModified={cms.lastModified?.contact}
+      validationIssues={validationIssues}
+    >
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        
+        {/* Left Side: Configuration Panel */}
+        <div className="xl:col-span-6 space-y-6">
+          
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 space-y-5">
+             <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+               <User className="w-4 h-4 text-slate-500" />
+               <h3 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest">HOD Information</h3>
+             </div>
+             
+             <div className="flex items-center gap-6">
+                <div className="w-24 h-24 rounded-full bg-slate-100 border-2 border-slate-200 overflow-hidden shrink-0 relative group flex items-center justify-center">
+                   {form.hodPhoto ? (
+                     <img src={form.hodPhoto} alt="HOD" className="w-full h-full object-cover" />
+                   ) : (
+                     <User className="w-8 h-8 text-slate-300" />
+                   )}
+                   <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer">
+                      <Upload className="w-5 h-5 text-white mb-1" />
+                      <span className="text-[9px] text-white font-bold tracking-wider">UPLOAD</span>
+                      <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} disabled={uploading} />
+                   </label>
+                </div>
+                <div className="flex-1">
+                   <AdminInput
+                     label="Head of Department Name *"
+                     value={form.hodName || ''}
+                     onChange={e => update('hodName', e.target.value)}
+                     placeholder="Dr. John Doe"
+                   />
+                </div>
+             </div>
+          </div>
 
-      {/* HOD & Basic Info */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-5">
-        <h3 className="text-sm font-semibold text-slate-700 border-b border-slate-100 pb-3">Head of Department</h3>
-        <Field label="HOD Name" icon={User}>
-          <input className={inputCls} value={form.hodName || ''} onChange={e => update('hodName', e.target.value)} placeholder="Dr. / Prof. Full Name" />
-        </Field>
-      </div>
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 space-y-5">
+             <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+               <Mail className="w-4 h-4 text-slate-500" />
+               <h3 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest">Contact Details</h3>
+             </div>
+             
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <AdminInput
+                  label="Department Email *"
+                  type="email"
+                  value={form.email || ''}
+                  onChange={e => update('email', e.target.value)}
+                  placeholder={`${deptKey}@cahcet.edu.in`}
+                />
+                <AdminInput
+                  label="Phone Number *"
+                  value={form.phone || ''}
+                  onChange={e => update('phone', e.target.value)}
+                  placeholder="+91 98765 43210"
+                />
+             </div>
+             <AdminInput
+               label="Office Location"
+               value={form.location || ''}
+               onChange={e => update('location', e.target.value)}
+               placeholder="Room 101, Block A, Ground Floor"
+             />
+             <AdminInput
+               label="Office Timings"
+               value={form.timings || ''}
+               onChange={e => update('timings', e.target.value)}
+               placeholder="Mon-Fri: 9:00 AM - 4:00 PM"
+             />
+          </div>
 
-      {/* Contact Details */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-5">
-        <h3 className="text-sm font-semibold text-slate-700 border-b border-slate-100 pb-3">Contact Details</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <Field label="Department Email" icon={Mail}>
-            <input className={inputCls} type="email" value={form.email || ''} onChange={e => update('email', e.target.value)} placeholder={`${deptKey}@cahcet.edu.in`} />
-          </Field>
-          <Field label="Phone Number" icon={Phone}>
-            <input className={inputCls} value={form.phone || ''} onChange={e => update('phone', e.target.value)} placeholder="+91 XXXXX XXXXX" />
-          </Field>
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 space-y-4">
+             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+               <div className="flex items-center gap-2">
+                 <Map className="w-4 h-4 text-slate-500" />
+                 <h3 className="text-[10px] font-bold text-slate-800 uppercase tracking-widest">Map Location</h3>
+               </div>
+               {mapSrc && (
+                 <button onClick={() => setShowMapPreview(!showMapPreview)} className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800">
+                   {showMapPreview ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                   {showMapPreview ? 'Hide' : 'Preview'} Map
+                 </button>
+               )}
+             </div>
+             <AdminTextarea
+               label="Google Map Embed Code or URL"
+               value={form.mapEmbed || ''}
+               onChange={e => update('mapEmbed', e.target.value)}
+               placeholder='<iframe src="..."></iframe>'
+               rows={3}
+             />
+             {showMapPreview && mapSrc && (
+               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 260 }} className="rounded-xl overflow-hidden border border-slate-200 mt-4">
+                 <iframe
+                   src={mapSrc}
+                   width="100%"
+                   height="260"
+                   style={{ border: 0 }}
+                   allowFullScreen
+                   loading="lazy"
+                   referrerPolicy="no-referrer-when-downgrade"
+                   title="Map Preview"
+                 />
+               </motion.div>
+             )}
+          </div>
         </div>
-        <Field label="Office Location" icon={MapPin} hint="Room number, block, floor, etc.">
-          <input className={inputCls} value={form.location || ''} onChange={e => update('location', e.target.value)} placeholder="Room 101, Block A, Ground Floor" />
-        </Field>
-        <Field label="Office Timings" icon={Clock}>
-          <input className={inputCls} value={form.timings || ''} onChange={e => update('timings', e.target.value)} placeholder="Mon–Fri: 9:00 AM – 5:00 PM" />
-        </Field>
-      </div>
 
-      {/* Google Map */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h3 className="text-sm font-semibold text-slate-700">Google Map Embed</h3>
-          {mapSrc && (
-            <button onClick={() => setShowMapPreview(p => !p)} className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800">
-              {showMapPreview ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-              {showMapPreview ? 'Hide' : 'Preview'} Map
-            </button>
-          )}
-        </div>
-        <Field label="Embed Code or URL" hint='Paste the full <iframe> embed code from Google Maps or just the URL'>
-          <textarea
-            className={textareaCls}
-            rows={3}
-            value={form.mapEmbed || ''}
-            onChange={e => update('mapEmbed', e.target.value)}
-            placeholder='<iframe src="https://www.google.com/maps/embed?..." ...></iframe>'
-          />
-        </Field>
-        {showMapPreview && mapSrc && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 260 }} className="rounded-xl overflow-hidden border border-slate-200">
-            <iframe
-              src={mapSrc}
-              width="100%"
-              height="260"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Map Preview"
-            />
-          </motion.div>
-        )}
-      </div>
+        {/* Right Side: Live Preview Panel */}
+        <div className="xl:col-span-6">
+          <div className="sticky top-24 max-h-[calc(100vh-140px)] flex flex-col">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <Monitor className="w-4 h-4" /> Live Preview
+            </h3>
+            
+            <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden flex-1 flex flex-col">
+              <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2 shrink-0">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                </div>
+                <div className="mx-auto bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono flex-1 max-w-[200px] text-center truncate shadow-sm">
+                  cahcet.edu.in/departments/{deptKey}/contact
+                </div>
+              </div>
 
-      {/* Live Preview Card */}
-      <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-5 text-white">
-        <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Preview</p>
-        <h4 className="text-lg font-bold mb-1">{dept.fullName}</h4>
-        <p className="text-sm text-amber-400 mb-4">{dept.label} Department</p>
-        <div className="space-y-2.5">
-          {form.hodName && <div className="flex items-center gap-2.5 text-sm text-slate-300"><User className="w-4 h-4 text-slate-500" /> HOD: {form.hodName}</div>}
-          {form.email && <div className="flex items-center gap-2.5 text-sm text-slate-300"><Mail className="w-4 h-4 text-slate-500" /> {form.email}</div>}
-          {form.phone && <div className="flex items-center gap-2.5 text-sm text-slate-300"><Phone className="w-4 h-4 text-slate-500" /> {form.phone}</div>}
-          {form.location && <div className="flex items-center gap-2.5 text-sm text-slate-300"><MapPin className="w-4 h-4 text-slate-500" /> {form.location}</div>}
-          {form.timings && <div className="flex items-center gap-2.5 text-sm text-slate-300"><Clock className="w-4 h-4 text-slate-500" /> {form.timings}</div>}
-        </div>
-      </div>
-
-      {/* Sticky Save Bar */}
-      <div className="sticky bottom-4 z-10">
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-lg px-5 py-3 flex items-center justify-between gap-4">
-          <p className="text-xs text-slate-400">
-            {cms.lastSaved ? `Last saved: ${new Date(cms.lastSaved).toLocaleTimeString()}` : 'No changes saved yet'}
-          </p>
-          <div className="flex gap-2">
-            <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50">
-              <RotateCcw className="w-4 h-4" /> Reset
-            </button>
-            <motion.button whileTap={{ scale: 0.97 }} onClick={handleSave} disabled={saving}
-              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all
-                ${saved ? 'bg-amber-500 text-white' : 'bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/25 shadow-lg'}`}>
-              {saved ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-              {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Changes'}
-            </motion.button>
+              {/* Scrollable Preview Area */}
+              <div className="flex-1 overflow-y-auto bg-primary-50/50 p-6 relative">
+                 <div className="scale-[0.8] origin-top">
+                    <ContactSection data={previewData} />
+                 </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {showHistory && (
+        <VersionHistoryModal
+          deptKey={deptKey}
+          section="contact"
+          cms={cms}
+          session={session}
+          onClose={() => setShowHistory(false)}
+        />
+      )}
+    </EditorPage>
   );
 };
 

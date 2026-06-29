@@ -31,16 +31,16 @@ export default function ValuesPhilosophyPage() {
         const newState = { ...data };
         
         const visionSec = sections.find(s => s.sectionKey === 'about.vision');
-        if (visionSec) newState.vision = JSON.parse(visionSec.content);
+        if (visionSec) try { if(visionSec && visionSec.content) { let _p = {}; try { if(visionSec && visionSec.content) { _p = JSON.parse(visionSec.content); } } catch(e){} if (Object.keys(_p).length) newState.vision = _p; } } catch(e) {}
         
         const missionSec = sections.find(s => s.sectionKey === 'about.mission');
         if (missionSec) {
-          newState.mission = JSON.parse(missionSec.content);
+          try { if(missionSec && missionSec.content) { let _p = {}; try { if(missionSec && missionSec.content) { _p = JSON.parse(missionSec.content); } } catch(e){} if (Object.keys(_p).length) newState.mission = _p; } } catch(e) {}
         }
 
         const valuesSec = sections.find(s => s.sectionKey === 'about.values');
         if (valuesSec) {
-          const v = JSON.parse(valuesSec.content);
+          let v = {}; try { if(valuesSec && valuesSec.content) { v = JSON.parse(valuesSec.content); } } catch(e){}
           if (v.qualityPolicy) newState.qualityPolicy = v.qualityPolicy;
           if (v.coreValues) newState.coreValues = v.coreValues;
           if (v.philosophy) newState.philosophy = v.philosophy;

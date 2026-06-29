@@ -14,7 +14,7 @@ const CurriculumSection = ({ data }) => {
 
   return (
     <div>
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl pb-4 mb-8 border-b border-primary-100/50 pt-2 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="sticky top-0 z-30 bg-white/70 backdrop-blur-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] pb-4 mb-8 border-b border-primary-100/50 pt-2 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-primary-400 text-xs font-bold tracking-widest uppercase mb-2">
             <span>Department</span>
@@ -37,13 +37,13 @@ const CurriculumSection = ({ data }) => {
         {data.map((item) => (
           <motion.div 
             key={item.id}
-            variants={departmentAnimations.fadeUp}
-            className="group bg-white p-8 rounded-[2rem] border border-primary-100 shadow-luxury hover:shadow-luxury-hover hover:border-accent-gold/50 transition-all duration-500 flex flex-col h-full relative overflow-hidden will-change-transform hover:-translate-y-2"
+            variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}
+            className="group bg-white p-8 rounded-[2.5rem] border border-primary-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]-hover hover:border-accent-gold/50 transition-all duration-500 flex flex-col h-full relative overflow-hidden will-change-transform hover:-translate-y-3 hover:scale-[1.02]"
           >
             {/* Background Glow */}
             <div className="absolute -top-16 -right-16 w-48 h-48 bg-primary-50 rounded-full blur-3xl -z-10 group-hover:bg-accent-gold/10 transition-colors duration-700" />
             
-            <div className="w-14 h-14 bg-primary-50 text-primary-400 border border-primary-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary-900 group-hover:text-accent-gold group-hover:border-primary-900 transition-colors duration-500 shadow-sm">
+            <div className="w-14 h-14 bg-primary-50 text-primary-400 border border-primary-100 rounded-3xl flex items-center justify-center mb-6 group-hover:bg-primary-900 group-hover:text-accent-gold group-hover:border-primary-900 transition-colors duration-500 shadow-sm">
               <FileText className="w-7 h-7" />
             </div>
 

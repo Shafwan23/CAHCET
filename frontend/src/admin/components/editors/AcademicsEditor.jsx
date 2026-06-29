@@ -20,7 +20,12 @@ const AcademicsEditor = () => {
         setSectionsMap(map);
 
         if (map['academics.overview']) {
-          setForm(JSON.parse(map['academics.overview'].content));
+          const raw = map['academics.overview'].draftContent || map['academics.overview'].content || '{}';
+          try {
+            setForm(JSON.parse(raw) || { teachingMethods: [], facilities: [] });
+          } catch {
+            setForm({ teachingMethods: [], facilities: [] });
+          }
         }
       } catch (err) {
         toast({ type: 'error', title: 'Error', message: 'Failed to load Academics data.' });

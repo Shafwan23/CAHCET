@@ -17,8 +17,10 @@ export const cmsService = {
   },
   
   createPage: async (pageData) => {
-    if (!window.confirm("Are you sure you want to save these changes?")) throw new Error("Cancelled by user");
-    const response = await apiClient.post('/cms/pages', pageData);
+    if (!pageData._isSilentDraft && !window.confirm("Are you sure you want to save these changes?")) throw new Error("Cancelled by user");
+    const payload = { ...pageData };
+    delete payload._isSilentDraft;
+    const response = await apiClient.post('/cms/pages', payload);
     return response.data;
   },
   

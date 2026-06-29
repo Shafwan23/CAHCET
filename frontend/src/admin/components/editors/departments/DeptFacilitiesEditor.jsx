@@ -1,284 +1,306 @@
-/**
- * DeptFacilitiesEditor.jsx — Facilities CMS Editor
- * CRUD for labs, smart classrooms, libraries, research centers, etc.
- * Each facility supports multiple images, description, highlights, and type.
- */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Monitor, Upload, Plus, Trash2, ArrowUp, ArrowDown, Building2, Cpu, Code, Printer, LayoutGrid } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Plus, Pencil, Trash2, X, Save, Upload, ChevronDown, ChevronUp,
-  Layers, Tag, Image as ImageIcon, CheckCircle,
-} from 'lucide-react';
-import { fileService } from '../../../services/fileService';
+import { useToast } from '../../ui/Toast';
+import EditorPage, { EditorCard } from '../../ui/EditorPage';
+import { AdminInput, AdminTextarea } from '../../ui/AdminInput';
+import { cmsService } from '../../../../services/cmsService';
+import VersionHistoryModal from './shared/VersionHistoryModal';
+import { useEditorStatus } from '../../../utils/useEditorStatus';
+import FacilitiesSection from '../../../../components/departments/sections/FacilitiesSection';
 
-const FACILITY_TYPES = ['Laboratory', 'Smart Classroom', 'Library', 'Research Center', 'Seminar Hall', 'Workshop', 'Sports Facility', 'Computer Lab', 'Other'];
-
-const emptyFacility = { name: '', type: '', description: '', highlights: [], images: [] };
-const inputCls = "w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white";
-
-/* ─── Facility Card ─── */
-const FacilityCard = ({ facility, onEdit, onDelete, expanded, onToggle }) => (
-  <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-md transition-all">
-    {/* Main image preview */}
-    {facility.images?.[0] && (
-      <div className="h-36 overflow-hidden">
-        <img src={facility.images[0]} alt={facility.name} className="w-full h-full object-cover" />
-      </div>
-    )}
-    <div className="p-4">
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">{facility.type}</span>
-          </div>
-          <p className="font-bold text-slate-800 text-sm">{facility.name}</p>
-        </div>
-        <div className="flex gap-1.5 shrink-0">
-          <button onClick={() => onEdit(facility)} className="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 transition-colors">
-            <Pencil className="w-3.5 h-3.5" />
-          </button>
-          <button onClick={() => onDelete(facility)} className="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-primary-50 transition-colors">
-            <Trash2 className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      </div>
-      {facility.description && (
-        <p className="text-xs text-slate-500 mt-2 line-clamp-2">{facility.description}</p>
-      )}
-      {facility.highlights?.length > 0 && (
-        <div className="flex flex-wrap gap-1 mt-2">
-          {facility.highlights.slice(0, 3).map((h, i) => (
-            <span key={i} className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{h}</span>
-          ))}
-          {facility.highlights.length > 3 && (
-            <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">+{facility.highlights.length - 3}</span>
-          )}
-        </div>
-      )}
-      <div className="flex items-center justify-between mt-3 text-[11px] text-slate-400">
-        <span>{facility.images?.length || 0} image{facility.images?.length !== 1 ? 's' : ''}</span>
-      </div>
-    </div>
-  </div>
-);
-
-/* ─── Facility Modal ─── */
-const FacilityModal = ({ initial, deptKey, onSave, onClose }) => {
-  const [form, setForm] = useState({ ...emptyFacility, ...initial });
-  const [newHighlight, setNewHighlight] = useState('');
-  const [uploading, setUploading] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  const update = (k, v) => setForm(prev => ({ ...prev, [k]: v }));
-
-  const addHighlight = () => {
-    const val = newHighlight.trim();
-    if (val && !form.highlights.includes(val)) {
-      update('highlights', [...form.highlights, val]);
-      setNewHighlight('');
-    }
-  };
-
-  const removeHighlight = (h) => update('highlights', form.highlights.filter(x => x !== h));
-
-  const handleImages = async (e) => {
-    const files = Array.from(e.target.files || []);
-    if (!files.length) return;
-    setUploading(true);
-    const urls = [];
-    for (const file of files) {
-      try {
-        const compressed = await fileService.compressImage(file, 1000, 0.85);
-        const record = await fileService.upload(compressed, deptKey, 'facilities');
-        urls.push(record.url);
-      } catch {}
-    }
-    update('images', [...form.images, ...urls]);
-    setUploading(false);
-  };
-
-  const removeImage = (idx) => update('images', form.images.filter((_, i) => i !== idx));
-
-  const handleSave = async () => {
-    if (!form.name.trim()) return;
-    setSaving(true);
-    await new Promise(r => setTimeout(r, 300));
-    onSave(form);
-    setSaving(false);
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-      >
-        <div className="flex items-center justify-between p-5 border-b border-slate-100 sticky top-0 bg-white z-10">
-          <h3 className="text-base font-bold text-slate-800">{initial?.id ? 'Edit Facility' : 'Add Facility'}</h3>
-          <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:bg-slate-100"><X className="w-4 h-4" /></button>
-        </div>
-
-        <div className="p-5 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Facility Name *</label>
-              <input className={inputCls} value={form.name} onChange={e => update('name', e.target.value)} placeholder="e.g. Advanced Computing Lab" />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Type</label>
-              <select className={inputCls} value={form.type} onChange={e => update('type', e.target.value)}>
-                <option value="">Select type</option>
-                {FACILITY_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Description</label>
-            <textarea className={`${inputCls} resize-none`} rows={4} value={form.description} onChange={e => update('description', e.target.value)} placeholder="Describe this facility..." />
-          </div>
-
-          {/* Highlights */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Highlights / Key Features</label>
-            <div className="flex gap-2 mb-2">
-              <input
-                className={`${inputCls} flex-1`}
-                value={newHighlight}
-                onChange={e => setNewHighlight(e.target.value)}
-                placeholder="e.g. 50 workstations"
-                onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addHighlight())}
-              />
-              <button onClick={addHighlight} className="px-3 py-2.5 bg-amber-500 text-white rounded-xl text-xs font-semibold hover:bg-amber-600">Add</button>
-            </div>
-            {form.highlights.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {form.highlights.map((h, i) => (
-                  <span key={i} className="flex items-center gap-1.5 text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full">
-                    <Tag className="w-3 h-3 text-slate-400" /> {h}
-                    <button onClick={() => removeHighlight(h)} className="text-slate-400 hover:text-amber-500"><X className="w-3 h-3" /></button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Images */}
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Images</label>
-            <label className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-slate-200 rounded-xl text-sm text-slate-500 cursor-pointer hover:border-amber-400 hover:text-amber-500 transition-colors">
-              <Upload className="w-4 h-4" />
-              {uploading ? 'Uploading...' : 'Upload images (multiple allowed)'}
-              <input type="file" accept="image/*" multiple className="hidden" onChange={handleImages} disabled={uploading} />
-            </label>
-            {form.images.length > 0 && (
-              <div className="flex gap-2 mt-3 flex-wrap">
-                {form.images.map((url, i) => (
-                  <div key={i} className="relative group">
-                    <img src={url} alt="" className="w-20 h-14 object-cover rounded-xl border border-slate-200" />
-                    <button onClick={() => removeImage(i)} className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-amber-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="flex gap-3 p-5 border-t border-slate-100 sticky bottom-0 bg-white">
-          <button onClick={onClose} className="flex-1 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-600 hover:bg-slate-50">Cancel</button>
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={handleSave}
-            disabled={!form.name.trim() || saving}
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-amber-500 text-white rounded-xl text-sm font-semibold hover:bg-amber-600 disabled:opacity-50"
-          >
-            {saving ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
-            {initial?.id ? 'Update' : 'Add Facility'}
-          </motion.button>
-        </div>
-      </motion.div>
-    </div>
-  );
+const emptyFacility = {
+  id: '',
+  name: 'New Laboratory',
+  totalSystems: '50',
+  hardware: 'Provide hardware details...',
+  software: 'Provide software details...',
+  peripherals: 'Provide peripheral details...',
+  images: []
 };
 
-/* ─── Delete Confirm ─── */
-const DeleteConfirm = ({ item, onConfirm, onCancel }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-    <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
-      <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
-        <Trash2 className="w-5 h-5 text-amber-500" />
-      </div>
-      <h3 className="font-bold text-slate-800 mb-1">Delete Facility</h3>
-      <p className="text-sm text-slate-500 mb-4">Delete <strong>{item.name}</strong>? This cannot be undone.</p>
-      <div className="flex gap-3">
-        <button onClick={onCancel} className="flex-1 py-2.5 border border-slate-200 rounded-xl text-sm hover:bg-slate-50">Cancel</button>
-        <button onClick={onConfirm} className="flex-1 py-2.5 bg-amber-500 text-white rounded-xl text-sm font-semibold hover:bg-amber-600">Delete</button>
-      </div>
-    </motion.div>
-  </div>
-);
-
-/* ─── Main ─── */
 const DeptFacilitiesEditor = ({ deptKey, dept, cms, session }) => {
-  const [editing, setEditing] = useState(null);
-  const [deleting, setDeleting] = useState(null);
-  const [saved, setSaved] = useState(false);
-  const facilities = cms.data?.facilities || [];
+  const { addToast } = useToast?.() || { addToast: () => {} };
+  const [facilities, setFacilities] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
-  const handleSave = (form) => {
-    if (form.id) cms.updateItem('facilities', form.id, form, session?.username, session?.name);
-    else cms.addItem('facilities', form, session?.username, session?.name);
-    setEditing(null);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  useEffect(() => {
+    if (cms.data?.facilities) {
+      setFacilities(Array.isArray(cms.data.facilities) ? cms.data.facilities : []);
+    } else {
+      setFacilities([]);
+    }
+  }, [deptKey, cms.data]);
+
+  const handleSave = async (isSilent = false) => {
+    setLoading(true);
+    try {
+      cms.setSection('facilities', facilities); // updates the parent context
+      await cms.saveSection('facilities', session?.username, session?.name, isSilent);
+      if (!isSilent) addToast({ type: 'success', title: 'Draft Saved', message: `Facilities changes saved to draft.` });
+    } catch(e) {
+      addToast({ type: 'error', title: 'Error', message: 'Failed to save draft.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const handlePublishClick = async () => {
+    await handleSave(true);
+    if (cms.publishSection) {
+       await cms.publishSection('facilities');
+       addToast({ type: 'success', title: 'Live', message: 'Facilities published to production.' });
+    }
+  };
+
+  const handleReset = () => {
+    const fresh = cms.data?.facilities || [];
+    setFacilities(Array.isArray(fresh) ? fresh : []);
+    cms.setSection('facilities', fresh);
+    addToast({ type: 'info', title: 'Reset', message: 'Discarded unsaved changes.' });
+  };
+
+  const updateItem = (index, field, value) => {
+    const updated = [...facilities];
+    updated[index][field] = value;
+    setFacilities(updated);
+    cms.setSection('facilities', updated);
+  };
+
+  const moveItem = (index, direction) => {
+    const list = [...facilities];
+    const targetIdx = index + direction;
+    if (targetIdx < 0 || targetIdx >= list.length) return;
+    const [moved] = list.splice(index, 1);
+    list.splice(targetIdx, 0, moved);
+    setFacilities(list);
+    cms.setSection('facilities', list);
+  };
+
+  const removeItem = (index) => {
+    if (window.confirm("Are you sure you want to delete this facility?")) {
+      const updated = facilities.filter((_, i) => i !== index);
+      setFacilities(updated);
+      cms.setSection('facilities', updated);
+    }
+  };
+
+  const addItem = () => {
+    const newItem = { ...emptyFacility, id: `fac_${Date.now()}` };
+    const updated = [...facilities, newItem];
+    setFacilities(updated);
+    cms.setSection('facilities', updated);
+  };
+
+  // Status mapping
+  const validationIssues = [];
+  facilities.forEach((fac, idx) => {
+     if (!fac.name?.trim()) validationIssues.push(`Facility ${idx + 1} is missing a name.`);
+  });
+
   return (
-    <div className="p-6 space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-slate-800">Facilities Management</h2>
-          <p className="text-sm text-slate-400 mt-0.5">{facilities.length} facilit{facilities.length !== 1 ? 'ies' : 'y'} in {dept.label}</p>
+    <EditorPage
+      title="Facilities Editor"
+      description="Manage laboratories, equipment, hardware, and software resources for the department."
+      breadcrumb={['Admin', 'Departments', dept.abbr, 'Facilities']}
+      onSave={() => handleSave(false)}
+      onPublish={handlePublishClick}
+      onReset={handleReset}
+      isLoading={loading}
+      status={cms.status?.facilities || 'DRAFT'}
+      lastModified={cms.lastModified?.facilities}
+      validationIssues={validationIssues}
+    >
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        
+        {/* Left Side: Configuration Panel */}
+        <div className="xl:col-span-7 space-y-6">
+          
+          <div className="grid grid-cols-2 gap-4">
+             <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
+                <div className="flex justify-between items-start">
+                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Facilities</p>
+                   <Building2 className="w-5 h-5 text-indigo-500" />
+                </div>
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl group-hover:bg-indigo-500/40 transition-colors duration-500 pointer-events-none" />
+                <div className="relative z-10">
+                   <p className="text-5xl font-black text-white tracking-tighter drop-shadow-md">
+                      {facilities.length}
+                   </p>
+                </div>
+             </div>
+             <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
+                <div className="flex justify-between items-start">
+                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Systems</p>
+                   <Monitor className="w-5 h-5 text-emerald-500" />
+                </div>
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl group-hover:bg-indigo-500/40 transition-colors duration-500 pointer-events-none" />
+                <div className="relative z-10">
+                   <p className="text-5xl font-black text-white tracking-tighter drop-shadow-md">
+                      {facilities.reduce((sum, fac) => sum + parseInt(fac.totalSystems || 0, 10), 0) || 0}
+                   </p>
+                </div>
+             </div>
+          </div>
+
+          <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+             <div>
+               <h3 className="text-base font-bold text-slate-800">Laboratory Facilities</h3>
+               <p className="text-xs text-slate-500 mt-1">Add or arrange lab rooms.</p>
+             </div>
+             <button
+               onClick={addItem}
+               className="flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white rounded-xl text-sm font-semibold hover:bg-amber-600 shadow-lg shadow-amber-500/20 transition-all active:scale-95"
+             >
+               <Plus className="w-4 h-4" /> Add Facility
+             </button>
+          </div>
+
+          <motion.div initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} className="space-y-4">
+            <AnimatePresence>
+              {facilities.map((item, index) => (
+                <motion.div 
+                    layout 
+                    initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -40 }}
+                    transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    key={item.id} 
+                    className="bg-gradient-to-br from-white to-slate-50/80 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:border-indigo-500/30 transition-all duration-300 group overflow-visible relative"
+                  >
+                    {/* Premium Glow Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-5 rounded-3xl transition-opacity duration-500 pointer-events-none" />
+                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500 pointer-events-none -z-10" />
+                >
+                  <div className="p-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs shadow-sm">{index + 1}</div>
+                       <span className="text-sm font-bold text-slate-700">
+                         {item.name || 'New Facility'}
+                       </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
+                      <button onClick={() => moveItem(index, -1)} disabled={index === 0} className="p-2 hover:bg-white border border-transparent hover:border-slate-200 rounded-xl text-slate-400 hover:text-indigo-600 hover:shadow-sm disabled:opacity-30 transition-all duration-300">
+                        <ArrowUp className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => moveItem(index, 1)}
+                        disabled={index === facilities.length - 1}
+                        className="p-2 hover:bg-white border border-transparent hover:border-slate-200 rounded-xl text-slate-400 hover:text-indigo-600 hover:shadow-sm disabled:opacity-30 transition-all duration-300"
+                      >
+                        <ArrowDown className="w-4 h-4" />
+                      </button>
+                      <div className="w-px h-4 bg-slate-300 mx-1"></div>
+                      <button onClick={() => removeItem(index)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl hover:shadow-sm transition-all duration-300">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-5 space-y-5">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="md:col-span-3">
+                        <AdminInput
+                          label="Facility Name"
+                          value={item.name || ''}
+                          onChange={e => updateItem(index, 'name', e.target.value)}
+                          placeholder="e.g. Advanced Computing Lab"
+                        />
+                      </div>
+                      <div className="md:col-span-1">
+                        <AdminInput
+                          label="Total Systems"
+                          type="number"
+                          value={item.totalSystems || ''}
+                          onChange={e => updateItem(index, 'totalSystems', e.target.value)}
+                          placeholder="50"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 pt-4 border-t border-slate-50">
+                       <AdminTextarea
+                          label="Hardware Details"
+                          icon={Cpu}
+                          value={item.hardware || ''}
+                          onChange={e => updateItem(index, 'hardware', e.target.value)}
+                          placeholder="e.g. Intel Core i7, 16GB RAM..."
+                          rows={2}
+                       />
+                       <AdminTextarea
+                          label="Software Details"
+                          icon={Code}
+                          value={item.software || ''}
+                          onChange={e => updateItem(index, 'software', e.target.value)}
+                          placeholder="e.g. Visual Studio, MATLAB..."
+                          rows={2}
+                       />
+                       <AdminTextarea
+                          label="Peripherals & Network"
+                          icon={Printer}
+                          value={item.peripherals || ''}
+                          onChange={e => updateItem(index, 'peripherals', e.target.value)}
+                          placeholder="e.g. 1Gbps LAN, Printers..."
+                          rows={2}
+                       />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+              {facilities.length === 0 && (
+                <div className="text-center p-12 bg-white rounded-2xl border border-dashed border-slate-300">
+                   <LayoutGrid className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                   <h3 className="text-sm font-bold text-slate-700">No Facilities Added</h3>
+                   <p className="text-xs text-slate-500 mt-1 mb-4">Start adding laboratories to build the facilities page.</p>
+                   <button onClick={addItem} className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800 transition-colors">Add Facility</button>
+                </div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
-        <div className="flex items-center gap-3">
-          {saved && (
-            <div className="flex items-center gap-1.5 text-amber-600 text-xs bg-primary-50 px-3 py-1.5 rounded-lg border border-emerald-200">
-              <CheckCircle className="w-3.5 h-3.5" /> Saved!
+
+        {/* Right Side: Live Preview Panel */}
+        <div className="xl:col-span-5">
+          <div className="sticky top-24 max-h-[calc(100vh-140px)] flex flex-col">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <Monitor className="w-4 h-4" /> Live Preview
+            </h3>
+            
+            <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden flex-1 flex flex-col">
+              <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2 shrink-0">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                </div>
+                <div className="mx-auto bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono flex-1 max-w-[200px] text-center truncate shadow-sm">
+                  cahcet.edu.in/departments/{deptKey}/facilities
+                </div>
+              </div>
+
+              {/* Scrollable Preview Area */}
+              <div className="flex-1 overflow-y-auto bg-primary-50/50 p-6 relative">
+                 <div className="scale-[0.85] origin-top">
+                    <FacilitiesSection data={facilities} />
+                 </div>
+              </div>
             </div>
-          )}
-          <button onClick={() => setEditing(emptyFacility)} className="flex items-center gap-2 px-4 py-2.5 bg-amber-500 text-white text-sm font-semibold rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/25">
-            <Plus className="w-4 h-4" /> Add Facility
-          </button>
+          </div>
         </div>
       </div>
 
-      {facilities.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <Layers className="w-12 h-12 text-slate-200 mb-3" />
-          <p className="text-slate-500 font-medium">No facilities added yet.</p>
-          <p className="text-xs text-slate-400 mt-1">Add labs, classrooms, research centers, and more.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <AnimatePresence>
-            {facilities.map(f => (
-              <motion.div key={f.id} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <FacilityCard facility={f} onEdit={setEditing} onDelete={setDeleting} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
+      {showHistory && (
+        <VersionHistoryModal
+          deptKey={deptKey}
+          section="facilities"
+          cms={cms}
+          session={session}
+          onClose={() => setShowHistory(false)}
+        />
       )}
-
-      <AnimatePresence>
-        {editing && <FacilityModal initial={editing} deptKey={deptKey} onSave={handleSave} onClose={() => setEditing(null)} />}
-        {deleting && <DeleteConfirm item={deleting} onConfirm={() => { cms.deleteItem('facilities', deleting.id, session?.username, session?.name, deleting.name); setDeleting(null); }} onCancel={() => setDeleting(null)} />}
-      </AnimatePresence>
-    </div>
+    </EditorPage>
   );
 };
 

@@ -1,239 +1,355 @@
-/**
- * DeptCurriculumEditor.jsx — Curriculum CMS Editor
- * Semester-wise syllabus management with PDF uploads, downloadable resources, regulations.
- */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Monitor, Upload, Plus, Trash2, ArrowUp, ArrowDown, FileText, Download, X, Search, BookOpenCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Plus, Pencil, Trash2, X, Save, Upload, BookOpenCheck,
-  Download, FileText, ExternalLink, CheckCircle,
-} from 'lucide-react';
+import { useToast } from '../../ui/Toast';
+import EditorPage from '../../ui/EditorPage';
+import { AdminInput, AdminTextarea } from '../../ui/AdminInput';
+import { cmsService } from '../../../../services/cmsService';
 import { fileService } from '../../../services/fileService';
+import VersionHistoryModal from './shared/VersionHistoryModal';
+import CurriculumSection from '../../../../components/departments/sections/CurriculumSection';
 
 const REGULATIONS = ['2021', '2020', '2019', '2017', 'R2021', 'R2020', 'R2019', 'R2017'];
 const SEMESTERS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
-const emptyCurriculum = { semester: 'I', regulation: '2021', title: '', description: '', downloadUrl: '', resources: [] };
-const inputCls = "w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white text-slate-800";
+const emptyCurriculum = {
+  id: '',
+  semester: 'I',
+  regulation: '2021',
+  title: '',
+  description: '',
+  downloadUrl: ''
+};
 
-/* ─── Curriculum Card ─── */
-const CurriculumCard = ({ item, onEdit, onDelete }) => (
-  <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-    className="bg-white rounded-2xl border border-slate-200 p-4 hover:shadow-md transition-all group">
-    <div className="flex items-start justify-between gap-2">
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex flex-col items-center justify-center">
-          <p className="text-[10px] font-bold text-amber-600 leading-none">SEM</p>
-          <p className="text-base font-black text-amber-700 leading-none">{item.semester}</p>
-        </div>
-        <div>
-          <div className="flex items-center gap-2 mb-0.5">
-            <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">Reg. {item.regulation}</span>
-          </div>
-          <p className="font-bold text-slate-800 text-sm">{item.title || `Semester ${item.semester} Curriculum`}</p>
-        </div>
-      </div>
-      <div className="flex gap-1.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-        <button onClick={() => onEdit(item)} className="p-1.5 text-amber-500 hover:bg-amber-50 rounded-lg transition-colors"><Pencil className="w-3.5 h-3.5" /></button>
-        <button onClick={() => onDelete(item)} className="p-1.5 text-amber-500 hover:bg-primary-50 rounded-lg transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
-      </div>
-    </div>
-    {item.description && <p className="text-xs text-slate-500 mt-2 line-clamp-2">{item.description}</p>}
-    <div className="flex flex-wrap items-center gap-2 mt-3">
-      {item.downloadUrl && (
-        <a href={item.downloadUrl} target="_blank" rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full">
-          <Download className="w-3 h-3" /> Download Syllabus
-        </a>
-      )}
-      {item.resources?.length > 0 && (
-        <span className="text-xs text-slate-400">{item.resources.length} resource{item.resources.length !== 1 ? 's' : ''}</span>
-      )}
-    </div>
-  </motion.div>
-);
-
-/* ─── Curriculum Modal ─── */
-const CurriculumModal = ({ initial, deptKey, onSave, onClose }) => {
-  const [form, setForm] = useState({ ...emptyCurriculum, ...initial });
-  const [newResource, setNewResource] = useState({ title: '', url: '' });
+const DeptCurriculumEditor = ({ deptKey, dept, cms, session }) => {
+  const { addToast } = useToast?.() || { addToast: () => {} };
+  const [curriculum, setCurriculum] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const update = (k, v) => setForm(p => ({ ...p, [k]: v }));
+  const [search, setSearch] = useState('');
 
-  const addResource = () => {
-    if (!newResource.title.trim()) return;
-    update('resources', [...(form.resources || []), { ...newResource, id: `res_${Date.now()}` }]);
-    setNewResource({ title: '', url: '' });
+  useEffect(() => {
+    if (cms.data?.curriculum) {
+      setCurriculum(Array.isArray(cms.data.curriculum) ? cms.data.curriculum : []);
+    } else {
+      setCurriculum([]);
+    }
+  }, [deptKey, cms.data]);
+
+  const handleSave = async (isSilent = false) => {
+    setLoading(true);
+    try {
+      cms.setSection('curriculum', curriculum);
+      await cms.saveSection('curriculum', session?.username, session?.name, isSilent);
+      if (!isSilent) addToast({ type: 'success', title: 'Draft Saved', message: `Curriculum changes saved to draft.` });
+    } catch(e) {
+      addToast({ type: 'error', title: 'Error', message: 'Failed to save draft.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const removeResource = (id) => update('resources', form.resources.filter(r => r.id !== id));
+  const handlePublishClick = async () => {
+    await handleSave(true);
+    if (cms.publishSection) {
+       await cms.publishSection('curriculum');
+       addToast({ type: 'success', title: 'Live', message: 'Curriculum published to production.' });
+    }
+  };
 
-  const handlePDFUpload = async (e) => {
+  const handleReset = () => {
+    const fresh = cms.data?.curriculum || [];
+    setCurriculum(Array.isArray(fresh) ? fresh : []);
+    cms.setSection('curriculum', fresh);
+    addToast({ type: 'info', title: 'Reset', message: 'Discarded unsaved changes.' });
+  };
+
+  const updateItem = (index, field, value) => {
+    const updated = [...curriculum];
+    updated[index][field] = value;
+    setCurriculum(updated);
+    cms.setSection('curriculum', updated);
+  };
+
+  const moveItem = (index, direction) => {
+    const list = [...curriculum];
+    const targetIdx = index + direction;
+    if (targetIdx < 0 || targetIdx >= list.length) return;
+    const [moved] = list.splice(index, 1);
+    list.splice(targetIdx, 0, moved);
+    setCurriculum(list);
+    cms.setSection('curriculum', list);
+  };
+
+  const removeItem = (index) => {
+    if (window.confirm("Are you sure you want to delete this curriculum entry?")) {
+      const updated = curriculum.filter((_, i) => i !== index);
+      setCurriculum(updated);
+      cms.setSection('curriculum', updated);
+    }
+  };
+
+  const addItem = () => {
+    const newItem = { ...emptyCurriculum, id: `curr_${Date.now()}` };
+    const updated = [newItem, ...curriculum];
+    setCurriculum(updated);
+    cms.setSection('curriculum', updated);
+    setSearch('');
+  };
+
+  const handlePDFUpload = async (e, index) => {
     const file = e.target.files?.[0]; if (!file) return;
     setUploading(true);
     try {
       const rec = await fileService.upload(file, deptKey, 'curriculum');
-      update('downloadUrl', rec.url);
-    } catch {}
+      updateItem(index, 'downloadUrl', rec.url);
+      addToast({ type: 'success', title: 'Uploaded!', message: 'PDF uploaded successfully.' });
+    } catch {
+      addToast({ type: 'error', title: 'Failed', message: 'Upload failed.' });
+    }
     setUploading(false);
   };
 
+  const validationIssues = [];
+  curriculum.forEach((curr, idx) => {
+     if (!curr.downloadUrl?.trim()) validationIssues.push(`Semester ${curr.semester || idx+1} is missing a PDF URL.`);
+  });
+
+  const filtered = search
+    ? curriculum.filter(c => c.title?.toLowerCase().includes(search.toLowerCase()) || c.semester?.toLowerCase().includes(search.toLowerCase()))
+    : curriculum;
+
+  const previewData = curriculum.map(c => ({
+    id: c.id,
+    title: c.title || `Semester ${c.semester} Syllabus`,
+    fileSize: `Regulation ${c.regulation}`,
+    fileUrl: c.downloadUrl
+  }));
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-5 border-b border-slate-100 sticky top-0 bg-white z-10">
-          <h3 className="text-base font-bold text-slate-800">{initial?.id ? 'Edit Curriculum' : 'Add Curriculum'}</h3>
-          <button onClick={onClose} className="p-2 rounded-xl text-slate-400 hover:bg-slate-100"><X className="w-4 h-4" /></button>
-        </div>
-        <div className="p-5 space-y-4">
+    <EditorPage
+      title="Curriculum Editor"
+      description="Manage semester-wise syllabus, academic regulations, and downloadable resources."
+      breadcrumb={['Admin', 'Departments', dept.abbr, 'Curriculum']}
+      onSave={() => handleSave(false)}
+      onPublish={handlePublishClick}
+      onReset={handleReset}
+      isLoading={loading}
+      status={cms.status?.curriculum || 'DRAFT'}
+      lastModified={cms.lastModified?.curriculum}
+      validationIssues={validationIssues}
+    >
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        
+        {/* Left Side: Configuration Panel */}
+        <div className="xl:col-span-7 space-y-6">
+          
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Semester</label>
-              <select className={inputCls} value={form.semester} onChange={e => update('semester', e.target.value)}>
-                {SEMESTERS.map(s => <option key={s} value={s}>Semester {s}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Regulation</label>
-              <select className={inputCls} value={form.regulation} onChange={e => update('regulation', e.target.value)}>
-                {REGULATIONS.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </div>
+             <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
+                <div className="flex justify-between items-start">
+                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Syllabus Entries</p>
+                   <BookOpenCheck className="w-5 h-5 text-indigo-500" />
+                </div>
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl group-hover:bg-indigo-500/40 transition-colors duration-500 pointer-events-none" />
+                <div className="relative z-10">
+                   <p className="text-5xl font-black text-white tracking-tighter drop-shadow-md">
+                      {curriculum.length}
+                   </p>
+                </div>
+             </div>
+             <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
+                <div className="flex justify-between items-start">
+                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">PDFs Uploaded</p>
+                   <FileText className="w-5 h-5 text-emerald-500" />
+                </div>
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl group-hover:bg-indigo-500/40 transition-colors duration-500 pointer-events-none" />
+                <div className="relative z-10">
+                   <p className="text-5xl font-black text-white tracking-tighter drop-shadow-md">
+                      {curriculum.filter(c => c.downloadUrl).length}
+                   </p>
+                </div>
+             </div>
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Title (optional)</label>
-            <input className={inputCls} value={form.title} onChange={e => update('title', e.target.value)} placeholder={`Semester ${form.semester} Curriculum`} />
+
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+             <div className="relative max-w-sm flex-1">
+               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+               <input
+                 className="w-full pl-10 pr-4 py-3 border border-slate-200/70 rounded-xl text-sm bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02)] focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400 transition-all duration-300"
+                 placeholder="Search curriculum..."
+                 value={search}
+                 onChange={e => setSearch(e.target.value)}
+               />
+               {search && <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2"><X className="w-3.5 h-3.5 text-slate-400" /></button>}
+             </div>
+             <button
+               onClick={addItem}
+               className="flex items-center justify-center gap-1.5 px-5 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 shadow-[0_4px_14px_0_rgb(0,0,0,0.1)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.15)] hover:-translate-y-0.5 transition-all shrink-0"
+             >
+               <Plus className="w-4 h-4" /> Add Entry
+             </button>
           </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Description</label>
-            <textarea className={`${inputCls} resize-none`} rows={3} value={form.description} onChange={e => update('description', e.target.value)} placeholder="Brief about the semester curriculum..." />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Syllabus PDF</label>
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-slate-200 rounded-xl text-sm text-slate-500 cursor-pointer hover:border-amber-400 hover:text-amber-500 transition-colors">
-                <Upload className="w-4 h-4" /> {uploading ? 'Uploading...' : 'Upload PDF'}
-                <input type="file" accept="application/pdf" className="hidden" onChange={handlePDFUpload} disabled={uploading} />
-              </label>
-              <p className="text-xs text-slate-400 text-center">— or paste a URL —</p>
-              <div className="relative">
-                <ExternalLink className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-                <input className={`${inputCls} pl-9`} value={form.downloadUrl} onChange={e => update('downloadUrl', e.target.value)} placeholder="https://..." />
-              </div>
-              {form.downloadUrl && (
-                <a href={form.downloadUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700">
-                  <FileText className="w-3 h-3" /> Preview file
-                </a>
+
+          <motion.div initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} className="space-y-4">
+            <AnimatePresence>
+              {filtered.map((item) => {
+                const actualIndex = curriculum.findIndex(c => c.id === item.id);
+                return (
+                  <motion.div 
+                    layout 
+                    initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -40 }}
+                    transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    key={item.id} 
+                    className="bg-gradient-to-br from-white to-slate-50/80 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] hover:border-indigo-500/30 transition-all duration-300 group overflow-visible relative"
+                  >
+                    {/* Premium Glow Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-5 rounded-3xl transition-opacity duration-500 pointer-events-none" />
+                    <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500 pointer-events-none -z-10" />
+                  >
+                    <div className="p-5 bg-white/60 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between rounded-t-3xl relative z-10">
+                      <div className="flex items-center gap-3">
+                         <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex flex-col items-center justify-center shadow-sm shrink-0">
+                           <p className="text-[8px] font-bold text-amber-600 leading-none mb-0.5">SEM</p>
+                           <p className="text-sm font-black text-amber-700 leading-none">{item.semester}</p>
+                         </div>
+                         <div>
+                            <span className="text-base font-extrabold text-slate-900 block leading-tight tracking-tight">
+                              {item.title || `Semester ${item.semester} Curriculum`}
+                            </span>
+                            <span className="text-[10px] text-indigo-600 font-bold tracking-widest uppercase">REG {item.regulation}</span>
+                         </div>
+                      </div>
+                      <div className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                        {!search && (
+                           <>
+                              <button onClick={() => moveItem(actualIndex, -1)} disabled={actualIndex === 0} className="p-2 hover:bg-white border border-transparent hover:border-slate-200 rounded-xl text-slate-400 hover:text-indigo-600 hover:shadow-sm disabled:opacity-30 transition-all duration-300">
+                                <ArrowUp className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => moveItem(actualIndex, 1)}
+                                disabled={actualIndex === curriculum.length - 1}
+                                className="p-2 hover:bg-white border border-transparent hover:border-slate-200 rounded-xl text-slate-400 hover:text-indigo-600 hover:shadow-sm disabled:opacity-30 transition-all duration-300"
+                              >
+                                <ArrowDown className="w-4 h-4" />
+                              </button>
+                              <div className="w-px h-4 bg-slate-300 mx-1"></div>
+                           </>
+                        )}
+                        <button onClick={() => removeItem(actualIndex)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl hover:shadow-sm transition-all duration-300">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="p-5 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-600 mb-1.5">Semester</label>
+                          <select 
+                             className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white"
+                             value={item.semester} 
+                             onChange={e => updateItem(actualIndex, 'semester', e.target.value)}
+                          >
+                            {SEMESTERS.map(s => <option key={s} value={s}>Semester {s}</option>)}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-slate-600 mb-1.5">Regulation</label>
+                          <select 
+                             className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white"
+                             value={item.regulation} 
+                             onChange={e => updateItem(actualIndex, 'regulation', e.target.value)}
+                          >
+                            {REGULATIONS.map(r => <option key={r} value={r}>{r}</option>)}
+                          </select>
+                        </div>
+                        <div className="md:col-span-2">
+                           <AdminInput
+                             label="Title (Optional)"
+                             value={item.title || ''}
+                             onChange={e => updateItem(actualIndex, 'title', e.target.value)}
+                             placeholder={`Semester ${item.semester} Curriculum`}
+                           />
+                        </div>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-50">
+                         <label className="block text-xs font-semibold text-slate-600 mb-1.5">Syllabus PDF File</label>
+                         <div className="flex flex-col sm:flex-row gap-3">
+                           <label className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-50 text-slate-700 text-xs font-bold rounded-xl cursor-pointer hover:bg-slate-100 border border-slate-200 transition-colors shrink-0">
+                              <Upload className="w-4 h-4" />
+                              {uploading ? 'Uploading...' : 'Upload PDF'}
+                              <input type="file" accept="application/pdf" className="hidden" onChange={e => handlePDFUpload(e, actualIndex)} disabled={uploading} />
+                           </label>
+                           <div className="flex-1">
+                              <AdminInput
+                                value={item.downloadUrl || ''}
+                                onChange={e => updateItem(actualIndex, 'downloadUrl', e.target.value)}
+                                placeholder="https://... OR upload a file"
+                              />
+                           </div>
+                         </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+              {curriculum.length === 0 && !search && (
+                <div className="text-center p-12 bg-white rounded-2xl border border-dashed border-slate-300">
+                   <BookOpenCheck className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                   <h3 className="text-sm font-bold text-slate-700">No Curriculum Entries</h3>
+                   <p className="text-xs text-slate-500 mt-1 mb-4">Start adding semester-wise syllabus PDFs.</p>
+                   <button onClick={addItem} className="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800 transition-colors">Add Entry</button>
+                </div>
               )}
-            </div>
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-slate-600 mb-1.5">Additional Resources</label>
-            <div className="flex gap-2 mb-2">
-              <input className={`${inputCls} flex-1`} value={newResource.title} onChange={e => setNewResource(r => ({ ...r, title: e.target.value }))} placeholder="Resource title" />
-              <input className={`${inputCls} flex-1`} value={newResource.url} onChange={e => setNewResource(r => ({ ...r, url: e.target.value }))} placeholder="URL" />
-              <button onClick={addResource} className="px-3 py-2.5 bg-amber-500 text-white rounded-xl text-xs font-semibold hover:bg-amber-600 whitespace-nowrap">Add</button>
-            </div>
-            {form.resources?.map(r => (
-              <div key={r.id} className="flex items-center gap-2 py-1.5 border-b border-slate-100 last:border-0">
-                <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span className="text-xs text-slate-700 flex-1">{r.title}</span>
-                <a href={r.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-500"><ExternalLink className="w-3 h-3" /></a>
-                <button onClick={() => removeResource(r.id)} className="text-amber-400 hover:text-amber-600"><X className="w-3.5 h-3.5" /></button>
+            </AnimatePresence>
+          </motion.div>
+        </div>
+
+        {/* Right Side: Live Preview Panel */}
+        <div className="xl:col-span-5">
+          <div className="sticky top-24 max-h-[calc(100vh-140px)] flex flex-col">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <Monitor className="w-4 h-4" /> Live Preview
+            </h3>
+            
+            <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden flex-1 flex flex-col">
+              <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2 shrink-0">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                </div>
+                <div className="mx-auto bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono flex-1 max-w-[200px] text-center truncate shadow-sm">
+                  cahcet.edu.in/departments/{deptKey}/curriculum
+                </div>
               </div>
-            ))}
+
+              {/* Scrollable Preview Area */}
+              <div className="flex-1 overflow-y-auto bg-primary-50/50 p-6 relative">
+                 <div className="scale-[0.8] origin-top">
+                    <CurriculumSection data={previewData} />
+                 </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="flex gap-3 p-5 border-t border-slate-100 sticky bottom-0 bg-white">
-          <button onClick={onClose} className="flex-1 py-2.5 border border-slate-200 rounded-xl text-sm hover:bg-slate-50">Cancel</button>
-          <button onClick={() => onSave(form)}
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-amber-500 text-white rounded-xl text-sm font-semibold hover:bg-amber-600">
-            <Save className="w-4 h-4" /> {initial?.id ? 'Update' : 'Add Curriculum'}
-          </button>
-        </div>
-      </motion.div>
-    </div>
-  );
-};
-
-/* ─── Main ─── */
-const DeptCurriculumEditor = ({ deptKey, dept, cms, session }) => {
-  const [editing, setEditing] = useState(null);
-  const [deleting, setDeleting] = useState(null);
-  const [saved, setSaved] = useState(false);
-  const curriculum = cms.data?.curriculum || [];
-
-  const grouped = SEMESTERS.reduce((acc, s) => {
-    acc[s] = curriculum.filter(c => c.semester === s);
-    return acc;
-  }, {});
-
-  const handleSave = (form) => {
-    if (form.id) cms.updateItem('curriculum', form.id, form, session?.username, session?.name);
-    else cms.addItem('curriculum', form, session?.username, session?.name);
-    setEditing(null);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
-
-  return (
-    <div className="p-6 space-y-5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-slate-800">Curriculum Management</h2>
-          <p className="text-sm text-slate-400 mt-0.5">{curriculum.length} syllabus entr{curriculum.length !== 1 ? 'ies' : 'y'}</p>
-        </div>
-        <div className="flex items-center gap-3">
-          {saved && <div className="flex items-center gap-1.5 text-amber-600 text-xs bg-primary-50 px-3 py-1.5 rounded-lg border border-emerald-200"><CheckCircle className="w-3.5 h-3.5" /> Saved!</div>}
-          <button onClick={() => setEditing(emptyCurriculum)} className="flex items-center gap-2 px-4 py-2.5 bg-amber-500 text-white text-sm font-semibold rounded-xl hover:bg-amber-600 shadow-lg shadow-amber-500/25">
-            <Plus className="w-4 h-4" /> Add Curriculum
-          </button>
         </div>
       </div>
 
-      {curriculum.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <BookOpenCheck className="w-12 h-12 text-slate-200 mb-3" />
-          <p className="text-slate-500 font-medium">No curriculum added yet.</p>
-          <p className="text-xs text-slate-400 mt-1">Add semester-wise syllabus and downloadable resources.</p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {SEMESTERS.filter(s => grouped[s]?.length > 0).map(s => (
-            <div key={s}>
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Semester {s}</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <AnimatePresence>
-                  {grouped[s].map(item => (
-                    <CurriculumCard key={item.id} item={item} onEdit={setEditing} onDelete={setDeleting} />
-                  ))}
-                </AnimatePresence>
-              </div>
-            </div>
-          ))}
-        </div>
+      {showHistory && (
+        <VersionHistoryModal
+          deptKey={deptKey}
+          section="curriculum"
+          cms={cms}
+          session={session}
+          onClose={() => setShowHistory(false)}
+        />
       )}
-
-      <AnimatePresence>
-        {editing && <CurriculumModal initial={editing} deptKey={deptKey} onSave={handleSave} onClose={() => setEditing(null)} />}
-        {deleting && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
-              <Trash2 className="w-8 h-8 text-amber-500 mx-auto mb-3" />
-              <h3 className="font-bold text-slate-800 mb-1">Delete Curriculum Entry?</h3>
-              <p className="text-sm text-slate-500 mb-4">Semester <strong>{deleting.semester}</strong> – Reg. {deleting.regulation}</p>
-              <div className="flex gap-3">
-                <button onClick={() => setDeleting(null)} className="flex-1 py-2.5 border rounded-xl text-sm hover:bg-slate-50">Cancel</button>
-                <button onClick={() => { cms.deleteItem('curriculum', deleting.id, session?.username, session?.name, `Sem ${deleting.semester}`); setDeleting(null); }}
-                  className="flex-1 py-2.5 bg-amber-500 text-white rounded-xl text-sm font-semibold hover:bg-amber-600">Delete</button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </div>
+    </EditorPage>
   );
 };
 

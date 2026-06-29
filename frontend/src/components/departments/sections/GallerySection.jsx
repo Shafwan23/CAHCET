@@ -76,7 +76,7 @@ const GallerySection = ({ data }) => {
 
   return (
     <div>
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl pb-4 mb-8 border-b border-primary-100/50 pt-2">
+      <div className="sticky top-0 z-30 bg-white/70 backdrop-blur-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] pb-4 mb-8 border-b border-primary-100/50 pt-2">
         <div className="flex items-center gap-2 text-primary-400 text-xs font-bold tracking-widest uppercase mb-2">
           <span>Department</span>
           <ChevronRight className="w-3 h-3" />
@@ -123,8 +123,8 @@ const GallerySection = ({ data }) => {
             return (
               <motion.div 
                 key={album.id || idx}
-                variants={departmentAnimations.fadeUp}
-                className="group relative rounded-[2rem] overflow-hidden cursor-pointer shadow-luxury hover:shadow-luxury-hover bg-slate-100 aspect-[4/3] border border-slate-100"
+                variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}
+                className="group relative rounded-[2.5rem] overflow-hidden cursor-pointer shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]-hover bg-slate-100 aspect-[4/3] border border-slate-100"
                 onClick={() => openAlbumLightbox(idx)}
               >
                 <OptimizedImage
@@ -163,7 +163,7 @@ const GallerySection = ({ data }) => {
                 </div>
                 
                 {/* Ambient Border Glow */}
-                <div className="absolute inset-0 rounded-[2rem] border-2 border-transparent group-hover:border-accent-gold/30 transition-colors duration-500 pointer-events-none" />
+                <div className="absolute inset-0 rounded-[2.5rem] border-2 border-transparent group-hover:border-accent-gold/30 transition-colors duration-500 pointer-events-none" />
               </motion.div>
             );
           })

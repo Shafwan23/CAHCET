@@ -9,11 +9,11 @@ import PremiumEmptyState from '../../ui/PremiumEmptyState';
 const LabCard = ({ lab, isOpen, onToggle }) => {
   return (
     <motion.div 
-      variants={departmentAnimations.fadeUp}
+      variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}
       whileHover={{ scale: 1.01 }}
       className={cn(
         "relative bg-white rounded-3xl overflow-hidden transition-all duration-500 border group",
-        isOpen ? "border-accent-gold shadow-[0_0_30px_rgba(212,175,55,0.2)]" : "border-primary-100 shadow-luxury hover:border-accent-gold/50 hover:shadow-luxury-hover"
+        isOpen ? "border-accent-gold shadow-[0_0_30px_rgba(212,175,55,0.2)]" : "border-primary-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:border-accent-gold/50 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]-hover"
       )}
     >
       <button 
@@ -22,7 +22,7 @@ const LabCard = ({ lab, isOpen, onToggle }) => {
       >
         <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
           <div className={cn(
-            "p-4 rounded-2xl transition-all duration-500 relative overflow-hidden",
+            "p-4 rounded-3xl transition-all duration-500 relative overflow-hidden",
             isOpen ? "bg-primary-900 text-white scale-110" : "bg-primary-50 text-primary-400 group-hover:bg-accent-gold/10 group-hover:text-accent-gold"
           )}>
             {isOpen && <div className="absolute inset-0 bg-accent-gold/20 blur-md animate-pulse" />}
@@ -65,7 +65,7 @@ const LabCard = ({ lab, isOpen, onToggle }) => {
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-primary-100"
             >
               
-              <motion.div variants={departmentAnimations.fadeUp} className="bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-primary-100/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+              <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }} className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-primary-100/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 bg-blue-500/10 text-blue-500 rounded-lg"><Cpu className="w-5 h-5" /></div>
                   <h4 className="font-bold text-sm uppercase tracking-widest text-primary-900">Hardware</h4>
@@ -73,7 +73,7 @@ const LabCard = ({ lab, isOpen, onToggle }) => {
                 <p className="text-primary-600 text-sm leading-relaxed">{lab.hardware}</p>
               </motion.div>
 
-              <motion.div variants={departmentAnimations.fadeUp} className="bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-primary-100/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+              <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }} className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-primary-100/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 bg-primary-500/10 text-primary-500 rounded-lg"><Code className="w-5 h-5" /></div>
                   <h4 className="font-bold text-sm uppercase tracking-widest text-primary-900">Software</h4>
@@ -81,7 +81,7 @@ const LabCard = ({ lab, isOpen, onToggle }) => {
                 <p className="text-primary-600 text-sm leading-relaxed">{lab.software}</p>
               </motion.div>
 
-              <motion.div variants={departmentAnimations.fadeUp} className="bg-white/60 backdrop-blur-md p-6 rounded-2xl border border-primary-100/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 lg:col-span-1 md:col-span-2">
+              <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }} className="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-primary-100/50 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 lg:col-span-1 md:col-span-2">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 bg-amber-500/10 text-amber-500 rounded-lg"><Printer className="w-5 h-5" /></div>
                   <h4 className="font-bold text-sm uppercase tracking-widest text-primary-900">Network & Peripherals</h4>
@@ -110,7 +110,7 @@ const FacilitiesSection = ({ data }) => {
 
   return (
     <div>
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl pb-4 mb-8 border-b border-primary-100/50 pt-2">
+      <div className="sticky top-0 z-30 bg-white/70 backdrop-blur-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] pb-4 mb-8 border-b border-primary-100/50 pt-2">
         <div className="flex items-center gap-2 text-primary-400 text-xs font-bold tracking-widest uppercase mb-2">
           <span>Department</span>
           <ChevronRight className="w-3 h-3" />

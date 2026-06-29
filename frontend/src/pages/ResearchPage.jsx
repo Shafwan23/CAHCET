@@ -52,7 +52,11 @@ const ResearchPage = () => {
             }
           });
         }
-        setCmsData(content);
+        if (content.research_main) {
+          setCmsData({ ...content, ...content.research_main });
+        } else {
+          setCmsData(content);
+        }
       } catch (err) {
         console.error("Failed to load research data", err);
       } finally {
@@ -65,7 +69,7 @@ const ResearchPage = () => {
   const statsArray = [
     { id: 1, label: 'Publications', value: parseInt(cmsData.stats?.publications) || 55, suffix: '+', desc: 'Peer-reviewed articles' },
     { id: 2, label: 'Patents Filed', value: parseInt(cmsData.stats?.patents) || 3, suffix: '+', desc: 'Intellectual properties' },
-    { id: 3, label: 'Funding Proposals', value: parseInt(cmsData.stats?.grants?.replace(/[^0-9]/g, '')) || 14, suffix: '+', desc: 'Research funding' },
+    { id: 3, label: 'Funding Proposals', value: parseInt(cmsData.stats?.grants?.toString()?.replace(/[^0-9]/g, '')) || 14, suffix: '+', desc: 'Research funding' },
     { id: 4, label: 'Scholars', value: parseInt(cmsData.stats?.scholars) || 18, suffix: '+', desc: 'Active researchers' }
   ];
 

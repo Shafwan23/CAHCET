@@ -39,7 +39,12 @@ const EventsEditor = () => {
         setSectionsMap(map);
 
         if (map['updates.events']) {
-          setEvents(JSON.parse(map['updates.events'].content));
+          const raw = map['updates.events'].draftContent || map['updates.events'].content || '[]';
+          try {
+            setEvents(JSON.parse(raw) || []);
+          } catch {
+            setEvents([]);
+          }
         }
       } catch (err) {
         toast({ type: 'error', title: 'Error', message: 'Failed to load Events data.' });

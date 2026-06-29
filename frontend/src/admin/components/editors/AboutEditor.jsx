@@ -22,7 +22,12 @@ const AboutEditor = () => {
         setSectionsMap(map);
 
         if (map['about.college']) {
-          setForm(JSON.parse(map['about.college'].content));
+          const raw = map['about.college'].draftContent || map['about.college'].content || '{}';
+          try {
+            setForm(JSON.parse(raw) || {});
+          } catch {
+            setForm({});
+          }
         }
       } catch (err) {
         toast({ type: 'error', title: 'Error', message: 'Failed to load About data.' });

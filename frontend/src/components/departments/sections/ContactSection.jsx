@@ -8,8 +8,8 @@ import PremiumEmptyState from '../../ui/PremiumEmptyState';
 const ContactCard = ({ contact }) => {
   return (
     <motion.div 
-      variants={departmentAnimations.fadeUp}
-      className="bg-white rounded-[2.5rem] overflow-hidden shadow-luxury hover:shadow-luxury-hover flex flex-col md:flex-row items-center p-8 md:p-10 gap-10 border border-primary-100 hover:border-accent-gold/50 transition-all duration-500 group will-change-transform hover:-translate-y-2 relative"
+      variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}
+      className="bg-white rounded-[2.5rem] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]-hover flex flex-col md:flex-row items-center p-8 md:p-10 gap-10 border border-primary-100 hover:border-accent-gold/50 transition-all duration-500 group will-change-transform hover:-translate-y-3 hover:scale-[1.02] relative"
     >
       {/* Decorative Glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-accent-gold/5 rounded-full blur-3xl -z-10 group-hover:bg-accent-gold/10 transition-colors duration-700" />
@@ -34,7 +34,7 @@ const ContactCard = ({ contact }) => {
             href={`mailto:${contact.email}`}
             className="flex items-center justify-center md:justify-start gap-4 text-primary-600 hover:text-primary-900 transition-colors group/link"
           >
-            <div className="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center group-hover/link:bg-accent-gold/20 group-hover/link:text-accent-gold transition-colors border border-primary-100 group-hover/link:border-accent-gold/30">
+            <div className="w-12 h-12 rounded-3xl bg-primary-50 flex items-center justify-center group-hover/link:bg-accent-gold/20 group-hover/link:text-accent-gold transition-colors border border-primary-100 group-hover/link:border-accent-gold/30">
               <Mail className="w-5 h-5" />
             </div>
             <span className="font-medium text-lg">{contact.email}</span>
@@ -43,7 +43,7 @@ const ContactCard = ({ contact }) => {
             href={`tel:${contact.phone.replace(/[^0-9+]/g, '')}`}
             className="flex items-center justify-center md:justify-start gap-4 text-primary-600 hover:text-primary-900 transition-colors group/link"
           >
-            <div className="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center group-hover/link:bg-accent-gold/20 group-hover/link:text-accent-gold transition-colors border border-primary-100 group-hover/link:border-accent-gold/30">
+            <div className="w-12 h-12 rounded-3xl bg-primary-50 flex items-center justify-center group-hover/link:bg-accent-gold/20 group-hover/link:text-accent-gold transition-colors border border-primary-100 group-hover/link:border-accent-gold/30">
               <Phone className="w-5 h-5" />
             </div>
             <span className="font-medium text-lg">{contact.phone}</span>
@@ -54,7 +54,7 @@ const ContactCard = ({ contact }) => {
       <div className="shrink-0 w-full md:w-auto mt-6 md:mt-0 z-10">
          <a 
             href={`mailto:${contact.email}`}
-            className="block w-full text-center px-10 py-5 bg-primary-900 hover:bg-primary-950 text-white rounded-2xl font-bold transition-all shadow-luxury hover:shadow-luxury-hover border border-transparent hover:border-white/20"
+            className="block w-full text-center px-10 py-5 bg-primary-900 hover:bg-primary-950 text-white rounded-3xl font-bold transition-all shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]-hover border border-transparent hover:border-white/20"
           >
             Send Message
           </a>
@@ -70,7 +70,7 @@ const ContactSection = ({ data }) => {
 
   return (
     <div>
-      <div className="sticky top-0 z-30 bg-white/80 backdrop-blur-xl pb-4 mb-8 border-b border-primary-100/50 pt-2 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="sticky top-0 z-30 bg-white/70 backdrop-blur-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] pb-4 mb-8 border-b border-primary-100/50 pt-2 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-primary-400 text-xs font-bold tracking-widest uppercase mb-2">
             <span>Department</span>
@@ -93,8 +93,8 @@ const ContactSection = ({ data }) => {
         
         {/* General Location Card */}
         <motion.div 
-          variants={departmentAnimations.fadeUp}
-          className="bg-primary-950 rounded-[2.5rem] p-10 flex items-center gap-8 text-white overflow-hidden relative shadow-luxury"
+          variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}
+          className="bg-primary-950 rounded-[2.5rem] p-10 flex items-center gap-8 text-white overflow-hidden relative shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]"
         >
           {/* Animated Background Mesh */}
           <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />

@@ -28,8 +28,13 @@ const SEOEditor = () => {
         setSectionsMap(map);
 
         if (map['seo.global']) {
-          const parsed = JSON.parse(map['seo.global'].content);
-          setForm(prev => ({ ...prev, ...parsed }));
+          const raw = map['seo.global'].draftContent || map['seo.global'].content || '{}';
+          try {
+            const parsed = JSON.parse(raw) || {};
+            setForm(prev => ({ ...prev, ...parsed }));
+          } catch {
+            // retain default form
+          }
         }
       } catch (err) {
         toast({ type: 'error', title: 'Error', message: 'Failed to load SEO data.' });

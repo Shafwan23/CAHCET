@@ -1,57 +1,74 @@
-/**
- * DeptOverviewEditor.jsx — Department Overview CMS Editor
- * Edits: title, tagline, established, HOD, description, vision, mission, banner image
- */
 import React, { useState, useEffect } from 'react';
+import { Monitor, Upload, Compass, Target, Clock, User, FileText, Image as ImageIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Save, RotateCcw, Upload, X, CheckCircle, History } from 'lucide-react';
-import { AUDIT_ACTIONS } from '../../../services/auditService';
+import { useToast } from '../../ui/Toast';
+import EditorPage, { EditorCard } from '../../ui/EditorPage';
+import { AdminInput, AdminTextarea } from '../../ui/AdminInput';
 import { fileService } from '../../../services/fileService';
 import VersionHistoryModal from './shared/VersionHistoryModal';
-import { useToast } from '../../ui/Toast';
-
-const Field = ({ label, hint, children }) => (
-  <div>
-    <label className="block text-sm font-semibold text-slate-700 mb-1">{label}</label>
-    {hint && <p className="text-xs text-slate-400 mb-2">{hint}</p>}
-    {children}
-  </div>
-);
-
-const inputCls = "w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white";
-const textareaCls = `${inputCls} resize-none`;
+import { useEditorStatus } from '../../../utils/useEditorStatus';
+import DepartmentHero from '../../../../components/departments/DepartmentHero';
+import AboutSection from '../../../../components/departments/sections/AboutSection';
 
 const DeptOverviewEditor = ({ deptKey, dept, cms, session }) => {
   const { addToast } = useToast?.() || { addToast: () => {} };
-  const [form, setForm] = useState(cms.data?.overview || {});
-  const [saving, setSaving] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
-  const [uploading, setUploading] = useState(false);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    if (cms.data?.overview) setForm(cms.data.overview);
-  }, [deptKey]);
-
-  const update = (field, val) => {
-    setForm(prev => ({ ...prev, [field]: val }));
-    cms.setSection('overview', { ...form, [field]: val });
+  
+  // Base default state
+  const defaultForm = {
+    title: dept.fullName || '',
+    tagline: 'Excellence in Engineering',
+    established: '2001',
+    hod: 'Dr. Head of Department',
+    description: 'Describe the department...',
+    vision: 'To be a globally recognized...',
+    mission: '1. First mission point\n2. Second mission point',
+    bannerImage: ''
   };
 
-  const handleSave = async () => {
-    setSaving(true);
+  const [form, setForm] = useState(defaultForm);
+  const [loading, setLoading] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    if (cms.data?.overview) {
+      setForm({ ...defaultForm, ...cms.data.overview });
+    }
+  }, [deptKey, cms.data]);
+
+  const update = (field, val) => {
+    const newForm = { ...form, [field]: val };
+    setForm(newForm);
+    cms.setSection('overview', newForm); // updates the draft in CMS parent context
+  };
+
+  const handleSave = async (isSilent = false) => {
+    setLoading(true);
     try {
-      cms.saveSection('overview', session?.username, session?.name);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2500);
+      await cms.saveSection('overview', session?.username, session?.name, isSilent);
+      if (!isSilent) addToast({ type: 'success', title: 'Draft Saved', message: `Overview changes saved to draft.` });
+    } catch(e) {
+      addToast({ type: 'error', title: 'Error', message: 'Failed to save draft.' });
     } finally {
-      setSaving(false);
+      setLoading(false);
+    }
+  };
+
+  const handlePublishClick = async () => {
+    await handleSave(true);
+    // Ideally we trigger a publish in CMS context here or show SectionPreviewModal
+    // For department CMS, cms.publishSection handles this if implemented in parent
+    if (cms.publishSection) {
+       await cms.publishSection('overview');
+       addToast({ type: 'success', title: 'Live', message: 'Overview published to production.' });
     }
   };
 
   const handleReset = () => {
-    const fresh = cms.data?.overview;
-    if (fresh) setForm(fresh);
+    const fresh = cms.data?.overview || defaultForm;
+    setForm(fresh);
+    cms.setSection('overview', fresh);
+    addToast({ type: 'info', title: 'Reset', message: 'Discarded unsaved changes.' });
   };
 
   const handleImageUpload = async (e) => {
@@ -62,108 +79,209 @@ const DeptOverviewEditor = ({ deptKey, dept, cms, session }) => {
       const compressed = await fileService.compressImage(file, 1400, 0.85);
       const record = await fileService.upload(compressed, deptKey, 'banner');
       update('bannerImage', record.url);
+      addToast({ type: 'success', title: 'Uploaded!', message: 'Image uploaded successfully.' });
     } catch (err) {
       console.error(err);
+      addToast({ type: 'error', title: 'Failed', message: 'Upload failed.' });
     } finally {
       setUploading(false);
     }
   };
 
+  const validationIssues = [];
+  if (!form.title?.trim()) validationIssues.push('Title is required');
+  if (!form.description?.trim()) validationIssues.push('Description is required');
+
+  // Preview Data Mapping
+  const previewHeroData = {
+     title: form.title || dept.fullName,
+     tagline: form.tagline || 'Excellence in Engineering',
+     backgroundImage: form.bannerImage || 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0'
+  };
+
+  const previewAboutData = {
+     about: form.description || 'Department description...',
+     vision: form.vision || 'Department vision...',
+     mission: (form.mission || '').split('\n').filter(Boolean),
+     peos: ['PEO 1: Example PEO'],
+     pos: ['PO 1: Example PO']
+  };
+
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      {/* Page title */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-bold text-slate-800">Department Overview</h2>
-          <p className="text-sm text-slate-400 mt-0.5">Basic information displayed on the department home page</p>
-        </div>
-        <button onClick={() => setShowHistory(true)} className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 hover:text-slate-800 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-          <History className="w-3.5 h-3.5" /> Version History
-        </button>
-      </div>
+    <EditorPage
+      title="Department Overview Editor"
+      description="Basic information, vision, mission and banner displayed on the department home page."
+      breadcrumb={['Admin', 'Departments', dept.abbr, 'Overview']}
+      onSave={() => handleSave(false)}
+      onPublish={handlePublishClick}
+      onReset={handleReset}
+      isLoading={loading}
+      status={cms.status?.overview || 'DRAFT'}
+      lastModified={cms.lastModified?.overview}
+      validationIssues={validationIssues}
+    >
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        
+        {/* Left Side: Configuration Panel */}
+        <div className="xl:col-span-7 space-y-6">
+          
+          <div className="grid grid-cols-2 gap-4">
+             <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
+                <div className="flex justify-between items-start">
+                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Completeness</p>
+                   <FileText className="w-5 h-5 text-emerald-500" />
+                </div>
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl group-hover:bg-indigo-500/40 transition-colors duration-500 pointer-events-none" />
+                <div className="relative z-10">
+                   <p className="text-5xl font-black text-white tracking-tighter drop-shadow-md">
+                      {Math.round((Object.values(form).filter(Boolean).length / Object.keys(form).length) * 100)}%
+                   </p>
+                </div>
+             </div>
+             <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
+                <div className="flex justify-between items-start">
+                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Version History</p>
+                   <button onClick={() => setShowHistory(true)} className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-[10px] font-bold hover:bg-blue-100 transition-colors">
+                     VIEW
+                   </button>
+                </div>
+                <div>
+                   <p className="text-sm font-semibold text-slate-800">Available</p>
+                </div>
+             </div>
+          </div>
 
-      {/* Banner image */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5">
-        <h3 className="text-sm font-semibold text-slate-700 mb-4">Department Banner</h3>
-        <div className="flex gap-4 items-start">
-          <div className="w-48 h-28 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden shrink-0">
-            {form.bannerImage ? (
-              <img src={form.bannerImage} alt="Banner" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-slate-300">
-                <Upload className="w-8 h-8" />
+          <motion.div initial={{opacity:0, y:10}} animate={{opacity:1, y:0}}>
+            <EditorCard title="Hero & Banner" description="Manage the department landing section.">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Department Banner Image</label>
+                  <div className="relative group overflow-hidden rounded-xl bg-slate-50 border border-slate-200 aspect-[21/9] flex items-center justify-center mb-3">
+                     {form.bannerImage ? (
+                       <img src={form.bannerImage} alt="Banner" className="w-full h-full object-cover" />
+                     ) : (
+                       <div className="flex flex-col items-center justify-center text-slate-400">
+                          <ImageIcon className="w-8 h-8 mb-2 opacity-50" />
+                          <span className="text-xs font-medium">1400×500px Recommended</span>
+                       </div>
+                     )}
+                     
+                     <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity backdrop-blur-[2px]">
+                        <label className="cursor-pointer bg-white text-slate-900 px-4 py-2 rounded-xl text-sm font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
+                           <Upload className="w-4 h-4" /> {uploading ? 'Uploading...' : 'Upload New Image'}
+                           <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
+                        </label>
+                     </div>
+                  </div>
+                  {form.bannerImage && (
+                    <div className="flex justify-end">
+                      <button onClick={() => update('bannerImage', '')} className="text-xs text-red-500 hover:text-red-600 font-semibold">Remove Image</button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <AdminInput
+                    label="Department Title"
+                    value={form.title || ''}
+                    onChange={e => update('title', e.target.value)}
+                    placeholder={dept.fullName}
+                  />
+                  <AdminInput
+                    label="Tagline"
+                    value={form.tagline || ''}
+                    onChange={e => update('tagline', e.target.value)}
+                    placeholder="Excellence in ..."
+                  />
+                </div>
               </div>
-            )}
-          </div>
-          <div className="space-y-2">
-            <p className="text-xs text-slate-500">Recommended: 1400×500px, JPG or PNG, max 5MB</p>
-            <label className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500 text-white text-xs font-semibold rounded-xl cursor-pointer hover:bg-amber-600 transition-colors">
-              <Upload className="w-3.5 h-3.5" />
-              {uploading ? 'Uploading...' : 'Upload Image'}
-              <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
-            </label>
-            {form.bannerImage && (
-              <button onClick={() => update('bannerImage', '')} className="flex items-center gap-1.5 text-xs text-amber-500 hover:text-amber-600">
-                <X className="w-3.5 h-3.5" /> Remove
-              </button>
-            )}
-          </div>
+            </EditorCard>
+          </motion.div>
+
+          <motion.div initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} transition={{delay: 0.1}}>
+            <EditorCard title="Basic Information" description="Key department details and summary.">
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <AdminInput
+                    label="Year Established"
+                    icon={Clock}
+                    type="number"
+                    value={form.established || ''}
+                    onChange={e => update('established', e.target.value)}
+                    placeholder="2001"
+                  />
+                  <AdminInput
+                    label="Head of Department (HOD)"
+                    icon={User}
+                    value={form.hod || ''}
+                    onChange={e => update('hod', e.target.value)}
+                    placeholder="Dr. Name"
+                  />
+                </div>
+                <AdminTextarea
+                  label="Department Description"
+                  value={form.description || ''}
+                  onChange={e => update('description', e.target.value)}
+                  placeholder="Describe the department..."
+                  rows={5}
+                />
+              </div>
+            </EditorCard>
+          </motion.div>
+
+          <motion.div initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} transition={{delay: 0.2}}>
+            <EditorCard title="Vision & Mission" description="Strategic goals of the department.">
+              <div className="space-y-4">
+                <AdminTextarea
+                  label="Vision"
+                  value={form.vision || ''}
+                  onChange={e => update('vision', e.target.value)}
+                  placeholder="To be a globally recognized..."
+                  rows={3}
+                  icon={Compass}
+                />
+                <AdminTextarea
+                  label="Mission (One per line)"
+                  value={form.mission || ''}
+                  onChange={e => update('mission', e.target.value)}
+                  placeholder="1. First mission point\n2. Second mission point"
+                  rows={4}
+                  icon={Target}
+                />
+              </div>
+            </EditorCard>
+          </motion.div>
         </div>
-      </div>
 
-      {/* Basic Info */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-5">
-        <h3 className="text-sm font-semibold text-slate-700">Basic Information</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <Field label="Department Title" hint="Displayed as the main heading">
-            <input className={inputCls} value={form.title || ''} onChange={e => update('title', e.target.value)} placeholder={dept.fullName} />
-          </Field>
-          <Field label="Tagline" hint="Short tagline below the title">
-            <input className={inputCls} value={form.tagline || ''} onChange={e => update('tagline', e.target.value)} placeholder="Excellence in ..." />
-          </Field>
-          <Field label="Year Established">
-            <input className={inputCls} type="number" value={form.established || ''} onChange={e => update('established', e.target.value)} placeholder="2001" />
-          </Field>
-          <Field label="Head of Department (HOD)">
-            <input className={inputCls} value={form.hod || ''} onChange={e => update('hod', e.target.value)} placeholder="Dr. Name" />
-          </Field>
-        </div>
-        <Field label="Department Description" hint="Main description paragraph shown on the overview page">
-          <textarea className={textareaCls} rows={5} value={form.description || ''} onChange={e => update('description', e.target.value)} placeholder="Describe the department..." />
-        </Field>
-      </div>
+        {/* Right Side: Live Preview Panel */}
+        <div className="xl:col-span-5">
+          <div className="sticky top-24 max-h-[calc(100vh-140px)] flex flex-col">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <Monitor className="w-4 h-4" /> Live Preview
+            </h3>
+            
+            <div className="bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden flex-1 flex flex-col">
+              <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2 shrink-0">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                </div>
+                <div className="mx-auto bg-white border border-slate-200 rounded-md px-3 py-1 text-[10px] text-slate-400 font-mono flex-1 max-w-[200px] text-center truncate shadow-sm">
+                  cahcet.edu.in/departments/{deptKey}
+                </div>
+              </div>
 
-      {/* Vision & Mission */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-5">
-        <h3 className="text-sm font-semibold text-slate-700">Vision & Mission</h3>
-        <Field label="Vision" hint="Long-term aspiration of the department">
-          <textarea className={textareaCls} rows={3} value={form.vision || ''} onChange={e => update('vision', e.target.value)} placeholder="To be a globally recognized..." />
-        </Field>
-        <Field label="Mission" hint="What the department does to achieve its vision">
-          <textarea className={textareaCls} rows={4} value={form.mission || ''} onChange={e => update('mission', e.target.value)} placeholder="To provide quality education..." />
-        </Field>
-      </div>
-
-      {/* Sticky Save Bar */}
-      <div className="sticky bottom-4 z-10">
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-lg px-5 py-3 flex items-center justify-between gap-4">
-          <p className="text-xs text-slate-400">
-            {cms.lastSaved ? `Last saved: ${new Date(cms.lastSaved).toLocaleTimeString()}` : 'No changes saved yet'}
-          </p>
-          <div className="flex gap-2">
-            <button onClick={handleReset} className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-              <RotateCcw className="w-4 h-4" /> Reset
-            </button>
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              onClick={handleSave}
-              disabled={saving}
-              className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold transition-all
-                ${saved ? 'bg-amber-500 text-white' : 'bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/25 shadow-lg'}`}
-            >
-              {saved ? <CheckCircle className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-              {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Changes'}
-            </motion.button>
+              {/* Scrollable Preview Area */}
+              <div className="flex-1 overflow-y-auto bg-primary-50/50 p-0 relative">
+                 <div className="scale-[0.8] origin-top">
+                    <DepartmentHero data={previewHeroData} />
+                    <div className="p-8 bg-white/40 backdrop-blur-3xl rounded-[2.5rem] mt-8 mx-4 border border-white/60 shadow-luxury">
+                      <AboutSection data={previewAboutData} />
+                    </div>
+                 </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -177,7 +295,7 @@ const DeptOverviewEditor = ({ deptKey, dept, cms, session }) => {
           onClose={() => setShowHistory(false)}
         />
       )}
-    </div>
+    </EditorPage>
   );
 };
 

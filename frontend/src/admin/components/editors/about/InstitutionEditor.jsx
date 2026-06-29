@@ -1,72 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { Monitor, Upload, Plus, Trash2, GripVertical } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Trash2, Search, CheckCircle, ArrowLeft, Building2, UploadCloud, Monitor, Image as ImageIcon, CheckSquare } from 'lucide-react';
 import { useToast } from '../../ui/Toast';
 import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { AdminInput, AdminTextarea } from '../../ui/AdminInput';
 import { fileService } from '../../../services/fileService';
 import { cmsService } from '../../../../services/cmsService';
+import SectionPreviewModal from '../../ui/SectionPreviewModal';
+import { useEditorStatus } from '../../../utils/useEditorStatus';
+
+const fadeUp = { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -20 }, transition: { duration: 0.3 } };
 
 const InstitutionEditor = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  
   const [sectionsMap, setSectionsMap] = useState({});
+  const [pageId, setPageId] = useState(null);
+  const [previewSection, setPreviewSection] = useState(null);
+  const [activeTab, setActiveTab] = useState('hero'); // hero, college, history, parentOrg
+
   const [formHero, setFormHero] = useState({});
   const [formCollege, setFormCollege] = useState({});
   const [formHistory, setFormHistory] = useState({ sections: [] });
   const [formParentOrg, setFormParentOrg] = useState({});
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchPage = async () => {
     try {
-      setLoading(true);
       const res = await cmsService.getPage('about');
-      const sectionsArray = res.data?.sections || [];
-      
-      const sMap = {};
-      sectionsArray.forEach(sec => { sMap[sec.sectionKey] = sec; });
-      setSectionsMap(sMap);
+      setPageId(res.data?.id);
+      const sections = res.data?.sections || [];
+      const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
+      setSectionsMap(map);
 
-      if (sMap['about.hero']) setFormHero(JSON.parse(sMap['about.hero'].content || '{}'));
-      if (sMap['about.college']) setFormCollege(JSON.parse(sMap['about.college'].content || '{}'));
-      if (sMap['about.history']) setFormHistory(JSON.parse(sMap['about.history'].content || '{"sections":[]}'));
-      if (sMap['about.parentOrganization']) setFormParentOrg(JSON.parse(sMap['about.parentOrganization'].content || '{}'));
-      
-    } catch (err) {
-      toast({ type: 'error', title: 'Error', message: 'Failed to load data' });
-    } finally {
-      setLoading(false);
-    }
+      if (map['about.hero']) setFormHero(JSON.parse(map['about.hero'].draftContent || map['about.hero'].content || '{}'));
+      if (map['about.college']) setFormCollege(JSON.parse(map['about.college'].draftContent || map['about.college'].content || '{}'));
+      if (map['about.history']) setFormHistory(JSON.parse(map['about.history'].draftContent || map['about.history'].content || '{"sections":[]}'));
+      if (map['about.parentOrganization']) setFormParentOrg(JSON.parse(map['about.parentOrganization'].draftContent || map['about.parentOrganization'].content || '{}'));
+    } catch (err) { toast({ type: 'error', title: 'Error', message: 'Failed to load data.' }); } finally { setLoading(false); }
   };
+  useEffect(() => { fetchPage(); }, []);
 
-  const handleSave = async () => {
+  const handleSaveDraft = async (isSilent = false) => {
+    setLoading(true);
     try {
-      setSaving(true);
       const updates = [];
-      if (sectionsMap['about.hero']) {
-        updates.push(cmsService.updateSection(sectionsMap['about.hero'].id, { content: JSON.stringify(formHero) }));
-      }
-      if (sectionsMap['about.college']) {
-        updates.push(cmsService.updateSection(sectionsMap['about.college'].id, { content: JSON.stringify(formCollege) }));
-      }
-      if (sectionsMap['about.history']) {
-        updates.push(cmsService.updateSection(sectionsMap['about.history'].id, { content: JSON.stringify(formHistory) }));
-      }
-      if (sectionsMap['about.parentOrganization']) {
-        updates.push(cmsService.updateSection(sectionsMap['about.parentOrganization'].id, { content: JSON.stringify(formParentOrg) }));
-      }
+      const pushUpdate = async (key, title, content) => {
+        if (sectionsMap[key]) {
+          updates.push(cmsService.updateSection(sectionsMap[key].id, { draftContent: content, _isSilentDraft: isSilent }));
+        } else {
+          const res = await cmsService.createSection({ pageId, sectionKey: key, title, draftContent: content, _isSilentDraft: isSilent });
+          setSectionsMap(prev => ({ ...prev, [key]: res.data }));
+        }
+      };
+
+      await pushUpdate('about.hero', 'Hero Banner', JSON.stringify(formHero));
+      await pushUpdate('about.college', 'College Overview', JSON.stringify(formCollege));
+      await pushUpdate('about.history', 'History', JSON.stringify(formHistory));
+      await pushUpdate('about.parentOrganization', 'Parent Organization', JSON.stringify(formParentOrg));
+
       await Promise.all(updates);
-      toast({ type: 'success', title: 'Saved!', message: 'Institution changes saved directly to the database.' });
-    } catch (err) {
-      toast({ type: 'error', title: 'Save Failed', message: err.message });
-    } finally {
-      setSaving(false);
-    }
+      if (!isSilent) toast({ type: 'success', title: 'Saved', message: 'Institution sections saved to draft.' });
+    } catch (err) { toast({ type: 'error', title: 'Error', message: 'Failed to save.' }); } finally { setLoading(false); }
   };
 
   const handleBannerUpload = async (e) => {
@@ -74,161 +69,116 @@ const InstitutionEditor = () => {
     setUploading(true);
     try {
       const rec = await fileService.upload(file, 'about', 'banner');
-      setFormHero(p => ({ ...p, bannerUrl: rec.url }));
-    } catch {}
+      const newHero = { ...formHero, bannerUrl: rec.url };
+      setFormHero(newHero);
+      handleSaveDraft(true);
+    } catch { toast({ type: 'error', title: 'Upload Failed' }); }
     setUploading(false);
   };
 
-  const addHighlight = () => {
-    setFormHistory(prev => ({
-      ...prev,
-      sections: [...(prev.sections || []), { id: Date.now(), title: 'New History Section', text: '', align: 'left' }]
-    }));
+  const handleImageUpload = async (e, index) => {
+    const file = e.target.files?.[0]; if (!file) return;
+    try {
+      const rec = await fileService.upload(file, 'about', 'history');
+      const newSections = [...(formHistory.sections || [])];
+      newSections[index] = { ...newSections[index], image: rec.url };
+      setFormHistory(p => ({ ...p, sections: newSections }));
+      handleSaveDraft(true);
+    } catch {}
   };
 
-  const updateHighlight = (index, field, value) => {
-    setFormHistory(prev => {
-      const newSections = [...(prev.sections || [])];
-      newSections[index] = { ...newSections[index], [field]: value };
-      return { ...prev, sections: newSections };
-    });
-  };
+  const { status, lastModified, validationIssues } = useEditorStatus(sectionsMap, `about.${activeTab}`, formHero);
 
-  const removeHighlight = (index) => {
-    setFormHistory(prev => ({
-      ...prev,
-      sections: (prev.sections || []).filter((_, i) => i !== index)
-    }));
-  };
-
-  if (loading) {
-    return <div className="p-8 text-center">Loading Database CMS...</div>;
-  }
+  if (loading && !Object.keys(sectionsMap).length) return <div>Loading...</div>;
 
   return (
-    <EditorPage
-      title="Institution Settings (Database)"
-      description="Manage the main information about the college, including history, vision, and mission. Saves directly to MySQL CMS."
-      breadcrumb={['Admin', 'About', 'Institution']}
-      onSave={handleSave}
-      isLoading={saving}
-    >
-      <EditorCard title="Hero Banner" description="The main background image at the top of the institution page.">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <input 
-              type="text" 
-              className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 transition-all bg-white text-slate-800"
-              value={formHero.bannerUrl || ''}
-              onChange={e => setFormHero(p => ({ ...p, bannerUrl: e.target.value }))}
-              placeholder="URL to banner image..."
-            />
+    <EditorPage title="Institution Records" description="Manage main information about the college." breadcrumb={['Admin', 'About', 'Institution']} onSave={() => handleSaveDraft(false)} onPublish={async () => { await handleSaveDraft(true); setPreviewSection(sectionsMap[`about.${activeTab}`]); }} onReset={fetchPage} isLoading={loading} status={status} lastModified={lastModified} validationIssues={validationIssues}>
+      <motion.div key="main" {...fadeUp} className="space-y-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="p-5 rounded-2xl border bg-indigo-50 text-indigo-700 border-indigo-100 relative overflow-hidden"><CheckSquare className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">Sections Managed</span><span className="text-3xl font-extrabold">4</span></div>
+          <div className="p-5 rounded-2xl border bg-amber-50 text-amber-700 border-amber-100 relative overflow-hidden"><ImageIcon className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">History Images</span><span className="text-3xl font-extrabold">{(formHistory.sections || []).length}</span></div>
+        </div>
+
+        <div className="bg-white/80 backdrop-blur-xl border border-slate-200 p-2 rounded-2xl flex gap-2 sticky top-[132px] z-20 shadow-sm w-max">
+          <button onClick={() => setActiveTab('hero')} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'hero' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50'}`}>Hero Section</button>
+          <button onClick={() => setActiveTab('college')} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'college' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50'}`}>Overview</button>
+          <button onClick={() => setActiveTab('parentOrganization')} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'parentOrganization' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50'}`}>Parent Org</button>
+          <button onClick={() => setActiveTab('history')} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === 'history' ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50'}`}>History Timeline</button>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+          <div className="xl:col-span-8 space-y-6">
+            {activeTab === 'hero' && (
+              <EditorCard title="Hero Configuration">
+                <div className="space-y-6">
+                  <div className="aspect-[21/9] rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center relative group">
+                    {formHero.bannerUrl ? (
+                      <><img src={formHero.bannerUrl} alt="Banner" className="w-full h-full object-cover"/><div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"><label className="cursor-pointer text-white text-xs font-bold px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 backdrop-blur-md"><UploadCloud className="w-4 h-4 inline mr-2"/>Change Banner<input type="file" className="hidden" onChange={handleBannerUpload} disabled={uploading} /></label></div></>
+                    ) : (
+                      <label className="cursor-pointer flex flex-col items-center gap-2 text-slate-400 hover:text-indigo-500 transition-colors"><UploadCloud className="w-8 h-8"/> <span className="text-sm font-bold">Upload Banner</span><input type="file" className="hidden" onChange={handleBannerUpload} disabled={uploading} /></label>
+                    )}
+                  </div>
+                  <AdminInput label="Hero Title" value={formHero.title || ''} onChange={e => setFormHero(p => ({ ...p, title: e.target.value }))} placeholder="Welcome to CAHCET" />
+                  <AdminTextarea label="Hero Subtitle" value={formHero.subtitle || ''} onChange={e => setFormHero(p => ({ ...p, subtitle: e.target.value }))} rows={3} placeholder="A premier engineering institution..." />
+                </div>
+              </EditorCard>
+            )}
+
+            {activeTab === 'college' && (
+              <EditorCard title="College Overview">
+                <AdminInput label="Overview Title" value={formCollege.title || ''} onChange={e => setFormCollege(p => ({ ...p, title: e.target.value }))} />
+                <div className="mt-4"><AdminTextarea label="Overview Content" value={formCollege.overview || ''} onChange={e => setFormCollege(p => ({ ...p, overview: e.target.value }))} rows={8} /></div>
+              </EditorCard>
+            )}
+
+            {activeTab === 'parentOrganization' && (
+              <EditorCard title="Parent Organization (MMES)">
+                <AdminInput label="Organization Name" value={formParentOrg.title || ''} onChange={e => setFormParentOrg(p => ({ ...p, title: e.target.value }))} />
+                <div className="mt-4"><AdminTextarea label="Description" value={formParentOrg.description || ''} onChange={e => setFormParentOrg(p => ({ ...p, description: e.target.value }))} rows={6} /></div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <AdminInput label="Short Name" value={formParentOrg.shortName || ''} onChange={e => setFormParentOrg(p => ({ ...p, shortName: e.target.value }))} />
+                  <AdminInput label="Established Year" value={formParentOrg.since || ''} onChange={e => setFormParentOrg(p => ({ ...p, since: e.target.value }))} />
+                </div>
+              </EditorCard>
+            )}
+
+            {activeTab === 'history' && (
+              <EditorCard title="History Timeline">
+                <div className="space-y-6">
+                  {(formHistory.sections || []).map((section, index) => (
+                    <div key={section.id || index} className="p-5 bg-white border border-slate-200 rounded-2xl shadow-sm relative group">
+                      <button onClick={() => setFormHistory(p => ({ ...p, sections: p.sections.filter((_, i) => i !== index) }))} className="absolute top-4 right-4 p-2 text-red-400 hover:text-red-600 bg-red-50 rounded-xl opacity-0 group-hover:opacity-100 transition-all"><Trash2 className="w-4 h-4" /></button>
+                      <div className="space-y-4 pr-12">
+                        <AdminInput label="Timeline Era / Title" value={section.title || ''} onChange={e => { const n = [...formHistory.sections]; n[index].title = e.target.value; setFormHistory(p => ({ ...p, sections: n })); }} />
+                        <AdminTextarea label="Historical Details" value={section.text || ''} onChange={e => { const n = [...formHistory.sections]; n[index].text = e.target.value; setFormHistory(p => ({ ...p, sections: n })); }} rows={3} />
+                        <div className="flex items-center gap-4">
+                           {section.image && <img src={section.image} className="w-20 h-20 object-cover rounded-xl border border-slate-200" />}
+                           <label className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 text-sm font-bold rounded-xl cursor-pointer hover:bg-slate-200"><UploadCloud className="w-4 h-4"/> Upload Photo<input type="file" className="hidden" onChange={e => handleImageUpload(e, index)}/></label>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <button onClick={() => setFormHistory(p => ({ ...p, sections: [...(p.sections || []), { id: Date.now(), title: '', text: '', image: '' }] }))} className="flex items-center justify-center w-full gap-2 px-4 py-3 bg-indigo-50 text-indigo-600 font-bold rounded-xl border border-indigo-100 hover:bg-indigo-100 transition-colors"><Plus className="w-4 h-4" /> Add History Entry</button>
+                </div>
+              </EditorCard>
+            )}
           </div>
-          <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl cursor-pointer hover:bg-slate-200 transition-colors shrink-0 border border-slate-200">
-            <Upload className="w-4 h-4" /> {uploading ? 'Uploading...' : 'Upload Image'}
-            <input type="file" accept="image/*" className="hidden" onChange={handleBannerUpload} disabled={uploading} />
-          </label>
-        </div>
-        {formHero.bannerUrl && (
-          <div className="mt-4 aspect-[21/9] rounded-xl overflow-hidden border border-slate-200">
-             <img src={formHero.bannerUrl} alt="Banner" className="w-full h-full object-cover" />
-          </div>
-        )}
-
-        <div className="mt-4 space-y-4">
-          <AdminInput
-            label="Hero Title"
-            value={formHero.title || ''}
-            onChange={e => setFormHero(p => ({ ...p, title: e.target.value }))}
-          />
-          <AdminTextarea
-            label="Hero Subtitle"
-            value={formHero.subtitle || ''}
-            onChange={e => setFormHero(p => ({ ...p, subtitle: e.target.value }))}
-            rows={2}
-          />
-        </div>
-      </EditorCard>
-
-      <EditorCard title="General Overview" description="The primary introductory text for the college.">
-        <AdminInput
-          label="Institution Heading"
-          value={formCollege.title || ''}
-          onChange={e => setFormCollege(p => ({ ...p, title: e.target.value }))}
-        />
-        <div className="mt-4">
-          <AdminTextarea
-            label="Overview Paragraph"
-            value={formCollege.overview || ''}
-            onChange={e => setFormCollege(p => ({ ...p, overview: e.target.value }))}
-            rows={5}
-          />
-        </div>
-      </EditorCard>
-
-      <EditorCard title="Parent Organization" description="Information about MMES.">
-        <AdminInput
-          label="Organization Title"
-          value={formParentOrg.title || ''}
-          onChange={e => setFormParentOrg(p => ({ ...p, title: e.target.value }))}
-        />
-        <div className="mt-4">
-          <AdminTextarea
-            label="Description"
-            value={formParentOrg.description || ''}
-            onChange={e => setFormParentOrg(p => ({ ...p, description: e.target.value }))}
-            rows={4}
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4 mt-4">
-          <AdminInput
-            label="Short Name"
-            value={formParentOrg.shortName || ''}
-            onChange={e => setFormParentOrg(p => ({ ...p, shortName: e.target.value }))}
-          />
-          <AdminInput
-            label="Since"
-            value={formParentOrg.since || ''}
-            onChange={e => setFormParentOrg(p => ({ ...p, since: e.target.value }))}
-          />
-        </div>
-      </EditorCard>
-
-      <EditorCard title="History Sections" description="Manage the history paragraphs and images.">
-        <div className="space-y-4">
-          {(formHistory.sections || []).map((section, index) => (
-            <div key={section.id || index} className="p-4 bg-slate-50 border border-slate-100 rounded-xl flex gap-3">
-              <GripVertical className="w-5 h-5 text-slate-300 mt-2 shrink-0 cursor-move" />
-              <div className="flex-1 space-y-3">
-                <AdminInput
-                  label="Section Title"
-                  value={section.title || ''}
-                  onChange={e => updateHighlight(index, 'title', e.target.value)}
-                />
-                <AdminTextarea
-                  label="Description"
-                  value={section.text || ''}
-                  onChange={e => updateHighlight(index, 'text', e.target.value)}
-                  rows={3}
-                />
-                <AdminInput
-                  label="Image URL"
-                  value={section.image || ''}
-                  onChange={e => updateHighlight(index, 'image', e.target.value)}
-                />
+          
+          <div className="xl:col-span-4 hidden xl:block">
+            <div className="sticky top-40 bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden">
+              <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2"><Monitor className="w-4 h-4 text-slate-400"/><span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Live Preview Area</span></div>
+              <div className="p-6">
+                <div className="flex flex-col items-center justify-center py-12 text-center text-slate-400">
+                  <Building2 className="w-12 h-12 mb-3 text-slate-200" />
+                  <p className="text-sm font-medium">Click "Preview Changes" on the action bar to see the full page rendering in the Modal.</p>
+                </div>
               </div>
-              <button onClick={() => removeHighlight(index)} className="p-2 text-amber-400 hover:text-amber-500 hover:bg-primary-50 rounded-lg transition-colors h-max">
-                <Trash2 className="w-5 h-5" />
-              </button>
             </div>
-          ))}
-          <button onClick={addHighlight} className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-amber-600 bg-primary-50 hover:bg-primary-100 rounded-xl transition-colors">
-            <Plus className="w-4 h-4" /> Add History Section
-          </button>
+          </div>
         </div>
-      </EditorCard>
+      </motion.div>
+      {previewSection && <SectionPreviewModal section={previewSection} onClose={()=>setPreviewSection(null)} onPublish={async (sec)=>{await cmsService.publishSection(sec.id); setPreviewSection(null); fetchPage();}} onRestore={fetchPage} />}
     </EditorPage>
   );
 };
-
 export default InstitutionEditor;

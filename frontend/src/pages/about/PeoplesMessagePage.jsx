@@ -28,14 +28,14 @@ export default function PeoplesMessagePage() {
         let newMessages = [...fallbackMessages];
         
         if (chairmanSec) {
-          const data = JSON.parse(chairmanSec.content);
+          let data = {}; try { if(chairmanSec && chairmanSec.content) { data = JSON.parse(chairmanSec.content); } } catch(e){}
           if (data && data.name) {
             newMessages = newMessages.map(m => m.id === 'chairman' ? data : m);
           }
         }
         
         if (principalSec) {
-          const data = JSON.parse(principalSec.content);
+          let data = {}; try { if(principalSec && principalSec.content) { data = JSON.parse(principalSec.content); } } catch(e){}
           if (data && data.name) {
             newMessages = newMessages.map(m => m.id === 'principal' ? data : m);
           }

@@ -336,7 +336,15 @@ const UserManagementEditor = () => {
   const [saved, setSaved] = useState(false);
   const [confirmDeactivate, setConfirmDeactivate] = useState(false);
 
-  const refresh = () => setUsers(getAllUsers());
+  const refresh = async () => {
+    try {
+      const data = await getAllUsers();
+      setUsers(data || []);
+    } catch (e) {
+      console.error(e);
+      setUsers([]);
+    }
+  };
   useEffect(() => { refresh(); }, []);
 
   if (!isSuperAdmin) {

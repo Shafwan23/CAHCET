@@ -4,6 +4,8 @@ import { useToast } from '../../ui/Toast';
 import EditorPage, { EditorCard } from '../../ui/EditorPage';
 import { AdminInput, AdminTextarea } from '../../ui/AdminInput';
 import { cmsService } from '../../../../services/cmsService';
+import { motion } from 'framer-motion';
+import { ShieldAlert, Monitor } from 'lucide-react';
 
 const AdmissionProcedureEditor = () => {
   const toast = useToast();
@@ -90,7 +92,9 @@ const AdmissionProcedureEditor = () => {
       onSave={handleSave}
       isLoading={saving}
     >
-      <div className="space-y-6">
+      <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:0.3}} className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+        <div className="xl:col-span-8 space-y-6">
+          <div className="p-5 rounded-2xl border bg-slate-50 text-slate-700 border-slate-200 flex justify-between items-center"><div className="flex items-center gap-3"><ShieldAlert className="w-8 h-8 text-slate-400"/><span className="font-bold">Enterprise Module Manager</span></div><div className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold">admissions</div></div>
         <EditorCard title="Page Headers">
           <div className="space-y-4">
             <AdminInput label="Main Heading" value={formHero.title || ''} onChange={e => setFormHero(p => ({ ...p, title: e.target.value }))} />
@@ -137,6 +141,16 @@ const AdmissionProcedureEditor = () => {
           </div>
         </EditorCard>
       </div>
+          <div className="xl:col-span-4 hidden xl:block">
+           <div className="sticky top-40 bg-white rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.06)] overflow-hidden">
+             <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2"><Monitor className="w-4 h-4 text-slate-400"/><span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Live Preview</span></div>
+             <div className="p-6 prose prose-sm max-w-none text-slate-600">
+               <h3 className="text-xl font-bold text-slate-900 mb-1">Live Module Preview</h3>
+               <div className="line-clamp-[12] whitespace-pre-wrap text-slate-400 italic">Preview updates as you type. Draft data is managed securely.</div>
+             </div>
+           </div>
+        </div>
+      </motion.div>
     </EditorPage>
   );
 };

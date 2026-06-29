@@ -9,8 +9,8 @@ const AccordionItem = ({ title, icon: Icon, children, isOpen, onToggle }) => {
     <motion.div 
       whileHover={{ scale: 1.01 }}
       className={cn(
-        "border rounded-2xl overflow-hidden transition-all duration-300",
-        isOpen ? "border-accent-gold bg-white shadow-xl shadow-accent-gold/10" : "border-primary-100 bg-white hover:border-primary-300 hover:shadow-luxury-hover"
+        "border rounded-3xl overflow-hidden transition-all duration-300",
+        isOpen ? "border-accent-gold bg-white shadow-xl shadow-accent-gold/10" : "border-primary-100 bg-white hover:border-primary-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)]-hover"
       )}
     >
       <button 
@@ -79,7 +79,7 @@ const AboutSection = ({ data }) => {
         viewport={{ once: true, margin: "-50px" }}
         className="space-y-4"
       >
-        <motion.div variants={departmentAnimations.fadeUp}>
+        <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
           <AccordionItem 
             title="About the Department" 
             icon={Info}
@@ -90,7 +90,7 @@ const AboutSection = ({ data }) => {
           </AccordionItem>
         </motion.div>
 
-        <motion.div variants={departmentAnimations.fadeUp}>
+        <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
           <AccordionItem 
             title="Vision" 
             icon={Compass}
@@ -103,7 +103,7 @@ const AboutSection = ({ data }) => {
           </AccordionItem>
         </motion.div>
 
-        <motion.div variants={departmentAnimations.fadeUp}>
+        <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
           <AccordionItem 
             title="Mission" 
             icon={Target}
@@ -121,7 +121,7 @@ const AboutSection = ({ data }) => {
           </AccordionItem>
         </motion.div>
 
-        <motion.div variants={departmentAnimations.fadeUp}>
+        <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
           <AccordionItem 
             title="Program Educational Objectives (PEOs)" 
             icon={Star}
@@ -139,7 +139,7 @@ const AboutSection = ({ data }) => {
           </AccordionItem>
         </motion.div>
 
-        <motion.div variants={departmentAnimations.fadeUp}>
+        <motion.div variants={{ hidden: { opacity: 0, y: 30, scale: 0.95 }, visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 100, damping: 20 } } }}>
           <AccordionItem 
             title="Program Outcomes (POs) & PSOs" 
             icon={BookOpen}

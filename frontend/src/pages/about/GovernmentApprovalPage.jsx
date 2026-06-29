@@ -80,7 +80,7 @@ export default function GovernmentApprovalPage() {
         
         const aicteSec = sections.find(s => s.sectionKey === 'about.accreditation');
         if (aicteSec) {
-          const parsed = JSON.parse(aicteSec.content);
+          let parsed = {}; try { if(aicteSec && aicteSec.content) { parsed = JSON.parse(aicteSec.content); } } catch(e){}
           if (parsed.documents) newState.aicte = parsed.documents;
         }
         
@@ -89,11 +89,11 @@ export default function GovernmentApprovalPage() {
         
         let accList = [];
         if (recognitionSec) {
-          const parsed = JSON.parse(recognitionSec.content);
+          let parsed = {}; try { if(recognitionSec && recognitionSec.content) { parsed = JSON.parse(recognitionSec.content); } } catch(e){}
           if (parsed.documents) accList = [...accList, ...parsed.documents];
         }
         if (affiliationSec) {
-          const parsed = JSON.parse(affiliationSec.content);
+          let parsed = {}; try { if(affiliationSec && affiliationSec.content) { parsed = JSON.parse(affiliationSec.content); } } catch(e){}
           if (parsed.documents) accList = [...accList, ...parsed.documents];
         }
         

@@ -46,13 +46,13 @@ MMES Public School(CBSE)`,
         const newState = { ...data };
         
         const collegeSec = sections.find(s => s.sectionKey === 'about.college');
-        if (collegeSec) newState.college = JSON.parse(collegeSec.content);
+        if (collegeSec) try { if(collegeSec && collegeSec.content) { let _p = {}; try { if(collegeSec && collegeSec.content) { _p = JSON.parse(collegeSec.content); } } catch(e){} if (Object.keys(_p).length) newState.college = _p; } } catch(e) {}
         
         const historySec = sections.find(s => s.sectionKey === 'about.history');
-        if (historySec) newState.history = JSON.parse(historySec.content);
+        if (historySec) try { if(historySec && historySec.content) { let _p = {}; try { if(historySec && historySec.content) { _p = JSON.parse(historySec.content); } } catch(e){} if (Object.keys(_p).length) newState.history = _p; } } catch(e) {}
         
         const parentOrgSec = sections.find(s => s.sectionKey === 'about.parentOrganization');
-        if (parentOrgSec) newState.parentOrg = JSON.parse(parentOrgSec.content);
+        if (parentOrgSec) try { if(parentOrgSec && parentOrgSec.content) { let _p = {}; try { if(parentOrgSec && parentOrgSec.content) { _p = JSON.parse(parentOrgSec.content); } } catch(e){} if (Object.keys(_p).length) newState.parentOrg = _p; } } catch(e) {}
         
         setData(newState);
       } catch (err) {
