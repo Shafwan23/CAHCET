@@ -21,8 +21,8 @@ const getIcon = (name) => {
 export default function ChatbotWelcomeScreen({ isFullscreen, handleSend }) {
   const { setMessages } = useChatbotContext();
   const [chatbotSettings, setChatbotSettings] = useState({});
-  const welcomeScreen = chatbotSettings.welcomeScreen || {};
-  const animationIntensity = chatbotSettings.animationIntensity || 'high';
+  const welcomeScreen = chatbotSettings?.welcomeScreen || {};
+  const animationIntensity = chatbotSettings?.animationIntensity || 'high';
   
   useEffect(() => {
     const fetchSettings = async () => {
@@ -31,7 +31,8 @@ export default function ChatbotWelcomeScreen({ isFullscreen, handleSend }) {
         const sections = res.data?.sections || [];
         const botSection = sections.find(s => s.sectionKey === 'system.chatbot');
         if (botSection) {
-          setChatbotSettings(JSON.parse(botSection.content));
+          const parsed = JSON.parse(botSection.content);
+          setChatbotSettings(parsed || {});
         }
       } catch (err) {
         console.error("Failed to load chatbot settings", err);
@@ -141,7 +142,7 @@ export default function ChatbotWelcomeScreen({ isFullscreen, handleSend }) {
             isFullscreen ? "w-16 h-16" : "w-14 h-14",
             !isReduced && "animate-pulse"
           )}>
-            {chatbotSettings.avatarUrl === 'sparkles' ? (
+            {chatbotSettings?.avatarUrl === 'sparkles' ? (
               <Sparkles className={cn("text-accent-gold", isFullscreen ? "w-8 h-8" : "w-7 h-7")} />
             ) : (
               <Brain className={cn("text-accent-gold", isFullscreen ? "w-8 h-8" : "w-7 h-7")} />
