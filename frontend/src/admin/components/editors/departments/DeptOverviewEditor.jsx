@@ -125,7 +125,7 @@ const DeptOverviewEditor = ({ deptKey, dept, cms, session }) => {
         {/* Left Side: Configuration Panel */}
         <div className="xl:col-span-7 space-y-6">
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
                 <div className="flex justify-between items-start">
                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Completeness</p>
@@ -158,7 +158,7 @@ const DeptOverviewEditor = ({ deptKey, dept, cms, session }) => {
                   <label className="block text-xs font-semibold text-slate-600 mb-1.5">Department Banner Image</label>
                   <div className="relative group overflow-hidden rounded-xl bg-slate-50 border border-slate-200 aspect-[21/9] flex items-center justify-center mb-3">
                      {form.bannerImage ? (
-                       <img src={form.bannerImage} alt="Banner" className="w-full h-full object-cover" />
+                       <img loading="lazy" decoding="async" src={form.bannerImage} alt="Banner" className="w-full h-full object-cover" />
                      ) : (
                        <div className="flex flex-col items-center justify-center text-slate-400">
                           <ImageIcon className="w-8 h-8 mb-2 opacity-50" />

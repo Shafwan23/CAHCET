@@ -223,7 +223,7 @@ const DepartmentsOverviewEditor = () => {
         <div className="xl:col-span-7 space-y-6">
           
           {/* Dashboard/KPI Cards */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Engineering Programs</p>
@@ -354,7 +354,7 @@ const DepartmentsOverviewEditor = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
                       <div className="md:col-span-7 space-y-4">
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                           <div className="col-span-2">
                             <AdminInput
                               label="Full Title"
@@ -400,7 +400,7 @@ const DepartmentsOverviewEditor = () => {
                         <label className="block text-xs font-semibold text-slate-600 mb-1.5">Program Image</label>
                         <div className="relative group overflow-hidden rounded-xl bg-slate-50 border border-slate-200 aspect-[4/3] flex items-center justify-center">
                            {item.image ? (
-                             <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                             <img loading="lazy" decoding="async" src={item.image} alt={item.title} className="w-full h-full object-cover" />
                            ) : (
                              <div className="flex flex-col items-center justify-center text-slate-400">
                                 <Upload className="w-6 h-6 mb-2 opacity-50" />

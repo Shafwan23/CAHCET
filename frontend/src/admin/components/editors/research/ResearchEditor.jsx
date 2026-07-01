@@ -191,7 +191,7 @@ const ResearchEditor = () => {
             </EditorCard>
 
             <EditorCard title="Research Statistics" description="Dynamic counters for the research portal.">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <AdminInput label="Publications" value={form.stats?.publications || ''} onChange={e => changeStat('publications', e.target.value)} placeholder="e.g. 500+" />
                 <AdminInput label="Patents Filed" value={form.stats?.patents || ''} onChange={e => changeStat('patents', e.target.value)} placeholder="e.g. 20+" />
                 <AdminInput label="Funding Proposals" value={form.stats?.grants || ''} onChange={e => changeStat('grants', e.target.value)} placeholder="e.g. 14+" />
@@ -241,7 +241,7 @@ const ResearchEditor = () => {
                   <div key={member.id} className="p-4 bg-white border border-slate-200 rounded-xl relative flex flex-col gap-3">
                     <button onClick={() => removeTeamMember(idx)} className="absolute top-2 right-2 p-1.5 text-amber-400 hover:text-amber-600 rounded-lg transition-colors z-10"><Trash2 className="w-4 h-4" /></button>
                     <div className="w-20 h-20 bg-slate-50 border border-slate-200 rounded-full mx-auto flex items-center justify-center overflow-hidden relative group/img">
-                      {member.image ? <img src={member.image} className="w-full h-full object-cover" /> : <span className="text-[10px] text-slate-400">Photo</span>}
+                      {member.image ? <img loading="lazy" decoding="async" src={member.image} className="w-full h-full object-cover" /> : <span className="text-[10px] text-slate-400">Photo</span>}
                       <label className="absolute inset-0 bg-black/50 text-white flex flex-col items-center justify-center opacity-0 group-hover/img:opacity-100 cursor-pointer transition-opacity">
                         <Upload className="w-4 h-4" />
                         <input type="file" accept="image/*" className="hidden" onChange={e => handleTeamImage(idx, e.target.files[0])} />
@@ -276,7 +276,7 @@ const ResearchEditor = () => {
                     <div className="flex flex-wrap gap-3">
                       {(sec.images || []).map((img, imgIdx) => (
                         <div key={imgIdx} className="relative w-24 h-24 rounded-lg overflow-hidden border border-slate-200 group/img shadow-sm">
-                          <img src={img} alt="Research" className="w-full h-full object-cover" />
+                          <img loading="lazy" decoding="async" src={img} alt="Research" className="w-full h-full object-cover" />
                           <button onClick={() => removeSectionImage(idx, imgIdx)} className="absolute top-1 right-1 p-1 bg-amber-500 text-white rounded-full opacity-0 group-hover/img:opacity-100 transition-opacity"><X className="w-3 h-3" /></button>
                         </div>
                       ))}
@@ -304,7 +304,7 @@ const ResearchEditor = () => {
                     <div className="space-y-3 pr-8">
                       <AdminInput label="Publication Title" value={pub.title} onChange={e => updatePublication(idx, 'title', e.target.value)} />
                       <AdminInput label="Authors" value={pub.authors} onChange={e => updatePublication(idx, 'authors', e.target.value)} />
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <AdminInput label="Journal / Conference" value={pub.journal} onChange={e => updatePublication(idx, 'journal', e.target.value)} />
                         <AdminInput label="Year" value={pub.year} onChange={e => updatePublication(idx, 'year', e.target.value)} />
                       </div>
@@ -342,7 +342,7 @@ const ResearchEditor = () => {
                     <div key={collab.id} className="p-4 bg-white border border-slate-200 rounded-xl relative flex gap-4 items-start">
                       <button onClick={() => removeCollaboration(idx)} className="absolute top-2 right-2 p-1.5 text-amber-400 hover:text-amber-600 rounded-lg transition-colors"><Trash2 className="w-4 h-4" /></button>
                       <div className="w-16 h-16 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-center shrink-0 overflow-hidden relative group/collab">
-                        {collab.logoUrl ? <img src={collab.logoUrl} className="w-full h-full object-contain p-1" /> : <span className="text-[9px] text-slate-400">Logo</span>}
+                        {collab.logoUrl ? <img loading="lazy" decoding="async" src={collab.logoUrl} className="w-full h-full object-contain p-1" /> : <span className="text-[9px] text-slate-400">Logo</span>}
                         <label className="absolute inset-0 bg-black/60 text-white flex flex-col items-center justify-center opacity-0 group-hover/collab:opacity-100 cursor-pointer transition-opacity">
                           <Upload className="w-3 h-3 mb-1" />
                           <input type="file" accept="image/*" className="hidden" onChange={e => handleCollabLogo(idx, e.target.files[0])} />

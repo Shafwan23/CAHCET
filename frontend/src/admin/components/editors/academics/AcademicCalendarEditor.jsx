@@ -167,7 +167,7 @@ const AcademicCalendarEditor = () => {
                   
                   <div className="flex-1 space-y-3">
                     <AdminInput value={doc.title} onChange={e => updateDocument(idx, 'title', e.target.value)} placeholder="Title (e.g. Odd Semester 2026)" />
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <AdminInput value={doc.academicYear} onChange={e => updateDocument(idx, 'academicYear', e.target.value)} placeholder="Year (e.g. 2025-2026)" />
                       <AdminInput value={doc.type} onChange={e => updateDocument(idx, 'type', e.target.value)} placeholder="Type (e.g. Calendar, Timetable)" />
                     </div>

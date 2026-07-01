@@ -236,7 +236,7 @@ const PlacementExcellenceEditor = () => {
           <div className="flex flex-wrap gap-4">
             {(form.featuredLogos || []).map((logo, index) => (
               <div key={index} className="w-24 h-16 bg-white border border-slate-200 rounded-xl relative group flex items-center justify-center p-2">
-                <img src={logo} alt="Recruiter" className="max-w-full max-h-full object-contain" />
+                <img loading="lazy" decoding="async" src={logo} alt="Recruiter" className="max-w-full max-h-full object-contain" />
                 <div className="absolute inset-0 bg-black/50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <button onClick={() => removeLogo(index)} className="p-1.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors">
                     <Trash2 className="w-4 h-4" />
@@ -316,7 +316,7 @@ const PlacementExcellenceEditor = () => {
                      <div className="flex flex-wrap gap-2 justify-center">
                        {form.featuredLogos.slice(0, 5).map((logo, i) => (
                          <div key={i} className="w-12 h-8 bg-white rounded flex items-center justify-center p-1">
-                           <img src={logo} alt="Logo" className="max-w-full max-h-full object-contain" />
+                           <img loading="lazy" decoding="async" src={logo} alt="Logo" className="max-w-full max-h-full object-contain" />
                          </div>
                        ))}
                        {form.featuredLogos.length > 5 && (

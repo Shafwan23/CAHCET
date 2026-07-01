@@ -34,7 +34,7 @@ const WelcomeSection = ({ data }) => {
             className="relative"
           >
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
-              <img
+              <img loading="lazy" decoding="async"
                 src={principalImage || principalImg}
                 alt="Principal's Message"
                 className="w-full h-[300px] md:h-[450px] lg:h-[600px] object-cover"

@@ -78,14 +78,14 @@ const SettingsPanel = () => {
         <div className="space-y-4">
           <AdminInput label="Website Title" value={form.websiteTitle || ''} onChange={e => change('websiteTitle', e.target.value)} placeholder="CAHCET" hint="Used in browser tab and system references." />
           <AdminInput label="Logo URL" value={form.logoUrl || ''} onChange={e => change('logoUrl', e.target.value)} placeholder="https://..." hint="URL of the college logo image." />
-          {form.logoUrl && <img src={form.logoUrl} alt="Logo preview" className="h-16 object-contain rounded-xl border border-slate-100 bg-slate-50 p-2" />}
+          {form.logoUrl && <img loading="lazy" decoding="async" src={form.logoUrl} alt="Logo preview" className="h-16 object-contain rounded-xl border border-slate-100 bg-slate-50 p-2" />}
         </div>
       </EditorCard>
 
       {/* Theme */}
       <EditorCard title="Theme Settings">
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-semibold text-slate-700 mb-1.5 block">Primary Color</label>
               <div className="flex items-center gap-3">

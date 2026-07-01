@@ -160,7 +160,7 @@ const DeptGalleryEditor = ({ deptKey, dept, cms, session }) => {
         {/* Left Side: Configuration Panel */}
         <div className="xl:col-span-7 space-y-6">
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
                 <div className="flex justify-between items-start">
                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Albums</p>
@@ -229,7 +229,7 @@ const DeptGalleryEditor = ({ deptKey, dept, cms, session }) => {
                       <div className="flex items-center gap-3">
                          <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-500 overflow-hidden shrink-0 shadow-sm relative">
                            {item.images && item.images.length > 0 ? (
-                             <img src={item.images[0].url || item.images[0]} alt="cover" className="w-full h-full object-cover" />
+                             <img loading="lazy" decoding="async" src={item.images[0].url || item.images[0]} alt="cover" className="w-full h-full object-cover" />
                            ) : (
                              <ImageIcon className="w-5 h-5 opacity-40 text-indigo-500" />
                            )}
@@ -305,12 +305,12 @@ const DeptGalleryEditor = ({ deptKey, dept, cms, session }) => {
                          </div>
                          
                          {item.images && item.images.length > 0 ? (
-                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                           <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                               {item.images.map((imgObj, iIdx) => {
                                  const url = typeof imgObj === 'string' ? imgObj : imgObj.url;
                                  return (
                                    <div key={iIdx} className="relative group aspect-square rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
-                                      <img src={url} alt="" className="w-full h-full object-cover" />
+                                      <img loading="lazy" decoding="async" src={url} alt="" className="w-full h-full object-cover" />
                                       <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[2px]">
                                          <button onClick={() => removeAlbumImage(actualIndex, iIdx)} className="w-7 h-7 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 hover:scale-110 transition-all shadow-md">
                                             <Trash2 className="w-3.5 h-3.5" />

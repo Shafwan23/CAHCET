@@ -115,7 +115,7 @@ const ResearchPage = () => {
         {/* 2. Premium Research Statistics (Glassmorphism on Dark) */}
         <section className="relative z-20 py-20 bg-slate-50">
           <div className="container mx-auto px-4 md:px-8 max-w-7xl">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {statsArray.map((stat, index) => (
                 <motion.div
                   key={stat.id}
@@ -188,8 +188,8 @@ const ResearchPage = () => {
           <div className="container mx-auto px-4 md:px-8 max-w-7xl">
             <div className="bg-gradient-to-br from-primary-950 to-primary-900 rounded-3xl p-10 md:p-16 text-white overflow-hidden relative shadow-luxury border border-white/5">
               <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
-              <div className="absolute -right-20 -top-20 w-96 h-96 bg-accent-gold opacity-10 rounded-full blur-3xl" />
-              <div className="absolute -left-20 -bottom-20 w-96 h-96 bg-blue-500 opacity-5 rounded-full blur-3xl" />
+              <div className="absolute -right-20 -top-20 w-full sm:w-96 h-96 bg-accent-gold opacity-10 rounded-full blur-3xl" />
+              <div className="absolute -left-20 -bottom-20 w-full sm:w-96 h-96 bg-blue-500 opacity-5 rounded-full blur-3xl" />
               
               <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
                 <div className="max-w-2xl space-y-4">
@@ -252,7 +252,7 @@ const ResearchPage = () => {
                           className="w-full lg:w-1/2"
                         >
                           <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl group">
-                            <img 
+                            <img loading="lazy" decoding="async" 
                               src={sec.images[0]} 
                               alt={sec.title} 
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
@@ -374,7 +374,7 @@ const ResearchPage = () => {
                   >
                     <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center p-3 shadow-xl overflow-hidden group">
                       {collab.logoUrl ? (
-                        <img src={collab.logoUrl} alt={collab.name} className="w-full h-full object-contain group-hover:scale-110 transition-transform" />
+                        <img loading="lazy" decoding="async" src={collab.logoUrl} alt={collab.name} className="w-full h-full object-contain group-hover:scale-110 transition-transform" />
                       ) : (
                         <Globe className="w-10 h-10 text-gray-300" />
                       )}
@@ -451,8 +451,8 @@ const ResearchPage = () => {
             </div>
 
             <div className="bg-white rounded-[2.5rem] p-8 md:p-14 shadow-[0_20px_50px_rgba(30,58,138,0.08)] relative overflow-hidden border border-slate-100">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-100/50 to-transparent rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-accent-gold/10 to-transparent rounded-full blur-3xl" />
+              <div className="absolute top-0 right-0 w-full sm:w-96 h-96 bg-gradient-to-br from-primary-100/50 to-transparent rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-full sm:w-96 h-96 bg-gradient-to-tr from-accent-gold/10 to-transparent rounded-full blur-3xl" />
               
               <ul className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                 {achievementsList.map((achievement, idx) => (

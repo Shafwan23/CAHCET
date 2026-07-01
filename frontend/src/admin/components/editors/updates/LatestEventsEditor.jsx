@@ -41,7 +41,7 @@ const EventCard = ({ item, onEdit, onDelete, onTogglePin, viewMode }) => {
         <>
           <div className="w-16 h-16 rounded-xl overflow-hidden relative shrink-0 border border-slate-100 shadow-sm">
             {item.image ? (
-              <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <img loading="lazy" decoding="async" src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
             ) : (
               <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-300"><Calendar className="w-6 h-6" /></div>
             )}
@@ -88,7 +88,7 @@ const EventCard = ({ item, onEdit, onDelete, onTogglePin, viewMode }) => {
         <>
           <div className="h-44 bg-slate-50 relative overflow-hidden shrink-0 border-b border-slate-100">
             {item.image ? (
-              <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+              <img loading="lazy" decoding="async" src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-slate-300 bg-gradient-to-br from-slate-50 to-slate-100"><Calendar className="w-10 h-10" /></div>
             )}
@@ -304,7 +304,7 @@ const LatestEventsEditor = () => {
           <motion.div key="list" {...fadeUp} className="space-y-8">
             
             {/* Executive Header Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { label: 'Total Events', value: metrics.total, color: 'bg-blue-50 text-blue-700 border-blue-100' },
                 { label: 'Published Live', value: metrics.published, color: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
@@ -471,7 +471,7 @@ const LatestEventsEditor = () => {
                     <div className="w-full sm:w-48 aspect-video sm:aspect-square rounded-2xl bg-slate-50 border border-slate-200 shrink-0 overflow-hidden relative shadow-inner flex items-center justify-center group">
                       {editingItem.image ? (
                         <>
-                          <img src={editingItem.image} alt="Event Cover" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                          <img loading="lazy" decoding="async" src={editingItem.image} alt="Event Cover" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <button onClick={() => setEditingItem(p => ({ ...p, image: '' }))} className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg transition-colors shadow-lg">Remove</button>
                           </div>
@@ -513,7 +513,7 @@ const LatestEventsEditor = () => {
                     {/* The exact frontend representation mock */}
                     <div className="h-48 bg-slate-100 relative overflow-hidden shrink-0">
                       {editingItem.image ? (
-                        <img src={editingItem.image} alt="Cover" className="w-full h-full object-cover" />
+                        <img loading="lazy" decoding="async" src={editingItem.image} alt="Cover" className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-slate-300"><Calendar className="w-10 h-10" /></div>
                       )}

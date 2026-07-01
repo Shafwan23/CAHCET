@@ -190,7 +190,7 @@ const CampusFacilitiesEditor = () => {
                     <div className="flex flex-wrap gap-3">
                       {(facility.images || []).map((img, imgIdx) => (
                         <div key={imgIdx} className="relative w-20 h-20 rounded-xl overflow-hidden border border-slate-200 group/img">
-                          <img src={img} alt="Facility" className="w-full h-full object-cover" />
+                          <img loading="lazy" decoding="async" src={img} alt="Facility" className="w-full h-full object-cover" />
                           <button onClick={() => removeImage(idx, imgIdx)} className="absolute top-1 right-1 p-1 bg-amber-500 text-white rounded-full opacity-0 group-hover/img:opacity-100 transition-opacity"><X className="w-3 h-3" /></button>
                         </div>
                       ))}

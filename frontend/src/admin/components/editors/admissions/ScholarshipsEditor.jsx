@@ -148,7 +148,7 @@ const ScholarshipsEditor = () => {
                   <div className="flex justify-between items-start gap-4 mb-4">
                     <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                       <AdminInput label="Scholarship Title" value={scholarship.title} onChange={e => updateScholarship(idx, 'title', e.target.value)} />
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <AdminInput label="Award Amount/Benefit" value={scholarship.amount} onChange={e => updateScholarship(idx, 'amount', e.target.value)} placeholder="e.g. 50% Tuition Fee Waiver" />
                         <div>
                           <label className="block text-xs font-semibold text-slate-500 mb-1.5">Featured/Highlighted</label>
@@ -175,7 +175,7 @@ const ScholarshipsEditor = () => {
                       <div className="flex flex-wrap gap-2">
                         {(scholarship.images || []).map((img, imgIdx) => (
                           <div key={imgIdx} className="relative w-16 h-16 rounded-lg overflow-hidden border border-slate-200 group/img">
-                            <img src={img} alt="Badge" className="w-full h-full object-cover" />
+                            <img loading="lazy" decoding="async" src={img} alt="Badge" className="w-full h-full object-cover" />
                             <button onClick={() => removeImage(idx, imgIdx)} className="absolute top-1 right-1 p-1 bg-amber-500 text-white rounded-full opacity-0 group-hover/img:opacity-100"><X className="w-3 h-3" /></button>
                           </div>
                         ))}

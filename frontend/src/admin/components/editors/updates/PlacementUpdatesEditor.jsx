@@ -45,7 +45,7 @@ const PlacementCard = ({ item, onEdit, onDelete, onTogglePin, viewMode }) => {
         <>
           <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 border border-slate-100 shadow-sm bg-white overflow-hidden p-2">
             {item.image ? (
-              <img src={item.image} alt="Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform" />
+              <img loading="lazy" decoding="async" src={item.image} alt="Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform" />
             ) : (
               <Building2 className="w-8 h-8 text-slate-300" />
             )}
@@ -93,7 +93,7 @@ const PlacementCard = ({ item, onEdit, onDelete, onTogglePin, viewMode }) => {
           <div className="flex items-start justify-between mb-5">
             <div className="w-16 h-16 rounded-[16px] bg-white border border-slate-100 shadow-[0_4px_12px_rgb(0,0,0,0.04)] flex items-center justify-center p-2.5 overflow-hidden group-hover:shadow-[0_8px_24px_rgb(0,0,0,0.08)] transition-all">
               {item.image ? (
-                <img src={item.image} alt="Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+                <img loading="lazy" decoding="async" src={item.image} alt="Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
               ) : (
                 <Building2 className="w-8 h-8 text-slate-300" />
               )}
@@ -115,7 +115,7 @@ const PlacementCard = ({ item, onEdit, onDelete, onTogglePin, viewMode }) => {
             <h4 className="font-extrabold text-slate-900 text-xl leading-tight mb-2 group-hover:text-blue-600 transition-colors">{item.company || 'Unnamed Company'}</h4>
             <p className="text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed min-h-[40px]">{item.description}</p>
             
-            <div className="grid grid-cols-2 gap-2 mt-auto text-[11px] font-bold">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-auto text-[11px] font-bold">
                <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex flex-col gap-1">
                  <span className="text-slate-400 uppercase tracking-widest text-[9px]">Drive Date</span>
                  <span className="text-slate-700 flex items-center gap-1.5"><Calendar className="w-3 h-3 text-blue-500" /> {item.driveDate || 'TBD'}</span>
@@ -308,7 +308,7 @@ const PlacementUpdatesEditor = () => {
           <motion.div key="list" {...fadeUp} className="space-y-8">
             
             {/* Executive Header Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { label: 'Total Companies', value: metrics.total, color: 'bg-blue-50 text-blue-700 border-blue-100' },
                 { label: 'Published Live', value: metrics.published, color: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
@@ -391,7 +391,7 @@ const PlacementUpdatesEditor = () => {
                       <div className="w-full sm:w-32 aspect-square rounded-2xl bg-white border border-slate-200 shrink-0 overflow-hidden relative shadow-[0_8px_30px_rgb(0,0,0,0.06)] flex items-center justify-center group p-4">
                         {editingItem.image ? (
                           <>
-                            <img src={editingItem.image} alt="Logo" className="w-full h-full object-contain transition-transform group-hover:scale-105" />
+                            <img loading="lazy" decoding="async" src={editingItem.image} alt="Logo" className="w-full h-full object-contain transition-transform group-hover:scale-105" />
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
                               <button onClick={() => setEditingItem(p => ({ ...p, image: '' }))} className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg shadow-sm">Remove</button>
                             </div>
@@ -500,7 +500,7 @@ const PlacementUpdatesEditor = () => {
                       <div className="flex gap-4 items-start mb-5">
                         <div className="w-16 h-16 rounded-2xl border border-slate-100 p-2 flex items-center justify-center bg-white shadow-sm shrink-0">
                           {editingItem.image ? (
-                            <img src={editingItem.image} alt="Logo" className="w-full h-full object-contain" />
+                            <img loading="lazy" decoding="async" src={editingItem.image} alt="Logo" className="w-full h-full object-contain" />
                           ) : (
                             <Building2 className="w-8 h-8 text-slate-300" />
                           )}
@@ -515,7 +515,7 @@ const PlacementUpdatesEditor = () => {
                       
                       <p className="text-sm text-slate-500 leading-relaxed line-clamp-3 mb-6 bg-slate-50 rounded-xl p-4 border border-slate-100">{editingItem.description || 'Roles and eligibility preview...'}</p>
                       
-                      <div className="grid grid-cols-2 gap-3 text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                         <div className="flex items-center gap-2 text-slate-600 font-bold">
                           <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500"><Calendar className="w-4 h-4" /></div>
                           <span>{editingItem.driveDate || 'TBD'}</span>

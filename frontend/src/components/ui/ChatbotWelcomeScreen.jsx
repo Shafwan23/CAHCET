@@ -186,7 +186,7 @@ export default function ChatbotWelcomeScreen({ isFullscreen, handleSend }) {
       {/* Professional Quick Options Grid */}
       <motion.div variants={itemVariants} className="w-full space-y-2">
         <span className="text-xs font-bold uppercase tracking-wider text-slate-400 px-1">How can I help?</span>
-        <div className="grid grid-cols-2 gap-2 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
           {quickOptions.map((option, idx) => {
             const Icon = getIcon(option.icon);
             return (

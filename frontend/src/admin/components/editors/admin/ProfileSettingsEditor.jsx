@@ -87,7 +87,7 @@ const ProfileSettingsEditor = () => {
                   <div className="px-6 pb-6 relative">
                     <div className="w-24 h-24 -mt-12 rounded-2xl bg-white border-4 border-white shadow-lg overflow-hidden flex items-center justify-center relative group">
                       {form.photoUrl ? (
-                        <img src={form.photoUrl} alt="Profile" className="w-full h-full object-cover" />
+                        <img loading="lazy" decoding="async" src={form.photoUrl} alt="Profile" className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full bg-slate-100 flex items-center justify-center text-3xl font-bold text-slate-400">
                           {session.initials}

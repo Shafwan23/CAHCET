@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, ChevronRight, BarChart3, TrendingUp } from 'lucide-react';
 
@@ -8,11 +9,11 @@ export default function PlacementHeader({ stats, year }) {
       <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
         <div className="absolute -left-16 -top-16 w-64 h-64 border border-white rounded-full" />
         <div className="absolute right-10 bottom-5 w-80 h-80 border border-white/40 rounded-full" />
-        <div className="absolute left-1/3 top-10 w-96 h-96 border border-white/20 rounded-full" />
+        <div className="absolute left-1/3 top-10 w-full sm:w-96 h-96 border border-white/20 rounded-full" />
       </div>
       
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[140px]" />
+        <div className="absolute top-0 left-1/4 w-[600px] max-w-full h-[600px] bg-blue-500/10 rounded-full blur-[140px]" />
       </div>
 
       <div className="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
@@ -24,10 +25,10 @@ export default function PlacementHeader({ stats, year }) {
           className="flex items-center gap-2 text-xs font-medium mb-6"
           aria-label="breadcrumb"
         >
-          <a href="/" className="flex items-center gap-1 text-slate-350 hover:text-white transition-colors">
+          <Link to="/" className="flex items-center gap-1 text-slate-350 hover:text-white transition-colors">
             <Home className="w-3.5 h-3.5" />
             Home
-          </a>
+          </Link>
           <ChevronRight className="w-3 h-3 text-slate-500" />
           <span className="text-slate-350">Placements</span>
           <ChevronRight className="w-3 h-3 text-slate-500" />

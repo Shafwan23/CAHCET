@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { AlertCircle, Home, ArrowLeft } from 'lucide-react';
@@ -8,8 +9,8 @@ const DepartmentNotFound = () => {
     <div className="min-h-screen bg-primary-950 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background styling */}
       <div className="absolute inset-0 z-0 opacity-20">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-[100px]" />
+        <div className="absolute top-1/4 left-1/4 w-full sm:w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-full sm:w-96 h-96 bg-primary-500/20 rounded-full blur-[100px]" />
       </div>
 
       <motion.div 
@@ -39,12 +40,12 @@ const DepartmentNotFound = () => {
             <ArrowLeft className="w-5 h-5 mr-2" />
             Go Back
           </Button>
-          <a href="/">
+          <Link to="/">
             <Button variant="accent" className="w-full sm:w-auto py-4 px-8">
               <Home className="w-5 h-5 mr-2" />
               Return Home
             </Button>
-          </a>
+          </Link>
         </div>
       </motion.div>
     </div>

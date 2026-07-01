@@ -131,7 +131,7 @@ const NavbarEditor = () => {
             </div>
             {form.logoUrl && (
               <div className="mt-3 w-32 h-16 rounded-lg overflow-hidden bg-slate-900 border border-slate-200 relative flex items-center justify-center p-2">
-                 <img src={form.logoUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
+                 <img loading="lazy" decoding="async" src={form.logoUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
               </div>
             )}
           </div>
@@ -170,7 +170,7 @@ const NavbarEditor = () => {
           {(form.links || []).map((link, index) => (
             <div key={index} className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
               <GripVertical className="w-4 h-4 text-slate-300 cursor-move shrink-0" />
-              <div className="grid grid-cols-2 gap-3 flex-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"

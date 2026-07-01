@@ -21,7 +21,7 @@ const RecruiterCard = ({ item, onEdit, onDelete }) => (
     <div className="absolute -top-10 -right-10 w-32 h-32 blur-3xl rounded-full opacity-20 pointer-events-none bg-blue-500" />
     <div className="flex items-start justify-between mb-4 relative z-10">
       <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 border border-slate-100 bg-white shadow-sm overflow-hidden p-2">
-        {item.logoUrl ? <img src={item.logoUrl} alt={item.companyName} className="w-full h-full object-contain" /> : <Building2 className="w-8 h-8 text-slate-300" />}
+        {item.logoUrl ? <img loading="lazy" decoding="async" src={item.logoUrl} alt={item.companyName} className="w-full h-full object-contain" /> : <Building2 className="w-8 h-8 text-slate-300" />}
       </div>
     </div>
     <div className="flex-1 flex flex-col relative z-10">
@@ -219,7 +219,7 @@ const RecruitersEditor = () => {
       <AnimatePresence mode="wait">
         {!editingItem ? (
           <motion.div key="list" {...fadeUp} className="space-y-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { label: 'Total Recruiters', value: metrics.total, color: 'bg-blue-50 text-blue-700 border-blue-100', icon: Building2 },
                 { label: 'Active Companies', value: metrics.active, color: 'bg-emerald-50 text-emerald-700 border-emerald-100', icon: Briefcase },
@@ -327,7 +327,7 @@ const RecruitersEditor = () => {
                     <div className="w-32 h-32 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50 flex items-center justify-center overflow-hidden relative group">
                       {editingItem.logoUrl ? (
                         <>
-                          <img src={editingItem.logoUrl} alt="Logo" className="w-full h-full object-contain p-2" />
+                          <img loading="lazy" decoding="async" src={editingItem.logoUrl} alt="Logo" className="w-full h-full object-contain p-2" />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                             <label className="cursor-pointer text-white text-xs font-bold px-3 py-1.5 bg-white/20 rounded-lg hover:bg-white/30"><Upload className="w-4 h-4" /><input type="file" className="hidden" onChange={handleLogoUpload} disabled={uploading} /></label>
                           </div>
@@ -356,7 +356,7 @@ const RecruitersEditor = () => {
                     <div className="bg-slate-50 border-b border-slate-100 px-4 py-3 flex items-center gap-2"><div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-slate-300" /><div className="w-2.5 h-2.5 rounded-full bg-slate-300" /><div className="w-2.5 h-2.5 rounded-full bg-slate-300" /></div></div>
                     <div className="p-6">
                       <div className="w-16 h-16 rounded-xl border border-slate-100 bg-white shadow-sm flex items-center justify-center p-2 mb-4">
-                        {editingItem.logoUrl ? <img src={editingItem.logoUrl} className="max-w-full max-h-full object-contain" /> : <Building2 className="w-6 h-6 text-slate-300" />}
+                        {editingItem.logoUrl ? <img loading="lazy" decoding="async" src={editingItem.logoUrl} className="max-w-full max-h-full object-contain" /> : <Building2 className="w-6 h-6 text-slate-300" />}
                       </div>
                       <h4 className="font-bold text-slate-800 text-base mb-2">{editingItem.companyName || 'Company Name'}</h4>
                       <div className="flex items-start gap-2 text-xs text-slate-600"><Briefcase className="w-3.5 h-3.5 shrink-0 text-slate-400" /><span>{editingItem.rolesOffered || 'Various Roles'}</span></div>

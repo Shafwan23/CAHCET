@@ -601,7 +601,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
             <motion.aside
               initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }}
               transition={{ type: 'spring', stiffness: 400, damping: 40 }}
-              className="fixed left-0 top-0 bottom-0 w-[260px] bg-[#0f172a] z-50 lg:hidden flex flex-col"
+              className="fixed left-0 top-0 bottom-0 w-[260px] max-w-full bg-[#0f172a] z-50 lg:hidden flex flex-col"
             >
               <SidebarContent onClose={() => { saveScroll(); setMobileOpen(false); }} />
             </motion.aside>

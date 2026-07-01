@@ -463,7 +463,7 @@ export default function ChatbotWelcomeEditor() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="col-span-2">
                       <label className="block text-xs font-semibold text-slate-600 mb-1">Card Title</label>
                       <input
@@ -525,7 +525,7 @@ export default function ChatbotWelcomeEditor() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {(welcomeScreen.quickActions || []).map((action, idx) => (
                 <div key={action.id || idx} className="flex gap-4 p-4 border border-slate-200 bg-slate-50/50 rounded-xl items-start">
-                  <div className="flex-1 grid grid-cols-2 gap-3">
+                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="col-span-2">
                       <label className="block text-xs font-semibold text-slate-600 mb-1">Chip Label</label>
                       <input
@@ -609,7 +609,7 @@ export default function ChatbotWelcomeEditor() {
             {analytics ? (
               <div className="space-y-8">
                 {/* High-level counters */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
                     <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Total Interactions</p>
                     <p className="text-3xl font-black text-slate-800 mt-1">{analytics.totalInteractions}</p>

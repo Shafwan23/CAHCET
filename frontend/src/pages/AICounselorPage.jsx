@@ -62,7 +62,7 @@ const FullscreenRichRenderer = ({ msg, themeClasses }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {msg.data.map((alumni, i) => (
             <div key={i} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center text-center hover:-translate-y-1 transition-transform">
-              <img src={alumni.image} alt={alumni.name} className="w-16 h-16 rounded-full mb-3 ring-4 ring-blue-50" />
+              <img loading="lazy" decoding="async" src={alumni.image} alt={alumni.name} className="w-16 h-16 rounded-full mb-3 ring-4 ring-blue-50" />
               <h4 className="font-bold text-slate-800 text-base">{alumni.name}</h4>
               <p className="text-sm text-blue-600 font-semibold mb-2">{alumni.company} • {alumni.package}</p>
               <p className="text-xs text-slate-500 italic leading-relaxed">"{alumni.testimonial}"</p>
@@ -77,7 +77,7 @@ const FullscreenRichRenderer = ({ msg, themeClasses }) => {
     return (
       <div className="space-y-4 mt-2 w-full max-w-md">
         <p className="text-base font-semibold">{msg.text}</p>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="bg-primary-50 p-4 rounded-2xl border border-primary-100 text-center">
             <p className="text-xs text-amber-600 font-bold uppercase tracking-wider mb-1">Highest Package</p>
             <p className="text-3xl font-black text-emerald-700">{msg.data.highest}</p>

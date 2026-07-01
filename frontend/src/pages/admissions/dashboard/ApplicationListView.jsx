@@ -180,7 +180,7 @@ const ApplicationListView = () => {
                 </div>
 
                 {app.applicationStatus === 'COMPLETED' ? (
-                  <div className="grid grid-cols-2 gap-4 mt-auto pt-4 border-t border-gray-100">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-auto pt-4 border-t border-gray-100">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}

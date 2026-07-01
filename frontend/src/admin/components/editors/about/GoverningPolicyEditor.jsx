@@ -69,7 +69,7 @@ const GoverningPolicyEditor = () => {
       <AnimatePresence mode="wait">
         {!editingItem ? (
           <motion.div key="list" {...fadeUp} className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl border bg-amber-50 text-amber-700 border-amber-100 relative overflow-hidden"><Users className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">Total Members</span><span className="text-3xl font-extrabold">{items.length}</span></div>
             </div>
 

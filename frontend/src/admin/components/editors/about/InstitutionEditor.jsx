@@ -94,7 +94,7 @@ const InstitutionEditor = () => {
   return (
     <EditorPage title="Institution Records" description="Manage main information about the college." breadcrumb={['Admin', 'About', 'Institution']} onSave={() => handleSaveDraft(false)} onPublish={async () => { await handleSaveDraft(true); setPreviewSection(sectionsMap[`about.${activeTab}`]); }} onReset={fetchPage} isLoading={loading} status={status} lastModified={lastModified} validationIssues={validationIssues}>
       <motion.div key="main" {...fadeUp} className="space-y-6">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-5 rounded-2xl border bg-indigo-50 text-indigo-700 border-indigo-100 relative overflow-hidden"><CheckSquare className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">Sections Managed</span><span className="text-3xl font-extrabold">4</span></div>
           <div className="p-5 rounded-2xl border bg-amber-50 text-amber-700 border-amber-100 relative overflow-hidden"><ImageIcon className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">History Images</span><span className="text-3xl font-extrabold">{(formHistory.sections || []).length}</span></div>
         </div>
@@ -113,7 +113,7 @@ const InstitutionEditor = () => {
                 <div className="space-y-6">
                   <div className="aspect-[21/9] rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center relative group">
                     {formHero.bannerUrl ? (
-                      <><img src={formHero.bannerUrl} alt="Banner" className="w-full h-full object-cover"/><div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"><label className="cursor-pointer text-white text-xs font-bold px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 backdrop-blur-md"><UploadCloud className="w-4 h-4 inline mr-2"/>Change Banner<input type="file" className="hidden" onChange={handleBannerUpload} disabled={uploading} /></label></div></>
+                      <><img loading="lazy" decoding="async" src={formHero.bannerUrl} alt="Banner" className="w-full h-full object-cover"/><div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"><label className="cursor-pointer text-white text-xs font-bold px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 backdrop-blur-md"><UploadCloud className="w-4 h-4 inline mr-2"/>Change Banner<input type="file" className="hidden" onChange={handleBannerUpload} disabled={uploading} /></label></div></>
                     ) : (
                       <label className="cursor-pointer flex flex-col items-center gap-2 text-slate-400 hover:text-indigo-500 transition-colors"><UploadCloud className="w-8 h-8"/> <span className="text-sm font-bold">Upload Banner</span><input type="file" className="hidden" onChange={handleBannerUpload} disabled={uploading} /></label>
                     )}
@@ -135,7 +135,7 @@ const InstitutionEditor = () => {
               <EditorCard title="Parent Organization (MMES)">
                 <AdminInput label="Organization Name" value={formParentOrg.title || ''} onChange={e => setFormParentOrg(p => ({ ...p, title: e.target.value }))} />
                 <div className="mt-4"><AdminTextarea label="Description" value={formParentOrg.description || ''} onChange={e => setFormParentOrg(p => ({ ...p, description: e.target.value }))} rows={6} /></div>
-                <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   <AdminInput label="Short Name" value={formParentOrg.shortName || ''} onChange={e => setFormParentOrg(p => ({ ...p, shortName: e.target.value }))} />
                   <AdminInput label="Established Year" value={formParentOrg.since || ''} onChange={e => setFormParentOrg(p => ({ ...p, since: e.target.value }))} />
                 </div>
@@ -152,7 +152,7 @@ const InstitutionEditor = () => {
                         <AdminInput label="Timeline Era / Title" value={section.title || ''} onChange={e => { const n = [...formHistory.sections]; n[index].title = e.target.value; setFormHistory(p => ({ ...p, sections: n })); }} />
                         <AdminTextarea label="Historical Details" value={section.text || ''} onChange={e => { const n = [...formHistory.sections]; n[index].text = e.target.value; setFormHistory(p => ({ ...p, sections: n })); }} rows={3} />
                         <div className="flex items-center gap-4">
-                           {section.image && <img src={section.image} className="w-20 h-20 object-cover rounded-xl border border-slate-200" />}
+                           {section.image && <img loading="lazy" decoding="async" src={section.image} className="w-20 h-20 object-cover rounded-xl border border-slate-200" />}
                            <label className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 text-sm font-bold rounded-xl cursor-pointer hover:bg-slate-200"><UploadCloud className="w-4 h-4"/> Upload Photo<input type="file" className="hidden" onChange={e => handleImageUpload(e, index)}/></label>
                         </div>
                       </div>

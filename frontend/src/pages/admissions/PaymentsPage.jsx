@@ -152,9 +152,9 @@ const PaymentsPage = () => {
 
         {/* Ambient Glows */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-          <div className="absolute top-0 right-1/4 w-[700px] h-[700px] bg-blue-50/50 rounded-full blur-[150px]" />
-          <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-emerald-50/50 rounded-full blur-[140px]" />
-          <div className="absolute top-1/3 left-1/2 w-[400px] h-[400px] bg-accent-gold/5 rounded-full blur-[120px]" />
+          <div className="absolute top-0 right-1/4 w-[700px] max-w-full h-[700px] bg-blue-50/50 rounded-full blur-[150px]" />
+          <div className="absolute bottom-1/4 left-1/4 w-[600px] max-w-full h-[600px] bg-emerald-50/50 rounded-full blur-[140px]" />
+          <div className="absolute top-1/3 left-1/2 w-[400px] max-w-full h-[400px] bg-accent-gold/5 rounded-full blur-[120px]" />
         </div>
 
         <FloatingParticles count={25} color="rgba(212, 175, 55, 0.15)" />
@@ -166,8 +166,8 @@ const PaymentsPage = () => {
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20" />
             <div className="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-950/90 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-            <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-emerald-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
+            <div className="absolute top-1/4 left-1/4 w-[500px] max-w-full h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-[400px] max-w-full h-[400px] bg-emerald-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
           </div>
 
           <motion.div 

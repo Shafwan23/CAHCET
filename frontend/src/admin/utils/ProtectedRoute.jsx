@@ -83,7 +83,7 @@ const ForcePasswordReset = () => {
                 <div key={i} className={`flex-1 rounded-full ${i <= strength ? colors[strength-1] : 'bg-slate-100'}`} />
               ))}
             </div>
-            <div className="mt-3 grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4 text-xs">
               <div className={`flex items-center gap-1.5 ${reqs.length ? 'text-amber-600' : 'text-slate-400'}`}>
                 {reqs.length ? <CheckCircle className="w-3.5 h-3.5" /> : <div className="w-1.5 h-1.5 rounded-full bg-slate-300 ml-1" />}
                 8+ Characters

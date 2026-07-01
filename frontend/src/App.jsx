@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import Home from './pages/Home';
+const Home = lazy(() => import('./pages/Home'));
 import SuspenseLoader from './components/ui/SuspenseLoader';
 import FloatingActionButtons from './components/ui/FloatingActionButtons';
 import ChatBotWidget from './components/ui/ChatBotWidget';
@@ -14,9 +14,7 @@ import ProtectedRoute from './admin/utils/ProtectedRoute';
 import { PermissionRoute } from './components/auth/PermissionRoute';
 import { Unauthorized } from './components/auth/Unauthorized';
 import { runLocalStorageMigration } from './admin/utils/migrateLocalStorage';
-import AdminLoginPage from './admin/pages/AdminLoginPage';
-import { Dashboard } from './pages/admin/Dashboard';
-import { CMSManagement } from './pages/admin/CMSManagement';
+const AdminLoginPage = lazy(() => import('./admin/pages/AdminLoginPage'));
 import { ChatbotProvider } from './context/ChatbotContext';
 const AdminDashboard = lazy(() => import('./admin/pages/AdminDashboard'));
 const DashboardOverview = lazy(() => import('./admin/components/dashboard/DashboardOverview'));

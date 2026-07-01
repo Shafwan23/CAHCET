@@ -118,8 +118,8 @@ const ScholarshipPage = () => {
 
         {/* Ambient Glows */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-          <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-blue-100/50 rounded-full blur-[140px]" />
-          <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-accent-gold/5 rounded-full blur-[130px]" />
+          <div className="absolute top-0 right-1/4 w-[600px] max-w-full h-[600px] bg-blue-100/50 rounded-full blur-[140px]" />
+          <div className="absolute top-1/3 left-1/4 w-[500px] max-w-full h-[500px] bg-accent-gold/5 rounded-full blur-[130px]" />
         </div>
 
         <FloatingParticles count={25} color="rgba(212, 175, 55, 0.12)" />
@@ -131,8 +131,8 @@ const ScholarshipPage = () => {
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20" />
             <div className="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-950/90 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-            <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-amber-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
+            <div className="absolute top-1/4 left-1/4 w-[500px] max-w-full h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-[400px] max-w-full h-[400px] bg-amber-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
           </div>
 
           <motion.div 
@@ -257,7 +257,8 @@ const ScholarshipPage = () => {
                 
                 {/* Right Side: The Table */}
                 <div className="col-span-1 md:col-span-8 p-0 overflow-x-auto">
-                  <table className="w-full text-left border-collapse h-full min-w-[500px]">
+                  <div className="w-full overflow-x-auto">
+<table className="w-full text-left border-collapse h-full min-w-[500px] max-w-full">
                     <thead>
                       <tr className="bg-primary-50/50 text-primary-500 font-display text-xs uppercase tracking-widest border-b border-primary-100/50">
                         <th className="py-6 px-8 font-black">10+2 / HSC Marks (Aggregate)</th>
@@ -280,6 +281,7 @@ const ScholarshipPage = () => {
                       ))}
                     </tbody>
                   </table>
+</div>
                 </div>
               </div>
             </motion.div>
@@ -297,7 +299,7 @@ const ScholarshipPage = () => {
             <motion.div 
               animate={{ rotate: 360 }}
               transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-              className="absolute top-0 right-0 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl pointer-events-none" 
+              className="absolute top-0 right-0 w-full sm:w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl pointer-events-none" 
             />
             
             <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-12 border-b border-primary-100/50 pb-8 relative z-10">

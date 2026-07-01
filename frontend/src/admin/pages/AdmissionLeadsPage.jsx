@@ -79,7 +79,8 @@ export default function AdmissionLeadsPage() {
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-slate-100">
-            <table className="w-full text-left text-sm whitespace-nowrap">
+            <div className="w-full overflow-x-auto">
+<table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-slate-50 text-slate-500 border-b border-slate-100">
                 <tr>
                   <th className="px-6 py-4 font-bold uppercase tracking-wider text-[10px]">Student / Contact</th>
@@ -143,6 +144,7 @@ export default function AdmissionLeadsPage() {
                 )}
               </tbody>
             </table>
+</div>
           </div>
         </EditorCard>
 

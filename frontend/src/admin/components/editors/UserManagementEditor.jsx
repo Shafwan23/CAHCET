@@ -159,7 +159,7 @@ const UserModal = ({ initial, onSave, onClose }) => {
             </div>
           )}
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1.5">Full Name *</label>
               <input className={inputCls} value={form.name} onChange={e => update('name', e.target.value)} placeholder="Display name" />
@@ -422,7 +422,8 @@ const UserManagementEditor = () => {
       {/* Table */}
       <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex-1 flex flex-col">
         <div className="overflow-x-auto flex-1 overflow-y-auto">
-          <table className="w-full relative">
+          <div className="w-full overflow-x-auto">
+<table className="w-full relative">
             <thead className="sticky top-0 z-10 bg-slate-50 backdrop-blur-md">
               <tr className="border-b border-slate-200">
                 <th className="text-left px-4 py-3.5 text-[10px] font-bold uppercase tracking-widest text-slate-500 bg-slate-50">Identity</th>
@@ -441,6 +442,7 @@ const UserManagementEditor = () => {
               </AnimatePresence>
             </tbody>
           </table>
+</div>
           {filtered.length === 0 && (
             <div className="py-16 flex flex-col items-center justify-center text-slate-400">
               <UserCircle className="w-12 h-12 mb-3 opacity-20" />

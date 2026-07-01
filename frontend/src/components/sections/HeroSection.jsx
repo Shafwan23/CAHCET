@@ -18,7 +18,7 @@ const HeroSection = () => {
         className="absolute inset-0 z-0"
       >
         <div className="absolute inset-0 bg-gradient-to-b from-primary-950/70 via-primary-950/40 to-primary-950/90 z-10" />
-        <img 
+        <img loading="lazy" decoding="async" 
           src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=2000" 
           alt="University Campus"
           className="w-full h-full object-cover"

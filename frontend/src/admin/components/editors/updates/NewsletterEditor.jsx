@@ -40,7 +40,7 @@ const NewsletterCard = ({ item, onEdit, onDelete, onTogglePin, viewMode }) => {
         <>
           <div className="w-16 h-20 rounded-lg overflow-hidden relative shrink-0 border border-slate-200 shadow-sm bg-slate-50 flex flex-col justify-center items-center">
             {item.thumbnailUrl ? (
-              <img src={item.thumbnailUrl} alt="Cover" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+              <img loading="lazy" decoding="async" src={item.thumbnailUrl} alt="Cover" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
             ) : (
               <FileText className="w-6 h-6 text-slate-300" />
             )}
@@ -90,7 +90,7 @@ const NewsletterCard = ({ item, onEdit, onDelete, onTogglePin, viewMode }) => {
           <div className="aspect-[3/4] bg-slate-50 relative overflow-hidden shrink-0 border-b border-slate-100 p-6 flex flex-col justify-end">
             {item.thumbnailUrl ? (
               <>
-                <img src={item.thumbnailUrl} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                <img loading="lazy" decoding="async" src={item.thumbnailUrl} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-slate-900/0 opacity-80" />
               </>
             ) : (
@@ -321,7 +321,7 @@ const NewsletterEditor = () => {
           <motion.div key="list" {...fadeUp} className="space-y-8">
             
             {/* Executive Header Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { label: 'Total Editions', value: metrics.total, color: 'bg-blue-50 text-blue-700 border-blue-100' },
                 { label: 'Published Live', value: metrics.published, color: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
@@ -372,7 +372,7 @@ const NewsletterEditor = () => {
                 <p className="text-slate-500 font-medium text-sm">Upload a new edition or adjust your search.</p>
               </div>
             ) : (
-              <div className={viewMode === 'grid' ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" : "flex flex-col gap-3"}>
+              <div className={viewMode === 'grid' ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" : "flex flex-col gap-3"}>
                 <AnimatePresence>
                   {filteredItems.map(item => (
                     <NewsletterCard key={item.id} item={item} onEdit={setEditingItem} onDelete={deleteItem} onTogglePin={togglePin} viewMode={viewMode} />
@@ -499,7 +499,7 @@ const NewsletterEditor = () => {
                         <div className="w-32 aspect-[3/4] bg-slate-100 rounded-xl border border-slate-200 overflow-hidden relative shadow-inner mb-4 flex items-center justify-center group">
                            {editingItem.thumbnailUrl ? (
                              <>
-                               <img src={editingItem.thumbnailUrl} alt="Cover" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
+                               <img loading="lazy" decoding="async" src={editingItem.thumbnailUrl} alt="Cover" className="w-full h-full object-cover transition-transform group-hover:scale-105" />
                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                   <button onClick={() => setEditingItem(p => ({ ...p, thumbnailUrl: '' }))} className="p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors shadow-lg"><Trash2 className="w-4 h-4"/></button>
                                </div>
@@ -535,7 +535,7 @@ const NewsletterEditor = () => {
                     <div className="p-6 bg-white flex flex-col items-center">
                        <div className="w-40 aspect-[3/4] bg-slate-100 rounded-xl overflow-hidden shadow-lg border border-slate-200 relative mb-5">
                           {editingItem.thumbnailUrl ? (
-                            <img src={editingItem.thumbnailUrl} alt="Cover" className="w-full h-full object-cover" />
+                            <img loading="lazy" decoding="async" src={editingItem.thumbnailUrl} alt="Cover" className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center bg-slate-50"><Newspaper className="w-10 h-10 text-slate-300" /></div>
                           )}

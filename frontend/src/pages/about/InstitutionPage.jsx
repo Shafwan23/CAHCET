@@ -79,7 +79,7 @@ MMES Public School(CBSE)`,
               scale: [1, 1.2, 0.8, 1]
             }}
             transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-40 -right-40 w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]"
+            className="absolute -top-40 -right-40 w-full sm:w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]"
           />
           <motion.div 
             animate={{ 
@@ -145,7 +145,7 @@ MMES Public School(CBSE)`,
                   >
                     <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(8,_112,_184,_0.07)] group">
                       <div className="absolute inset-0 border border-primary-100 rounded-3xl z-10 opacity-50 pointer-events-none" />
-                      <img 
+                      <img loading="lazy" decoding="async" 
                         src={section.image} 
                         alt={section.title} 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"

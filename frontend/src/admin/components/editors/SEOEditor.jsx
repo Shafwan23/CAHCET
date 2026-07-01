@@ -305,7 +305,7 @@ const SEOEditor = () => {
                 {previewTab === 'facebook' && (
                   <motion.div key="facebook" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="w-full max-w-sm bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden font-sans">
                     <div className="w-full aspect-[1.91/1] bg-slate-200 border-b border-slate-200 relative overflow-hidden">
-                      <img src={ogImage} alt="OG" className="w-full h-full object-cover" onError={(e) => e.target.src = 'https://via.placeholder.com/1200x630/f8fafc/94a3b8?text=Image+Not+Found'} />
+                      <img loading="lazy" decoding="async" src={ogImage} alt="OG" className="w-full h-full object-cover" onError={(e) => e.target.src = 'https://via.placeholder.com/1200x630/f8fafc/94a3b8?text=Image+Not+Found'} />
                     </div>
                     <div className="p-3 bg-slate-50/50">
                       <p className="text-[12px] text-slate-500 uppercase tracking-wide mb-1">cahcet.edu.in</p>
@@ -321,7 +321,7 @@ const SEOEditor = () => {
                     {form.twitterCardType === 'summary_large_image' ? (
                       <>
                         <div className="w-full aspect-[1.91/1] bg-slate-200 border-b border-slate-300 relative overflow-hidden">
-                          <img src={twImage} alt="Twitter" className="w-full h-full object-cover" onError={(e) => e.target.src = 'https://via.placeholder.com/1200x630/f8fafc/94a3b8?text=Image+Not+Found'} />
+                          <img loading="lazy" decoding="async" src={twImage} alt="Twitter" className="w-full h-full object-cover" onError={(e) => e.target.src = 'https://via.placeholder.com/1200x630/f8fafc/94a3b8?text=Image+Not+Found'} />
                         </div>
                         <div className="p-3">
                           <p className="text-[15px] text-slate-500 mb-0.5">cahcet.edu.in</p>
@@ -332,7 +332,7 @@ const SEOEditor = () => {
                     ) : (
                       <div className="flex h-32">
                         <div className="w-32 h-32 bg-slate-200 border-r border-slate-300 shrink-0">
-                          <img src={twImage} alt="Twitter" className="w-full h-full object-cover" onError={(e) => e.target.src = 'https://via.placeholder.com/150x150/f8fafc/94a3b8?text=Img'} />
+                          <img loading="lazy" decoding="async" src={twImage} alt="Twitter" className="w-full h-full object-cover" onError={(e) => e.target.src = 'https://via.placeholder.com/150x150/f8fafc/94a3b8?text=Img'} />
                         </div>
                         <div className="p-3 flex flex-col justify-center min-w-0">
                           <p className="text-[15px] text-slate-500 mb-0.5 truncate">cahcet.edu.in</p>

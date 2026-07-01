@@ -44,7 +44,7 @@ const GallerySection = ({ data }) => {
               custom={idx * 0.1}
               className="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-lg cursor-pointer"
             >
-              <img 
+              <img loading="lazy" decoding="async" 
                 src={img.url} 
                 alt={img.title} 
                 className="w-full object-cover transition-transform duration-700 group-hover:scale-110"

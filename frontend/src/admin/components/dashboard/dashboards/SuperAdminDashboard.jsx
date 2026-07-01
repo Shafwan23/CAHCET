@@ -250,7 +250,7 @@ const ExecutiveOverviewTab = ({ data }) => {
         </motion.div>
 
         {/* Campus Snapshot Grid */}
-        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }} className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-[2rem] p-6 border border-slate-200 shadow-sm flex flex-col min-w-0 break-words justify-center relative overflow-hidden group hover:-translate-y-1.5 hover:border-violet-300/60 hover:shadow-[0_0_0_2px_rgba(139,92,246,0.3),0_25px_50px_-12px_rgba(139,92,246,0.25)] transition-all duration-300 ease-out">
             <div className="absolute right-0 top-0 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-colors" />
             <Users className="w-6 h-6 text-blue-600 mb-4" />
@@ -450,7 +450,7 @@ const SuperAdminDashboard = ({ data }) => {
 
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto">
-        <div className="p-6 md:p-10 max-w-[1600px] mx-auto">
+        <div className="p-6 md:p-10 max-w-[1600px] max-w-full mx-auto">
           {renderTabContent()}
         </div>
       </div>

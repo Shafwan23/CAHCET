@@ -65,7 +65,7 @@ export default function ValuesPhilosophyPage() {
         <section className="relative w-full overflow-hidden bg-primary-950 mb-16 shadow-2xl rounded-b-[3rem]">
           <div className="absolute inset-0 bg-gradient-to-br from-primary-950 via-primary-900 to-slate-900 opacity-90" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
-          <div className="absolute -top-20 -right-20 w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]" />
+          <div className="absolute -top-20 -right-20 w-full sm:w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]" />
           
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 relative z-10 text-center flex flex-col items-center">
             <div className="inline-block px-4 py-1.5 bg-accent-gold/20 text-accent-gold text-xs font-bold uppercase tracking-widest rounded-full border border-accent-gold/30 mb-6">
@@ -173,7 +173,7 @@ export default function ValuesPhilosophyPage() {
                 <h2 className="text-3xl md:text-4xl font-display font-bold text-slate-900">Core Values</h2>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                 {data.coreValues.map((val, i) => {
                   const Icon = getIcon(val.icon, Shield);
                   return (

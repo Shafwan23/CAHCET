@@ -122,7 +122,7 @@ const DeptContactEditor = ({ deptKey, dept, cms, session }) => {
              <div className="flex items-center gap-6">
                 <div className="w-24 h-24 rounded-full bg-slate-100 border-2 border-slate-200 overflow-hidden shrink-0 relative group flex items-center justify-center">
                    {form.hodPhoto ? (
-                     <img src={form.hodPhoto} alt="HOD" className="w-full h-full object-cover" />
+                     <img loading="lazy" decoding="async" src={form.hodPhoto} alt="HOD" className="w-full h-full object-cover" />
                    ) : (
                      <User className="w-8 h-8 text-slate-300" />
                    )}

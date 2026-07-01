@@ -99,8 +99,8 @@ const ContactPage = () => {
 
       {/* Ambient Glows */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-blue-100/40 rounded-full blur-[140px]" />
-        <div className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] bg-primary-50/30 rounded-full blur-[130px]" />
+        <div className="absolute top-1/3 left-1/4 w-[600px] max-w-full h-[600px] bg-blue-100/40 rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/3 right-1/4 w-[500px] max-w-full h-[500px] bg-primary-50/30 rounded-full blur-[130px]" />
       </div>
 
       <main className="flex-1 relative z-10">
@@ -110,11 +110,11 @@ const ContactPage = () => {
           <div className="absolute inset-0 pointer-events-none opacity-20 z-0">
             <div className="absolute -left-16 -top-16 w-64 h-64 border border-white rounded-full" />
             <div className="absolute right-10 bottom-5 w-80 h-80 border border-white/40 rounded-full" />
-            <div className="absolute left-1/3 top-10 w-96 h-96 border border-white/20 rounded-full" />
+            <div className="absolute left-1/3 top-10 w-full sm:w-96 h-96 border border-white/20 rounded-full" />
           </div>
           
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[140px]" />
+            <div className="absolute top-0 left-1/4 w-[600px] max-w-full h-[600px] bg-blue-500/10 rounded-full blur-[140px]" />
           </div>
 
           <motion.div

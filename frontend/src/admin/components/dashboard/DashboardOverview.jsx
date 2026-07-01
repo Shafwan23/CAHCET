@@ -29,7 +29,7 @@ const DashboardOverview = () => {
 
   if (loading) {
     return (
-      <div className="p-8 max-w-[1600px] mx-auto min-h-screen bg-slate-50 flex flex-col gap-8 animate-pulse">
+      <div className="p-8 max-w-[1600px] max-w-full mx-auto min-h-screen bg-slate-50 flex flex-col gap-8 animate-pulse">
         <div className="h-48 bg-white border border-slate-100 shadow-sm rounded-[2.5rem]" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => <div key={i} className="h-40 bg-white border border-slate-100 shadow-sm rounded-3xl" />)}

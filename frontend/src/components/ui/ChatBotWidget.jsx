@@ -13,7 +13,7 @@ import ChatbotWelcomeScreen from './ChatbotWelcomeScreen';
 const RichMessageRenderer = ({ msg, themeClasses }) => {
   if (msg.type === 'counselor_recommendation') {
     return (
-      <div className="space-y-3 mt-2 w-full max-w-[280px]">
+      <div className="space-y-3 mt-2 w-full max-w-[280px] max-w-full">
         <p className="text-sm font-semibold">{msg.text}</p>
         {msg.data.map((rec, i) => (
           <div key={i} className="bg-white/80 p-3 rounded-xl border border-slate-200 shadow-sm">
@@ -32,7 +32,7 @@ const RichMessageRenderer = ({ msg, themeClasses }) => {
 
   if (msg.type === 'comparison_table') {
     return (
-      <div className="space-y-3 mt-2 w-full max-w-[300px]">
+      <div className="space-y-3 mt-2 w-full max-w-[300px] max-w-full">
         <p className="text-sm font-semibold">{msg.text}</p>
         <div className="flex gap-2">
           {msg.data.map((d, i) => (
@@ -53,12 +53,12 @@ const RichMessageRenderer = ({ msg, themeClasses }) => {
 
   if (msg.type === 'alumni_cards') {
     return (
-      <div className="space-y-3 mt-2 w-full max-w-[280px]">
+      <div className="space-y-3 mt-2 w-full max-w-[280px] max-w-full">
         <p className="text-sm font-semibold">{msg.text}</p>
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
           {msg.data.map((alumni, i) => (
             <div key={i} className="min-w-[200px] snap-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center text-center">
-              <img src={alumni.image} alt={alumni.name} className="w-12 h-12 rounded-full mb-2 ring-2 ring-blue-100" />
+              <img loading="lazy" decoding="async" src={alumni.image} alt={alumni.name} className="w-12 h-12 rounded-full mb-2 ring-2 ring-blue-100" />
               <h4 className="font-bold text-slate-800 text-sm">{alumni.name}</h4>
               <p className="text-xs text-blue-600 font-medium mb-1">{alumni.company} • {alumni.package}</p>
               <p className="text-[10px] text-slate-500 italic leading-snug line-clamp-2">"{alumni.testimonial}"</p>
@@ -71,9 +71,9 @@ const RichMessageRenderer = ({ msg, themeClasses }) => {
 
   if (msg.type === 'placement_dashboard') {
     return (
-      <div className="space-y-3 mt-2 w-full max-w-[280px]">
+      <div className="space-y-3 mt-2 w-full max-w-[280px] max-w-full">
         <p className="text-sm font-semibold">{msg.text}</p>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-100 text-center">
             <p className="text-[10px] text-emerald-600 font-bold uppercase mb-0.5">Highest</p>
             <p className="text-lg font-black text-emerald-700">{msg.data.highest}</p>
@@ -278,7 +278,7 @@ const ChatBotWidget = () => {
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className={cn(
-              "mb-4 w-[calc(100vw-2rem)] sm:w-[400px] h-[70vh] sm:h-[580px] max-h-[600px] rounded-3xl shadow-2xl overflow-hidden flex flex-col pointer-events-auto transition-colors duration-300 origin-bottom-right",
+              "mb-4 w-[calc(100vw-2rem)] sm:w-[400px] max-w-full h-[70vh] sm:h-[580px] max-h-[600px] rounded-3xl shadow-2xl overflow-hidden flex flex-col pointer-events-auto transition-colors duration-300 origin-bottom-right",
               themeClasses.window
             )}
           >

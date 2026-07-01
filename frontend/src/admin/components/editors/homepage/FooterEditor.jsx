@@ -110,7 +110,7 @@ const FooterEditor = () => {
           {(form.quickLinks || []).map((link, index) => (
             <div key={index} className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
               <GripVertical className="w-4 h-4 text-slate-300 cursor-move shrink-0" />
-              <div className="grid grid-cols-2 gap-3 flex-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
                 <input
                   type="text"
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"

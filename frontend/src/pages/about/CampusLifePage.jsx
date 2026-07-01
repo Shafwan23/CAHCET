@@ -111,8 +111,8 @@ const CampusLifePage = () => {
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-950/90 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
-          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
+          <div className="absolute top-1/4 left-1/4 w-[500px] max-w-full h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-[400px] max-w-full h-[400px] bg-purple-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
         </div>
 
         <div className="container mx-auto px-4 md:px-8 relative z-10">
@@ -149,7 +149,7 @@ const CampusLifePage = () => {
               onClick={() => setSelectedImage(spotlightItem)}
             >
               <div className="absolute inset-0 bg-accent-gold/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <img 
+              <img loading="lazy" decoding="async" 
                 src={spotlightItem.image} 
                 alt={spotlightItem.title} 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-luxury"
@@ -199,7 +199,7 @@ const CampusLifePage = () => {
                 >
                   <div className="absolute inset-0 bg-accent-gold/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   {/* Image */}
-                  <img 
+                  <img loading="lazy" decoding="async" 
                     src={item.image} 
                     alt={item.title} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-luxury"
@@ -246,7 +246,7 @@ const CampusLifePage = () => {
               className="max-w-5xl w-full bg-transparent overflow-hidden rounded-2xl flex flex-col items-center"
               onClick={(e) => e.stopPropagation()}
             >
-              <img 
+              <img loading="lazy" decoding="async" 
                 src={selectedImage.image} 
                 alt={selectedImage.title} 
                 className="max-h-[75vh] w-auto object-contain rounded-2xl shadow-2xl"

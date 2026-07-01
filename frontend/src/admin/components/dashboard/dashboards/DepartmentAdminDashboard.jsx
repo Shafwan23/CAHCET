@@ -374,7 +374,7 @@ const DepartmentAdminDashboard = ({ data }) => {
 
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto">
-        <div className="p-6 md:p-10 max-w-[1400px] mx-auto">
+        <div className="p-6 md:p-10 max-w-[1400px] max-w-full mx-auto">
           {renderTabContent()}
         </div>
       </div>

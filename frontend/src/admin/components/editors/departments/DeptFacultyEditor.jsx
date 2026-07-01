@@ -147,7 +147,7 @@ const DeptFacultyEditor = ({ deptKey, dept, cms, session }) => {
         {/* Left Side: Configuration Panel */}
         <div className="xl:col-span-6 space-y-6">
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
                 <div className="flex justify-between items-start">
                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Faculty</p>
@@ -216,7 +216,7 @@ const DeptFacultyEditor = ({ deptKey, dept, cms, session }) => {
                       <div className="flex items-center gap-3">
                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100/50 flex items-center justify-center text-indigo-500 overflow-hidden shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-500">
                            {item.image ? (
-                             <img src={item.image} alt="pic" className="w-full h-full object-cover" />
+                             <img loading="lazy" decoding="async" src={item.image} alt="pic" className="w-full h-full object-cover" />
                            ) : (
                              <UserCircle className="w-6 h-6 opacity-30" />
                            )}

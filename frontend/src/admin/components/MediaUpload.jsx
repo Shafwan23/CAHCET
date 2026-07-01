@@ -176,12 +176,12 @@ const MediaUpload = () => {
       {filtered.length === 0 && !uploading ? (
         <EmptyState icon={ImageIcon} title="No media yet" description="Upload images to build your media library." />
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {filtered.map((item, i) => (
             <motion.div key={item.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}
               className="group relative bg-slate-100 rounded-xl overflow-hidden aspect-square border border-slate-200 hover:shadow-lg transition-all"
             >
-              <img src={item.url} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img loading="lazy" decoding="async" src={item.url} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
 
               {/* Overlay */}
               <div className="absolute inset-0 bg-slate-900/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
@@ -205,7 +205,7 @@ const MediaUpload = () => {
         <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setPreviewImg(null)}>
           <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative max-w-3xl w-full" onClick={e => e.stopPropagation()}>
             <button onClick={() => setPreviewImg(null)} className="absolute -top-4 -right-4 z-10 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg text-slate-700 hover:text-amber-600"><X className="w-4 h-4" /></button>
-            <img src={previewImg.url} alt={previewImg.name} className="w-full rounded-2xl shadow-2xl" />
+            <img loading="lazy" decoding="async" src={previewImg.url} alt={previewImg.name} className="w-full rounded-2xl shadow-2xl" />
             <p className="text-white text-center text-sm mt-3 font-medium">{previewImg.name}</p>
           </motion.div>
         </div>

@@ -81,7 +81,7 @@ const GovApprovalEditor = () => {
       <AnimatePresence mode="wait">
         {!editingItem ? (
           <motion.div key="list" {...fadeUp} className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl border bg-indigo-50 text-indigo-700 border-indigo-100 relative overflow-hidden"><FileCheck className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">Total Approvals</span><span className="text-3xl font-extrabold">{items.length}</span></div>
               <div className="p-5 rounded-2xl border bg-emerald-50 text-emerald-700 border-emerald-100 relative overflow-hidden"><ShieldCheck className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">Active Certificates</span><span className="text-3xl font-extrabold">{items.filter(i=>i.fileUrl).length}</span></div>
             </div>

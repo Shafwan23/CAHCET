@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   GraduationCap, 
@@ -166,8 +166,8 @@ const RegistrationPage2026 = () => {
 
         {/* Premium ambient background (light theme compatible) */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden bg-slate-50">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[120px] mix-blend-multiply opacity-70" />
-          <div className="absolute bottom-1/4 left-0 w-[600px] h-[600px] bg-amber-50/50 rounded-full blur-[150px] mix-blend-multiply opacity-60" />
+          <div className="absolute top-0 right-0 w-[500px] max-w-full h-[500px] bg-blue-100/50 rounded-full blur-[120px] mix-blend-multiply opacity-70" />
+          <div className="absolute bottom-1/4 left-0 w-[600px] max-w-full h-[600px] bg-amber-50/50 rounded-full blur-[150px] mix-blend-multiply opacity-60" />
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
         </div>
 
@@ -176,9 +176,9 @@ const RegistrationPage2026 = () => {
            ======================================================== */}
         <nav className="fixed top-0 inset-x-0 z-50 bg-primary-950/95 backdrop-blur-md border-b border-white/10 py-3.5 px-6 md:px-12 flex items-center justify-between shadow-xl">
           {/* Left: Logo & Branding */}
-          <a href="/" className="flex items-center gap-3.5 group">
+          <Link to="/" className="flex items-center gap-3.5 group">
             <div className="p-1 bg-white/5 rounded-xl border border-white/10 transition-transform duration-300 group-hover:scale-105">
-              <img src={logoImg} alt="CAHCET Logo" className="w-10 h-10 object-contain" />
+              <img loading="lazy" decoding="async" src={logoImg} alt="CAHCET Logo" className="w-10 h-10 object-contain" />
             </div>
             <div className="flex flex-col text-white">
               <span className="text-lg font-display font-extrabold leading-none tracking-tight flex items-center gap-1.5">
@@ -187,11 +187,11 @@ const RegistrationPage2026 = () => {
               </span>
               <span className="text-[10px] uppercase tracking-wider font-semibold text-accent-gold/90">Admissions 2026</span>
             </div>
-          </a>
+          </Link>
 
           {/* Center: Main Nav Links */}
           <div className="hidden md:flex items-center gap-8 font-medium text-sm text-white/90">
-            <a href="/" className="hover:text-accent-gold transition-colors duration-200">HOME</a>
+            <Link to="/" className="hover:text-accent-gold transition-colors duration-200">HOME</Link>
             
             {/* Hoverable Dropdown */}
             <div className="relative group py-2">
@@ -235,7 +235,7 @@ const RegistrationPage2026 = () => {
               </div>
             </div>
             
-            <a href="/contact" className="hover:text-accent-gold transition-colors duration-200">CONTACT US</a>
+            <Link to="/contact" className="hover:text-accent-gold transition-colors duration-200">CONTACT US</Link>
           </div>
 
           {/* Right: CTAs */}
@@ -271,7 +271,7 @@ const RegistrationPage2026 = () => {
                 exit={{ opacity: 0, y: -20 }}
                 className="absolute top-full left-0 w-full bg-primary-950 border-b border-white/10 p-6 flex flex-col gap-4 shadow-xl z-50 md:hidden text-white"
               >
-                <a href="/" className="text-white/80 hover:text-white py-2 border-b border-white/5">HOME</a>
+                <Link to="/" className="text-white/80 hover:text-white py-2 border-b border-white/5">HOME</Link>
                 
                 {/* Mobile Portal Navigation Links */}
                 <div className="flex flex-col gap-2 pl-4 border-l border-white/10 my-1">
@@ -308,7 +308,7 @@ const RegistrationPage2026 = () => {
                   </a>
                 </div>
 
-                <a href="/contact" className="text-white/80 hover:text-white py-2 border-b border-white/5">CONTACT US</a>
+                <Link to="/contact" className="text-white/80 hover:text-white py-2 border-b border-white/5">CONTACT US</Link>
                 <div className="flex gap-4 pt-4">
                   <button 
                     onClick={() => navigate('/admissions/login')}
@@ -334,7 +334,7 @@ const RegistrationPage2026 = () => {
         <header className="relative min-h-[90vh] flex items-center justify-center pt-24 overflow-hidden z-10 rounded-b-[4rem] shadow-luxury mb-20">
           {/* Background parallax container */}
           <div className="absolute inset-0 z-0">
-            <img 
+            <img loading="lazy" decoding="async" 
               src={cahcetHeroImg} 
               alt="Premium College Gate" 
               className="w-full h-full object-cover object-center scale-105 transform-gpu motion-safe:animate-[pulse_20s_ease-in-out_infinite_alternate]"
@@ -622,7 +622,7 @@ const RegistrationPage2026 = () => {
 
                     <div className="w-20 h-20 bg-white shadow-md border border-gray-100 rounded-full flex items-center justify-center text-accent-gold mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500">
                       {item.logoUrl ? (
-                        <img src={item.logoUrl} alt={item.title} className="w-10 h-10 object-contain mix-blend-multiply" />
+                        <img loading="lazy" decoding="async" src={item.logoUrl} alt={item.title} className="w-10 h-10 object-contain mix-blend-multiply" />
                       ) : (
                         <Award className="w-8 h-8" />
                       )}
@@ -659,7 +659,7 @@ const RegistrationPage2026 = () => {
           <motion.div 
             animate={{ rotate: 360 }}
             transition={{ duration: 100, repeat: Infinity, ease: "linear" }}
-            className="absolute top-1/4 -right-1/4 w-[1000px] h-[1000px] bg-accent-gold/10 rounded-full blur-[150px] pointer-events-none z-0" 
+            className="absolute top-1/4 -right-1/4 w-[1000px] max-w-full h-[1000px] bg-accent-gold/10 rounded-full blur-[150px] pointer-events-none z-0" 
           />
 
           <div className="max-w-6xl mx-auto relative z-10">
@@ -760,13 +760,13 @@ const RegistrationPage2026 = () => {
                 <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform duration-300" />
               </button>
               
-              <a 
-                href="/contact" 
+              <Link 
+                to="/contact" 
                 className="text-primary-300 hover:text-accent-gold font-medium text-base transition-colors duration-300 flex items-center gap-2 mt-4 hover:underline"
               >
                 Need assistance? Contact our admissions team
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </motion.div>
           </div>
         </section>
@@ -775,15 +775,15 @@ const RegistrationPage2026 = () => {
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent" />
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-2">
-              <img src={logoImg} alt="CAHCET" className="w-8 h-8 object-contain opacity-70" />
+              <img loading="lazy" decoding="async" src={logoImg} alt="CAHCET" className="w-8 h-8 object-contain opacity-70" />
               <span className="font-semibold text-white/80">CAHCET Admissions</span>
             </div>
             <p className="text-xs">
               © {new Date().getFullYear()} C. Abdul Hakeem College of Engineering & Technology. All rights reserved.
             </p>
             <div className="flex gap-4 text-xs text-white/70">
-              <a href="/about/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="/about/terms-and-conditions" className="hover:text-white transition-colors">Terms of Service</a>
+              <Link to="/about/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link to="/about/terms-and-conditions" className="hover:text-white transition-colors">Terms of Service</Link>
             </div>
           </div>
         </footer>

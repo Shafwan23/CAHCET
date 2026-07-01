@@ -309,7 +309,7 @@ const AnnouncementsEditor = () => {
           <motion.div key="list" {...fadeUp} className="space-y-8">
             
             {/* Executive Header Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { label: 'Total Announcements', value: metrics.total, color: 'bg-blue-50 text-blue-700 border-blue-100' },
                 { label: 'Active (Live)', value: metrics.active, color: 'bg-emerald-50 text-emerald-700 border-emerald-100' },

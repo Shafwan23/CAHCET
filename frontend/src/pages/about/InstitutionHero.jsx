@@ -35,7 +35,7 @@ const InstitutionHero = () => {
         transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         className="absolute inset-0"
       >
-        <img 
+        <img loading="lazy" decoding="async" 
           src={content.bannerUrl} 
           alt="College Campus" 
           className="w-full h-full object-cover"

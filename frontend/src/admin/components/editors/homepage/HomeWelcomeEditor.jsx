@@ -169,7 +169,7 @@ const HomeWelcomeEditor = () => {
             <div className="w-40 h-40 border border-slate-200 rounded-2xl bg-slate-50 flex items-center justify-center overflow-hidden shrink-0 group relative">
               {form.principalImage ? (
                 <>
-                  <img src={form.principalImage} alt="Principal" className="w-full h-full object-cover" />
+                  <img loading="lazy" decoding="async" src={form.principalImage} alt="Principal" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <label className="cursor-pointer text-white text-xs font-semibold px-3 py-1.5 bg-white/20 rounded-lg backdrop-blur-sm hover:bg-white/30 transition-colors">
                       Change
@@ -225,7 +225,7 @@ const HomeWelcomeEditor = () => {
               <div className="p-4 flex gap-4 items-start">
                 <div className="w-16 h-16 rounded-full overflow-hidden shrink-0 bg-slate-200 border border-white shadow-sm">
                   {form.principalImage ? (
-                     <img src={form.principalImage} className="w-full h-full object-cover" alt="Principal" />
+                     <img loading="lazy" decoding="async" src={form.principalImage} className="w-full h-full object-cover" alt="Principal" />
                   ) : (
                      <div className="w-full h-full bg-slate-300" />
                   )}

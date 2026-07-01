@@ -135,7 +135,7 @@ const PaymentsEditor = () => {
                 
                 <div className="flex flex-col md:flex-row gap-6 pr-12">
                   <div className="w-32 h-32 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center shrink-0 overflow-hidden relative group/qr shadow-sm">
-                    {method.qrUrl ? <img src={method.qrUrl} className="w-full h-full object-contain p-2" /> : <div className="text-center text-slate-400"><QrCode className="w-8 h-8 mx-auto mb-1 opacity-50"/> <span className="text-[10px]">No QR Code</span></div>}
+                    {method.qrUrl ? <img loading="lazy" decoding="async" src={method.qrUrl} className="w-full h-full object-contain p-2" /> : <div className="text-center text-slate-400"><QrCode className="w-8 h-8 mx-auto mb-1 opacity-50"/> <span className="text-[10px]">No QR Code</span></div>}
                     <label className="absolute inset-0 bg-black/60 text-white flex flex-col items-center justify-center opacity-0 group-hover/qr:opacity-100 cursor-pointer transition-opacity backdrop-blur-[1px]">
                       <Upload className="w-5 h-5 mb-1" />
                       <span className="text-[10px] font-semibold">Upload QR</span>

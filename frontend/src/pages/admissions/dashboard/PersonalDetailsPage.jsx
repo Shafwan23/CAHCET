@@ -194,8 +194,8 @@ const PersonalDetailsPage = () => {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="bg-gray-50/90 backdrop-blur-3xl p-6 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] border border-white/50 relative overflow-hidden w-full"
       >
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-accent-gold/20 to-transparent rounded-full blur-3xl -z-10 transform translate-x-1/3 -translate-y-1/3" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-primary-900/10 to-transparent rounded-full blur-3xl -z-10 transform -translate-x-1/3 translate-y-1/3" />
+        <div className="absolute top-0 right-0 w-full sm:w-96 h-96 bg-gradient-to-bl from-accent-gold/20 to-transparent rounded-full blur-3xl -z-10 transform translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 left-0 w-full sm:w-96 h-96 bg-gradient-to-tr from-primary-900/10 to-transparent rounded-full blur-3xl -z-10 transform -translate-x-1/3 translate-y-1/3" />
 
       <motion.div variants={itemVariants} initial="hidden" animate="show" className="mb-6 flex justify-between items-center">
         <div>

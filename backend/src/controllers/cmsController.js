@@ -359,14 +359,32 @@ exports.getAdminDashboardStats = asyncHandler(async (req, res) => {
   // SUPER_ADMIN Logic (Global MIS)
   // ---------------------------------------------------------
   if (role === 'SUPER_ADMIN') {
-    const totalApplications = await prisma.application.count();
-    const activeCourses = await prisma.department.count();
-    
-    // Departments Intelligence
-    const facultySections = await prisma.contentSection.findMany({
-      where: { sectionKey: 'faculty', page: { slug: { startsWith: 'dept_' } } },
-      include: { page: { select: { slug: true } } }
-    });
+    const [
+      totalApplications,
+      activeCourses,
+      facultySections,
+      placementStudents,
+      allApps,
+      unreadMessages,
+      draftPages,
+      recentActivity
+    ] = await Promise.all([
+      prisma.application.count(),
+      prisma.department.count(),
+      prisma.contentSection.findMany({
+        where: { sectionKey: 'faculty', page: { slug: { startsWith: 'dept_' } } },
+        include: { page: { select: { slug: true } } }
+      }),
+      prisma.contentSection.findFirst({
+        where: { sectionKey: 'placements.students', page: { slug: 'placements' } }
+      }),
+      prisma.application.findMany({ select: { applicationStatus: true, courseChoice: true, createdAt: true } }),
+      prisma.contactMessage.count({ where: { status: 'UNREAD' } }),
+      prisma.contentPage.count({ where: { status: 'DRAFT' } }),
+      prisma.contentSection.findMany({
+        orderBy: { updatedAt: 'desc' }, take: 8, include: { page: { select: { slug: true } } }
+      })
+    ]);
     
     let totalFaculty = 0;
     const facultyByDept = {};
@@ -381,14 +399,8 @@ exports.getAdminDashboardStats = asyncHandler(async (req, res) => {
       } catch (e) {}
     });
 
-    // Placements
-    const placementStudents = await prisma.contentSection.findFirst({
-      where: { sectionKey: 'placements.students', page: { slug: 'placements' } }
-    });
     let placementCount = getArrayLength(placementStudents?.content);
 
-    // Admissions Funnel (Real Data)
-    const allApps = await prisma.application.findMany({ select: { applicationStatus: true, courseChoice: true, createdAt: true } });
     const studentsByDept = {};
     const funnelCounts = { REGISTERED: 0, PERSONAL_DONE: 0, ACADEMIC_DONE: 0, COURSE_SELECTED: 0, COMPLETED: 0 };
     
@@ -396,22 +408,18 @@ exports.getAdminDashboardStats = asyncHandler(async (req, res) => {
     const trendDataRaw = {};
 
     allApps.forEach(app => {
-      // Dept Count
       if (app.courseChoice) {
         const code = app.courseChoice.replace('B.E. ', '').replace('B.Tech ', '').substring(0, 4).toUpperCase().trim();
         studentsByDept[code] = (studentsByDept[code] || 0) + 1;
       }
-      // Funnel Count
       if (app.applicationStatus) {
         funnelCounts[app.applicationStatus] = (funnelCounts[app.applicationStatus] || 0) + 1;
       }
-      // Trend Count
       const mIndex = app.createdAt.getMonth();
       const monthName = months[mIndex];
       trendDataRaw[monthName] = (trendDataRaw[monthName] || 0) + 1;
     });
 
-    // Funnel Logic: A 'COMPLETED' app means it passed through all previous stages.
     const completed = funnelCounts['COMPLETED'] || 0;
     const confirmed = completed + (funnelCounts['COURSE_SELECTED'] || 0);
     const approved = confirmed + (funnelCounts['ACADEMIC_DONE'] || 0);
@@ -428,36 +436,25 @@ exports.getAdminDashboardStats = asyncHandler(async (req, res) => {
 
     const trendData = Object.keys(trendDataRaw).map(m => ({ name: m, applications: trendDataRaw[m] }));
 
-    // Department Intelligence Matrix
     const coreDepts = ['CSE', 'ECE', 'EEE', 'MECH', 'IT', 'AIDS', 'AIML', 'CIVIL', 'MBA'];
     const departmentIntelligence = coreDepts.map(dept => {
       const students = studentsByDept[dept] || 0;
       const faculty = facultyByDept[dept] || 0;
       const ratio = faculty > 0 ? Math.round((students / faculty) * 10) / 10 : 0;
       
-      // Real performance score formula
       let score = 0;
       if (students > 0 && faculty > 0) {
-        const capacityScore = Math.min((students / 120) * 40, 40); // Max 40 points for filling capacity
-        const facultyScore = Math.min((faculty / 20) * 40, 40); // Max 40 points for faculty strength
-        const balanceScore = ratio > 0 && ratio <= 15 ? 20 : (ratio > 15 && ratio < 25 ? 10 : 0); // Max 20 points for good ratio
+        const capacityScore = Math.min((students / 120) * 40, 40);
+        const facultyScore = Math.min((faculty / 20) * 40, 40);
+        const balanceScore = ratio > 0 && ratio <= 15 ? 20 : (ratio > 15 && ratio < 25 ? 10 : 0);
         score = Math.round(capacityScore + facultyScore + balanceScore);
       }
 
       return { department: dept, students, faculty, ratio, score, growth: 0 };
     }).sort((a, b) => b.students - a.students);
 
-    // Global Health Index
     const avgScore = departmentIntelligence.reduce((sum, d) => sum + d.score, 0) / (coreDepts.length || 1);
     const healthIndex = Math.round(avgScore);
-
-    // System Status
-    const unreadMessages = await prisma.contactMessage.count({ where: { status: 'UNREAD' } });
-    const draftPages = await prisma.contentPage.count({ where: { status: 'DRAFT' } });
-    
-    const recentActivity = await prisma.contentSection.findMany({
-      orderBy: { updatedAt: 'desc' }, take: 8, include: { page: { select: { slug: true } } }
-    });
 
     return res.status(200).json({
       success: true,

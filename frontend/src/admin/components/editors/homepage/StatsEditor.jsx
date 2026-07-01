@@ -169,7 +169,7 @@ const StatsEditor = () => {
                   placeholder="e.g. 5000"
                 />
                 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <AdminInput
                     label="Prefix (Optional)"
                     value={stat.prefix || ''}
@@ -184,7 +184,7 @@ const StatsEditor = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-slate-600 mb-1.5">Icon Selection</label>
                     <select 
@@ -245,7 +245,7 @@ const StatsEditor = () => {
                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500 opacity-20 blur-3xl rounded-full" />
                <div className="p-6 relative z-10">
                  <h4 className="text-center text-sm font-semibold text-white mb-6 uppercase tracking-widest">{form.title || 'By the Numbers'}</h4>
-                 <div className="grid grid-cols-2 gap-4">
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                    {statsList.slice(0, 4).map((stat, i) => {
                      const IconComponent = AVAILABLE_ICONS.find(ic => ic.id === stat.icon)?.icon || AVAILABLE_ICONS[0].icon;
                      return (

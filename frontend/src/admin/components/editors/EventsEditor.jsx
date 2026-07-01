@@ -158,7 +158,7 @@ const EventsEditor = () => {
       >
         <div className="space-y-4">
           <AdminInput label="Event Title *" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Annual Tech Symposium 2026" />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <AdminInput label="Date *" type="date" value={form.date} onChange={e => setForm(p => ({ ...p, date: e.target.value }))} />
             <AdminSelect label="Category" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))} options={CATEGORY_OPTIONS} />
           </div>

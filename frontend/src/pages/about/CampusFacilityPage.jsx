@@ -82,8 +82,8 @@ const CampusFacilityPage = () => {
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-950/90 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
-          <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-cyan-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
+          <div className="absolute top-1/4 left-1/4 w-[500px] max-w-full h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-[400px] max-w-full h-[400px] bg-cyan-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
         </div>
 
         <div className="container mx-auto px-4 md:px-8 relative z-10">
@@ -126,7 +126,7 @@ const CampusFacilityPage = () => {
                   {/* Image Block */}
                   <div className="w-full lg:w-1/2 relative overflow-hidden h-64 lg:h-auto">
                     <div className="absolute inset-0 bg-accent-gold/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    <img 
+                    <img loading="lazy" decoding="async" 
                       src={facility.image || facility.images?.[0] || 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3'} 
                       alt={facility.title} 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-luxury"

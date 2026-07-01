@@ -180,7 +180,7 @@ const PaymentPage = () => {
                             className="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-accent-gold transition-colors font-mono tracking-widest"
                           />
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           <div className="space-y-1.5">
                             <label className="text-xs font-bold text-gray-700 uppercase tracking-wider">Expiry (MM/YY)</label>
                             <input 

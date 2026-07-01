@@ -54,7 +54,7 @@ const TermsEditor = () => {
            <div className="p-5 rounded-2xl border bg-slate-50 text-slate-700 border-slate-200 flex justify-between items-center"><div className="flex items-center gap-3"><ShieldAlert className="w-8 h-8 text-slate-400"/><span className="font-bold">Legal Document Manager</span></div><div className="px-3 py-1 bg-white border border-slate-200 rounded-lg text-xs font-bold">about.terms</div></div>
            <EditorCard title="Document Content">
              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                    <AdminInput label="Document Title" value={form.title || ''} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} />
                    <AdminInput label="Last Updated Date" type="date" value={form.lastUpdated || ''} onChange={e => setForm(p => ({ ...p, lastUpdated: e.target.value }))} />
                 </div>

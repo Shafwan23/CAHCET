@@ -158,7 +158,7 @@ const DeptAchievementsEditor = ({ deptKey, dept, cms, session }) => {
         {/* Left Side: Configuration Panel */}
         <div className="xl:col-span-7 space-y-6">
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
              <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-6 rounded-[2rem] border border-slate-700 shadow-[0_10px_40px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.25)] hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between h-36 relative overflow-hidden group text-white">
                 <div className="flex justify-between items-start">
                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Achievements</p>
@@ -235,12 +235,11 @@ const DeptAchievementsEditor = ({ deptKey, dept, cms, session }) => {
                     {/* Premium Glow Effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-5 rounded-3xl transition-opacity duration-500 pointer-events-none" />
                     <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-3xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500 pointer-events-none -z-10" />
-                  >
                     <div className="p-5 bg-white/60 backdrop-blur-xl border-b border-slate-100 flex items-center justify-between rounded-t-3xl relative z-10">
                       <div className="flex items-center gap-3">
                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100/50 flex items-center justify-center text-indigo-500 overflow-hidden shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-500">
                            {item.image ? (
-                             <img src={item.image} alt="pic" className="w-full h-full object-cover" />
+                             <img loading="lazy" decoding="async" src={item.image} alt="pic" className="w-full h-full object-cover" />
                            ) : (
                              <Trophy className="w-5 h-5 opacity-40 text-amber-500" />
                            )}
@@ -298,7 +297,7 @@ const DeptAchievementsEditor = ({ deptKey, dept, cms, session }) => {
                           onChange={e => updateItem(actualIndex, 'author', e.target.value)}
                           placeholder="Dr. John Doe"
                         />
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                            <AdminInput
                              label="Academic Year"
                              value={item.year || ''}

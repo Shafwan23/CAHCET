@@ -29,7 +29,7 @@ const StatsSection = ({ data }) => {
   return (
     <section className="bg-primary-50 py-12">
       <Container>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-primary-200">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-primary-200">
           {stats.map((stat, index) => (
             <motion.div 
               key={index}

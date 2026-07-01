@@ -118,7 +118,7 @@ const ApplicationRegisterPage = () => {
         {/* Left Side: Image & Branding */}
         <div className="hidden md:flex md:w-5/12 lg:w-1/2 relative flex-col justify-between p-12 text-white overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <img 
+            <img loading="lazy" decoding="async" 
               src={cahcetHeroImg} 
               alt="Campus" 
               className="w-full h-full object-cover scale-105 transform-gpu motion-safe:animate-[pulse_20s_ease-in-out_infinite_alternate]"
@@ -130,7 +130,7 @@ const ApplicationRegisterPage = () => {
           <div className="relative z-10">
             <Link to="/" className="inline-flex items-center gap-3 group">
               <div className="p-1.5 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 transition-transform duration-300 group-hover:scale-105">
-                <img src={logoImg} alt="CAHCET Logo" className="w-10 h-10 object-contain" />
+                <img loading="lazy" decoding="async" src={logoImg} alt="CAHCET Logo" className="w-10 h-10 object-contain" />
               </div>
               <span className="text-xl font-display font-extrabold tracking-tight">CAHCET</span>
             </Link>
@@ -160,8 +160,8 @@ const ApplicationRegisterPage = () => {
         {/* Right Side: Form */}
         <div className="w-full md:w-7/12 lg:w-1/2 flex items-center justify-center p-6 md:p-12 relative">
           {/* Ambient glow */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-900/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-full sm:w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-full sm:w-96 h-96 bg-primary-900/5 rounded-full blur-3xl pointer-events-none" />
 
           <motion.div 
             initial={{ opacity: 0, x: 20 }}

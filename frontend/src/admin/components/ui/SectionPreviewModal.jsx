@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy, memo } from 'react';
 import { X, CheckCircle, AlertTriangle, XCircle, RotateCcw, GitCompare, Eye, LayoutTemplate, FileCode, History, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cmsService } from '../../../services/cmsService';
@@ -29,7 +29,7 @@ const ComponentRegistry = {
   'home.contact': ContactSection,
 };
 
-const SectionPreviewModal = ({ section, onClose, onPublish, onRestore }) => {
+const SectionPreviewModal = memo(({ section, onClose, onPublish, onRestore }) => {
   const [activeTab, setActiveTab] = useState('diff'); // diff, visual, validation, versions
   const [versions, setVersions] = useState([]);
   const [loadingVersions, setLoadingVersions] = useState(false);
@@ -177,7 +177,7 @@ const SectionPreviewModal = ({ section, onClose, onPublish, onRestore }) => {
                           <div className="flex-1 overflow-hidden">
                             <p className="text-xs font-mono text-slate-400 mb-1">{diff.path}</p>
                             {diff.type === 'MODIFIED' && (
-                              <div className="grid grid-cols-2 gap-4">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="bg-red-50/50 p-2 rounded border border-red-100">
                                   <p className="text-xs text-red-400 font-bold mb-1">Published</p>
                                   <p className="text-sm text-slate-700 break-words">{JSON.stringify(diff.oldValue)}</p>
@@ -314,6 +314,6 @@ const SectionPreviewModal = ({ section, onClose, onPublish, onRestore }) => {
       </motion.div>
     </div>
   );
-};
+});
 
 export default SectionPreviewModal;

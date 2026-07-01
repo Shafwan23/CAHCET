@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown, GraduationCap } from 'lucide-react';
 import { navigationLinks } from '../../data/navigation';
@@ -40,11 +40,9 @@ const Navbar = () => {
 
   const handleHomeClick = (e, href) => {
     if (href === '/') {
-      e.preventDefault();
       if (window.location.pathname === '/') {
+        e.preventDefault();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        window.location.href = '/';
       }
     }
   };
@@ -61,19 +59,19 @@ const Navbar = () => {
       >
       <Container className="flex items-center justify-between">
         {/* Logo */}
-        <a 
-          href="/" 
+        <Link 
+          to="/" 
           className="flex items-center gap-3 group"
           onClick={(e) => handleHomeClick(e, '/')}
         >
           <div className="p-1 transition-transform duration-300 group-hover:scale-105">
-            <img src={logoImg} alt="CAHCET Logo" className="w-12 h-12 object-contain" />
+            <img loading="lazy" decoding="async" src={logoImg} alt="CAHCET Logo" className="w-12 h-12 object-contain" />
           </div>
           <div className="flex flex-col">
             <span className="text-xl font-display font-bold leading-none text-white">{brandName || 'CAHCET'}</span>
             <span className="text-[10px] uppercase tracking-widest font-semibold text-white/70">Engineering Excellence</span>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-8">
@@ -92,17 +90,17 @@ const Navbar = () => {
                 setActiveSubmenu(null);
               }}
             >
-              <a
-                href={link.href || '#'}
+              <Link
+                to={link.href || '#'}
                 onClick={(e) => handleHomeClick(e, link.href)}
                 className={cn(
                   "flex items-center gap-1 font-medium text-sm transition-colors hover:text-accent-gold",
-                  "text-white"
+                  activeDropdown === link.name ? "text-accent-gold" : "text-white"
                 )}
               >
                 {link.name}
                 {(link.dropdown || link.megaMenu) && <ChevronDown className="w-4 h-4" />}
-              </a>
+              </Link>
 
               <AnimatePresence>
                 {activeDropdown === link.name && (link.dropdown || link.megaMenu) && (
@@ -113,20 +111,20 @@ const Navbar = () => {
                     transition={{ duration: 0.2 }}
                     className={cn(
                       "absolute top-full pt-4",
-                      link.megaMenu ? "-left-48 w-[600px]" : "left-0 w-64"
+                      link.megaMenu ? "-left-48 w-max min-w-[600px]" : "left-0 w-64"
                     )}
                   >
-                    <div className="bg-primary-950/95 backdrop-blur-xl border border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.45)] rounded-xl p-6 text-white">
+                    <div className="bg-primary-950/95 backdrop-blur-xl border border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.45)] rounded-xl p-6 text-white w-full">
                       {link.dropdown && (
                         <div className="grid gap-2">
                           {link.dropdown.map((item) => (
-                            <a
+                            <Link
                               key={item.name}
-                              href={item.href}
+                              to={item.href}
                               className="text-white/70 hover:text-accent-gold transition-colors block py-1 text-sm font-light"
                             >
                               {item.name}
-                            </a>
+                            </Link>
                           ))}
                         </div>
                       )}
@@ -151,23 +149,23 @@ const Navbar = () => {
                           </div>
                           
                           {/* Level 2: Links (Floating Submenu Area) */}
-                          <div className="w-3/4 bg-primary-950 border border-white/10 rounded-lg p-4">
+                          <div className="w-3/4 bg-primary-900/50 border border-white/10 rounded-lg p-4 h-full">
                             {link.megaMenu.map((group) => (
                               <div 
                                 key={group.title}
                                 className={cn(
-                                  "grid grid-cols-2 gap-x-6 gap-y-2",
+                                  "grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2",
                                   activeSubmenu === group.title ? "grid" : "hidden"
                                 )}
                               >
                                 {group.links.map((item) => (
-                                  <a
+                                  <Link
                                     key={item.name}
-                                    href={item.href}
+                                    to={item.href}
                                     className="text-white/70 hover:text-accent-gold transition-colors text-sm font-light py-1"
                                   >
                                     {item.name}
-                                  </a>
+                                  </Link>
                                 ))}
                               </div>
                             ))}
@@ -206,7 +204,7 @@ const Navbar = () => {
             <div className="p-6 flex flex-col min-h-screen">
               <div className="flex items-center justify-between mb-12">
                 <div className="flex items-center gap-3">
-                  <img src={logoImg} alt="CAHCET Logo" className="w-12 h-12 object-contain" />
+                  <img loading="lazy" decoding="async" src={logoImg} alt="CAHCET Logo" className="w-12 h-12 object-contain" />
                   <span className="text-white text-xl font-display font-bold">{brandName || 'CAHCET'}</span>
                 </div>
                 <button onClick={() => setIsOpen(false)} className="text-white p-2">
@@ -243,13 +241,13 @@ const MobileLink = ({ link, close }) => {
             {link.name}
           </button>
         ) : (
-          <a
-            href={link.href}
+          <Link
+            to={link.href}
             className="text-xl text-white font-medium flex-1 py-1"
             onClick={close}
           >
             {link.name}
-          </a>
+          </Link>
         )}
         {hasSub && (
           <button 
@@ -273,37 +271,37 @@ const MobileLink = ({ link, close }) => {
           >
             <div className="p-4 grid gap-3">
               {link.name === 'Departments' && (
-                <a 
-                  href="/departments" 
+                <Link 
+                  to="/departments" 
                   onClick={close} 
                   className="text-accent-gold font-semibold text-base py-1 border-b border-white/5 block mb-2 hover:text-white transition-colors"
                 >
                   Departments Overview
-                </a>
+                </Link>
               )}
               {link.dropdown && link.dropdown.map(item => (
-                <a 
+                <Link 
                   key={item.name} 
-                  href={item.href} 
+                  to={item.href} 
                   onClick={close} 
                   className="text-white/70 hover:text-white transition-colors text-base py-1.5 block"
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
               {link.megaMenu && link.megaMenu.map(group => (
                 <div key={group.title} className="mb-4 last:mb-0">
                   <div className="text-accent-gold text-xs uppercase tracking-widest font-bold mb-2">{group.title}</div>
                   <div className="grid gap-2 pl-2">
                     {group.links.map(item => (
-                      <a 
+                      <Link 
                         key={item.name} 
-                        href={item.href} 
+                        to={item.href} 
                         onClick={close} 
                         className="text-white/70 hover:text-white transition-colors py-1 block text-base"
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>

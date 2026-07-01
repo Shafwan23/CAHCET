@@ -133,8 +133,8 @@ export default function StudentsPlacedPage() {
     <div className="min-h-screen bg-slate-50 text-slate-800 overflow-x-hidden font-sans relative">
       {/* Ambient background effects */}
       <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-100/40 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-primary-50/20 rounded-full blur-[120px]" />
+        <div className="absolute top-0 left-1/4 w-[600px] max-w-full h-[600px] bg-blue-100/40 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] max-w-full h-[500px] bg-primary-50/20 rounded-full blur-[120px]" />
       </div>
 
       <Navbar />

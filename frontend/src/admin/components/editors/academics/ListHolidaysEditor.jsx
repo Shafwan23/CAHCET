@@ -146,7 +146,8 @@ const ListHolidaysEditor = () => {
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-slate-200">
-            <table className="w-full text-left text-sm whitespace-nowrap">
+            <div className="w-full overflow-x-auto">
+<table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
                 <tr>
                   <th className="px-4 py-3">Holiday Name</th>
@@ -179,6 +180,7 @@ const ListHolidaysEditor = () => {
                 )}
               </tbody>
             </table>
+</div>
           </div>
         </EditorCard>
       </div>

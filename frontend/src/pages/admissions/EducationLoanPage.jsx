@@ -89,8 +89,8 @@ const EducationLoanPage = () => {
 
         {/* Ambient Glows */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-100/40 rounded-full blur-[140px]" />
-          <div className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] bg-primary-50/30 rounded-full blur-[130px]" />
+          <div className="absolute top-0 left-1/4 w-[600px] max-w-full h-[600px] bg-blue-100/40 rounded-full blur-[140px]" />
+          <div className="absolute bottom-1/3 right-1/4 w-[500px] max-w-full h-[500px] bg-primary-50/30 rounded-full blur-[130px]" />
         </div>
 
         <FloatingParticles count={25} color="rgba(37, 99, 235, 0.1)" />
@@ -102,8 +102,8 @@ const EducationLoanPage = () => {
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20" />
             <div className="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-950/90 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-            <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-emerald-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
+            <div className="absolute top-1/4 left-1/4 w-[500px] max-w-full h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+            <div className="absolute bottom-1/4 right-1/4 w-[400px] max-w-full h-[400px] bg-emerald-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
           </div>
 
           <motion.div 
@@ -197,7 +197,7 @@ const EducationLoanPage = () => {
             <motion.div 
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-32 -right-32 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl z-0 pointer-events-none" 
+              className="absolute -top-32 -right-32 w-full sm:w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl z-0 pointer-events-none" 
             />
             
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
@@ -297,7 +297,7 @@ const EducationLoanPage = () => {
                     <div className="w-28 h-28 bg-white border border-primary-100 rounded-[2rem] p-4 shrink-0 flex items-center justify-center shadow-sm group-hover:border-accent-gold/40 group-hover:shadow-glow-sm transition-all duration-500 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       {provider.logoUrl ? (
-                        <img src={provider.logoUrl} alt={provider.bankName} className="w-full h-full object-contain mix-blend-multiply relative z-10 group-hover:scale-110 transition-transform duration-700" />
+                        <img loading="lazy" decoding="async" src={provider.logoUrl} alt={provider.bankName} className="w-full h-full object-contain mix-blend-multiply relative z-10 group-hover:scale-110 transition-transform duration-700" />
                       ) : (
                         <Building className="w-12 h-12 text-primary-300 relative z-10 group-hover:text-accent-gold transition-colors duration-500 group-hover:scale-110" />
                       )}

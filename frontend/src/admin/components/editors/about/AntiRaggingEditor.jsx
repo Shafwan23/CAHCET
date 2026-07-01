@@ -85,7 +85,7 @@ const AntiRaggingEditor = () => {
     <EditorPage title="Anti Ragging Policy" description="Manage the Anti Ragging Committee, Squads, and General Members." breadcrumb={['Admin', 'About', 'Anti Ragging']} onSave={() => handleSaveDraft(false)} onPublish={async () => { await handleSaveDraft(true); setPreviewSection(sectionsMap['about.anti_ragging']); }} onReset={fetchPage} isLoading={loading} status={status} lastModified={lastModified} validationIssues={validationIssues}>
       <AnimatePresence mode="wait">
         <motion.div key="main" {...fadeUp} className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div className="p-5 rounded-2xl border bg-red-50 text-red-700 border-red-100 relative overflow-hidden"><Shield className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">Committee Members</span><span className="text-3xl font-extrabold">{form.committee.length}</span></div>
             <div className="p-5 rounded-2xl border bg-amber-50 text-amber-700 border-amber-100 relative overflow-hidden"><AlertTriangle className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">Anti-Ragging Squads</span><span className="text-3xl font-extrabold">{form.squads.length}</span></div>
             <div className="p-5 rounded-2xl border bg-blue-50 text-blue-700 border-blue-100 relative overflow-hidden"><Users className="absolute -right-4 -bottom-4 w-16 h-16 opacity-10"/><span className="text-[10px] font-bold uppercase block mb-1">General Members</span><span className="text-3xl font-extrabold">{form.members.length}</span></div>
@@ -106,7 +106,8 @@ const AntiRaggingEditor = () => {
 
           <EditorCard title={`${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Roster`} description="Manage personnel for this section.">
             <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
-              <table className="w-full text-left text-sm whitespace-nowrap">
+              <div className="w-full overflow-x-auto">
+<table className="w-full text-left text-sm whitespace-nowrap">
                 <thead className="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
                   <tr><th className="px-4 py-3">Name</th><th className="px-4 py-3">Designation</th><th className="px-4 py-3">Role</th><th className="px-4 py-3">Department</th><th className="px-4 py-3">Contact</th><th className="px-4 py-3 w-16 text-center">Action</th></tr>
                 </thead>
@@ -128,6 +129,7 @@ const AntiRaggingEditor = () => {
                   </AnimatePresence>
                 </tbody>
               </table>
+</div>
             </div>
           </EditorCard>
         </motion.div>

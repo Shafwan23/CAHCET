@@ -84,7 +84,7 @@ const FacilitiesSection = ({ data }) => {
               custom={idx * 0.1}
               className="group relative overflow-hidden rounded-2xl shadow-lg h-[300px]"
             >
-              <img 
+              <img loading="lazy" decoding="async" 
                 src={facility.image} 
                 alt={facility.title} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"

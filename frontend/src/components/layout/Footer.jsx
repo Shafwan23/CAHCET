@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { GraduationCap, Facebook, Twitter, Instagram, Linkedin, ArrowUp } from 'lucide-react';
 import { Container } from '../ui/Layout';
 import { footerLinks } from '../../data/navigation';
@@ -37,7 +38,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              <img src={logoImg} alt="CAHCET Logo" className="w-14 h-14 object-contain" />
+              <img loading="lazy" decoding="async" src={logoImg} alt="CAHCET Logo" className="w-14 h-14 object-contain" />
               <span className="text-2xl font-display font-bold">CAHCET</span>
             </div>
             <p className="text-primary-300 mb-8 leading-relaxed">
@@ -58,7 +59,7 @@ const Footer = () => {
             <ul className="space-y-4">
               {footerLinks.quickLinks.map(link => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-primary-300 hover:text-accent-gold transition-colors">{link.name}</a>
+                  <Link to={link.href} className="text-primary-300 hover:text-accent-gold transition-colors">{link.name}</Link>
                 </li>
               ))}
             </ul>
@@ -70,7 +71,7 @@ const Footer = () => {
             <ul className="space-y-4">
               {footerLinks.departments.map(link => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-primary-300 hover:text-accent-gold transition-colors">{link.name}</a>
+                  <Link to={link.href} className="text-primary-300 hover:text-accent-gold transition-colors">{link.name}</Link>
                 </li>
               ))}
             </ul>
@@ -97,18 +98,16 @@ const Footer = () => {
             © 2026 C. Abdul Hakeem College of Engineering and Technology. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-8 text-sm text-primary-400">
-            <a
-              href="/admin/login"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/admin/login"
               className="text-primary-600 hover:text-accent-gold transition-colors text-xs tracking-wider font-medium opacity-50 hover:opacity-100"
               title="Admin Panel"
             >
               Admin
-            </a>
+            </Link>
             <span className="text-primary-700 text-xs select-none hidden sm:inline">·</span>
             {footerLinks.legal.map(link => (
-              <a key={link.name} href={link.href} className="hover:text-accent-gold transition-colors">{link.name}</a>
+              <Link key={link.name} to={link.href} className="hover:text-accent-gold transition-colors">{link.name}</Link>
             ))}
           </div>
           <button

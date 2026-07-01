@@ -137,7 +137,7 @@ const EducationLoanEditor = () => {
                 
                 <div className="flex gap-4 mb-4">
                   <div className="w-24 h-24 bg-white border border-slate-200 rounded-xl flex items-center justify-center shrink-0 overflow-hidden relative group/logo p-2 shadow-sm">
-                    {provider.logoUrl ? <img src={provider.logoUrl} className="w-full h-full object-contain" /> : <Landmark className="w-8 h-8 text-slate-300" />}
+                    {provider.logoUrl ? <img loading="lazy" decoding="async" src={provider.logoUrl} className="w-full h-full object-contain" /> : <Landmark className="w-8 h-8 text-slate-300" />}
                     <label className="absolute inset-0 bg-black/60 text-white flex flex-col items-center justify-center opacity-0 group-hover/logo:opacity-100 cursor-pointer transition-opacity backdrop-blur-[1px]">
                       <Upload className="w-5 h-5 mb-1" />
                       <span className="text-[10px] font-semibold">Upload Logo</span>

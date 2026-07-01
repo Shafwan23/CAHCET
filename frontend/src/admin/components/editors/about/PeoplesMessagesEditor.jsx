@@ -69,18 +69,18 @@ const PeoplesMessagesEditor = () => {
         <div className="space-y-5">
           <AdminInput label="Full Name" value={data.name || ''} onChange={e => setData(p => ({ ...p, name: e.target.value }))} />
           <AdminInput label="Designation" value={data.designation || ''} onChange={e => setData(p => ({ ...p, designation: e.target.value }))} />
-          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-100">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Portrait Photo</label>
               <div className="flex flex-col gap-3">
-                {data.photoUrl ? <img src={data.photoUrl} className="w-24 h-32 object-cover rounded-xl border border-slate-200 shadow-sm" /> : <div className="w-24 h-32 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl" />}
+                {data.photoUrl ? <img loading="lazy" decoding="async" src={data.photoUrl} className="w-24 h-32 object-cover rounded-xl border border-slate-200 shadow-sm" /> : <div className="w-24 h-32 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl" />}
                 <label className="inline-flex items-center px-4 py-2 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg cursor-pointer hover:bg-slate-200 w-max"><UploadCloud className="w-3.5 h-3.5 mr-2" /> Upload<input type="file" accept="image/*" className="hidden" onChange={e => handleUpload(key, 'photoUrl', e)} /></label>
               </div>
             </div>
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Signature</label>
               <div className="flex flex-col gap-3">
-                {data.signatureUrl ? <img src={data.signatureUrl} className="h-16 object-contain rounded-xl border border-slate-200 bg-white shadow-sm p-2" /> : <div className="h-16 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl" />}
+                {data.signatureUrl ? <img loading="lazy" decoding="async" src={data.signatureUrl} className="h-16 object-contain rounded-xl border border-slate-200 bg-white shadow-sm p-2" /> : <div className="h-16 bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl" />}
                 <label className="inline-flex items-center px-4 py-2 bg-slate-100 text-slate-700 text-xs font-bold rounded-lg cursor-pointer hover:bg-slate-200 w-max"><UploadCloud className="w-3.5 h-3.5 mr-2" /> Upload<input type="file" accept="image/*" className="hidden" onChange={e => handleUpload(key, 'signatureUrl', e)} /></label>
               </div>
             </div>

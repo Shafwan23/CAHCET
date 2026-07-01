@@ -117,7 +117,7 @@ const PlacementsSection = ({ data, liveData, liveStats }) => {
             {recruiters.map((company, idx) => (
               <SwiperSlide key={idx}>
                 <div className="bg-white rounded-2xl p-6 h-32 flex items-center justify-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                  <img 
+                  <img loading="lazy" decoding="async" 
                     src={company.logo} 
                     alt={company.name} 
                     className="max-h-12 w-auto object-contain opacity-100 transition-opacity"

@@ -12,8 +12,8 @@ const Preloader = () => {
     >
       {/* Mesh Gradient Background */}
       <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-gold rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/4 left-1/4 w-full sm:w-96 h-96 bg-accent-gold rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-full sm:w-96 h-96 bg-blue-600 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center">
@@ -25,7 +25,7 @@ const Preloader = () => {
           className="relative mb-8"
         >
           <div className="w-24 h-24 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 flex items-center justify-center p-4">
-            <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
+            <img loading="lazy" decoding="async" src={logoImg} alt="Logo" className="w-full h-full object-contain" />
           </div>
           {/* Ambient Glow */}
           <div className="absolute inset-0 bg-accent-gold/20 blur-xl rounded-full -z-10" />

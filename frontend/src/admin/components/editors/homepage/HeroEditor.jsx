@@ -208,7 +208,7 @@ const HeroEditor = () => {
             </div>
             {form.bgImageUrl && (
               <div className="mt-3 aspect-[21/9] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 relative">
-                 <img src={form.bgImageUrl} alt="Hero Background" className="w-full h-full object-cover" />
+                 <img loading="lazy" decoding="async" src={form.bgImageUrl} alt="Hero Background" className="w-full h-full object-cover" />
               </div>
             )}
           </div>
@@ -257,7 +257,7 @@ const HeroEditor = () => {
 
               <div className="relative aspect-[4/5] sm:aspect-video xl:aspect-[3/4] bg-slate-900 overflow-hidden flex flex-col items-center justify-center text-center p-6">
                 {form.bgImageUrl && (
-                  <img src={form.bgImageUrl} alt="Hero" className="absolute inset-0 w-full h-full object-cover opacity-60" style={{ opacity: 1 - (form.overlayOpacity || 60) / 100 }} />
+                  <img loading="lazy" decoding="async" src={form.bgImageUrl} alt="Hero" className="absolute inset-0 w-full h-full object-cover opacity-60" style={{ opacity: 1 - (form.overlayOpacity || 60) / 100 }} />
                 )}
                 {form.showTextOverlay && (
                   <div className="relative z-10 flex flex-col items-center">

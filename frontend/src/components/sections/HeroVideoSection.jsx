@@ -11,6 +11,35 @@ import campusVideoMV from '../../assets/videos/heroViideoMV.mp4';
 const HeroVideoSection = ({ data }) => {
   const { scrollY } = useScroll();
   const [isMobile, setIsMobile] = React.useState(false);
+  const videoRefMobile = React.useRef(null);
+  const videoRefDesktop = React.useRef(null);
+  const [isVideoLoaded, setIsVideoLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (isMobile) {
+              videoRefMobile.current?.play().catch(() => {});
+            } else {
+              videoRefDesktop.current?.play().catch(() => {});
+            }
+          } else {
+            videoRefMobile.current?.pause();
+            videoRefDesktop.current?.pause();
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const section = document.getElementById('home');
+    if (section) observer.observe(section);
+    return () => {
+      if (section) observer.unobserve(section);
+    };
+  }, [isMobile]);
 
   React.useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -37,11 +66,13 @@ const HeroVideoSection = ({ data }) => {
         
         {/* Mobile Video (portrait-optimized) */}
         <video 
-          autoPlay 
+          ref={videoRefMobile}
+          preload="metadata"
           muted 
           loop 
           playsInline
-          className="block md:hidden w-full h-full object-cover object-center pointer-events-none"
+          onCanPlay={() => setIsVideoLoaded(true)}
+          className={`block md:hidden w-full h-full object-cover object-center pointer-events-none transition-opacity duration-1000 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
           poster={data?.bgImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=800"}
         >
           <source src={data?.mobileVideoUrl || data?.videoUrl || campusVideoMV} type="video/mp4" />
@@ -49,16 +80,18 @@ const HeroVideoSection = ({ data }) => {
 
         {/* Desktop Video (landscape) */}
         <video 
-          autoPlay 
+          ref={videoRefDesktop}
+          preload="metadata"
           muted 
           loop 
           playsInline
-          className="hidden md:block w-full h-full object-cover object-center pointer-events-none"
+          onCanPlay={() => setIsVideoLoaded(true)}
+          className={`hidden md:block w-full h-full object-cover object-center pointer-events-none transition-opacity duration-1000 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
           poster={data?.bgImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=2000"}
         >
           <source src={data?.videoUrl || campusVideo} type="video/mp4" />
           {/* Fallback image */}
-          <img 
+          <img loading="lazy" decoding="async" 
             src={data?.bgImageUrl || "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=2000"} 
             alt="University Campus"
             className="w-full h-full object-cover"

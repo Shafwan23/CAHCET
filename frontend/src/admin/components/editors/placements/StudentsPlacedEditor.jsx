@@ -116,7 +116,7 @@ const StudentsPlacedEditor = () => {
       <AnimatePresence mode="wait">
         {!editingItem ? (
           <motion.div key="list" {...fadeUp} className="space-y-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl border bg-blue-50 text-blue-700 border-blue-100"><span className="text-[10px] font-bold uppercase block mb-1">Total Placed</span><span className="text-3xl font-extrabold">{metrics.total}</span></div>
               <div className="p-5 rounded-2xl border bg-emerald-50 text-emerald-700 border-emerald-100"><span className="text-[10px] font-bold uppercase block mb-1">Avg. Package</span><span className="text-3xl font-extrabold">{metrics.avgPackage} LPA</span></div>
               <div className="p-5 rounded-2xl border bg-amber-50 text-amber-700 border-amber-100"><span className="text-[10px] font-bold uppercase block mb-1">Highest Package</span><span className="text-3xl font-extrabold">{metrics.highest} LPA</span></div>

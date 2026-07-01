@@ -77,7 +77,8 @@ const DepartmentIntelligenceTab = ({ data }) => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <div className="w-full overflow-x-auto">
+<table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-200">
                 <th className="p-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest cursor-pointer hover:bg-slate-50 transition-colors rounded-tl-xl" onClick={() => handleSort('department')}>Department</th>
@@ -135,6 +136,7 @@ const DepartmentIntelligenceTab = ({ data }) => {
               ))}
             </tbody>
           </table>
+</div>
         </div>
       </motion.div>
 

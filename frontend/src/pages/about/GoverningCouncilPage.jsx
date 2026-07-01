@@ -70,7 +70,7 @@ export default function GoverningCouncilPage() {
         <section className="relative w-full overflow-hidden bg-primary-950 mb-16 shadow-2xl rounded-b-[3rem]">
           <div className="absolute inset-0 bg-gradient-to-br from-primary-950 via-primary-900 to-indigo-900 opacity-90" />
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay" />
-          <div className="absolute -top-20 -right-20 w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]" />
+          <div className="absolute -top-20 -right-20 w-full sm:w-96 h-96 bg-accent-gold/20 rounded-full blur-[100px]" />
           <div className="absolute top-40 -left-20 w-80 h-80 bg-blue-500/20 rounded-full blur-[80px]" />
           
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 relative z-10 text-center flex flex-col items-center">
@@ -112,7 +112,7 @@ export default function GoverningCouncilPage() {
                     <div className="flex items-start justify-between mb-6">
                       <div className="w-16 h-16 rounded-2xl bg-slate-100 group-hover:bg-primary-100 flex items-center justify-center text-slate-400 group-hover:text-primary-600 transition-colors overflow-hidden shadow-sm group-hover:scale-105 duration-300">
                         {member.photoUrl ? (
-                          <img src={member.photoUrl} alt={member.name} className="w-full h-full object-cover" />
+                          <img loading="lazy" decoding="async" src={member.photoUrl} alt={member.name} className="w-full h-full object-cover" />
                         ) : (
                           <User className="w-8 h-8" />
                         )}

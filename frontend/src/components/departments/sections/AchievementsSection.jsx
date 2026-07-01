@@ -46,7 +46,7 @@ const AchievementCard = ({ item }) => {
         {item.image && (
           <div className="relative group/img">
             <div className="absolute inset-0 bg-accent-gold/20 blur-md rounded-3xl opacity-0 group-hover/img:opacity-100 transition-opacity" />
-            <img 
+            <img loading="lazy" decoding="async" 
               src={item.image} 
               alt={item.title} 
               className="w-20 h-20 rounded-3xl object-cover shrink-0 border border-primary-100 shadow-sm relative z-10"
@@ -236,7 +236,8 @@ const AchievementsSection = ({ data }) => {
                       </h3>
                     </div>
                     <div className="overflow-x-auto p-4 md:p-6">
-                      <table className="w-full text-left border-separate" style={{ borderSpacing: '0 12px' }}>
+                      <div className="w-full overflow-x-auto">
+<table className="w-full text-left border-separate" style={{ borderSpacing: '0 12px' }}>
                         <thead>
                           <tr className="text-primary-400 uppercase tracking-widest text-[10px]">
                             {['internship', 'mooc'].includes(activeSubTab) ? (
@@ -306,6 +307,7 @@ const AchievementsSection = ({ data }) => {
                           ))}
                         </tbody>
                       </table>
+</div>
                     </div>
                   </div>
                 ))}

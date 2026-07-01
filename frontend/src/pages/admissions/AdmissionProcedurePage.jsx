@@ -105,8 +105,8 @@ const AdmissionProcedurePage = () => {
 
         {/* Ambient Backlighting Mesh Gradients */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-blue-100/40 rounded-full blur-[140px]" />
-          <div className="absolute bottom-1/4 right-1/3 w-[700px] h-[700px] bg-primary-50/30 rounded-full blur-[160px]" />
+          <div className="absolute top-1/3 left-1/4 w-[500px] max-w-full h-[500px] bg-blue-100/40 rounded-full blur-[140px]" />
+          <div className="absolute bottom-1/4 right-1/3 w-[700px] max-w-full h-[700px] bg-primary-50/30 rounded-full blur-[160px]" />
         </div>
 
         <FloatingParticles count={25} color="rgba(37, 99, 235, 0.08)" />
@@ -123,8 +123,8 @@ const AdmissionProcedurePage = () => {
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20" />
               <div className="absolute inset-0 bg-gradient-to-r from-primary-950 via-primary-950/90 to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
-              <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-              <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
+              <div className="absolute top-1/4 left-1/4 w-[500px] max-w-full h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+              <div className="absolute bottom-1/4 right-1/4 w-[400px] max-w-full h-[400px] bg-blue-600/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
             </div>
 
             <div className="container mx-auto px-4 md:px-8 relative z-10 max-w-5xl">
@@ -162,7 +162,7 @@ const AdmissionProcedurePage = () => {
                 <motion.div 
                   animate={{ rotate: 360 }}
                   transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                  className="absolute -top-32 -left-32 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl group-hover:bg-accent-gold/10 transition-all duration-700 z-0 pointer-events-none" 
+                  className="absolute -top-32 -left-32 w-full sm:w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl group-hover:bg-accent-gold/10 transition-all duration-700 z-0 pointer-events-none" 
                 />
                 <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
                   <div className="p-6 bg-gradient-to-br from-primary-950 to-primary-800 rounded-[2rem] shadow-luxury shrink-0">
@@ -302,7 +302,7 @@ const AdmissionProcedurePage = () => {
                 <motion.div 
                   animate={{ rotate: 360 }}
                   transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-                  className="absolute top-0 right-0 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl pointer-events-none" 
+                  className="absolute top-0 right-0 w-full sm:w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl pointer-events-none" 
                 />
 
                 <h2 className="text-4xl md:text-6xl font-display font-extrabold text-primary-950 mb-6 tracking-tight relative z-10">

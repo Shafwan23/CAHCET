@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronRight, Home } from 'lucide-react';
@@ -37,8 +38,8 @@ const DepartmentHero = ({ data }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-primary-950 via-transparent to-primary-950/50" />
         
         {/* Animated Accent Glows */}
-        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
+        <div className="absolute top-1/4 left-1/4 w-[500px] max-w-full h-[500px] bg-accent-gold/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[400px] max-w-full h-[400px] bg-blue-500/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
       </div>
 
       <FloatingParticles count={25} color="rgba(212, 175, 55, 0.25)" />
@@ -52,10 +53,10 @@ const DepartmentHero = ({ data }) => {
             animate="visible"
             className="inline-flex items-center gap-2 text-primary-200 text-xs md:text-sm mb-8 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md uppercase tracking-widest font-bold"
           >
-            <a href="/" className="hover:text-accent-gold transition-colors flex items-center gap-1">
+            <Link to="/" className="hover:text-accent-gold transition-colors flex items-center gap-1">
               <Home className="w-3 h-3 md:w-4 md:h-4" />
               Home
-            </a>
+            </Link>
             <ChevronRight className="w-3 h-3 md:w-4 md:h-4 opacity-50" />
             <span className="opacity-80">Departments</span>
             <ChevronRight className="w-3 h-3 md:w-4 md:h-4 opacity-50" />

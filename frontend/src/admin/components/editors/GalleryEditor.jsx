@@ -85,7 +85,7 @@ const GalleryEditor = () => {
       <AnimatePresence mode="wait">
         {!editingItem ? (
           <motion.div key="list" {...fadeUp} className="space-y-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl border bg-indigo-50 text-indigo-700 border-indigo-100"><span className="text-[10px] font-bold uppercase block mb-1">Total Records</span><span className="text-3xl font-extrabold">{items.length}</span></div>
             </div>
             <div className="bg-white/80 border border-slate-200 p-3 rounded-2xl flex items-center justify-between sticky top-[132px] z-20 shadow-sm backdrop-blur-md">

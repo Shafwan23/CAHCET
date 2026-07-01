@@ -199,7 +199,8 @@ export default function DataGrid({
     >
       {/* Table wrapper — horizontal scroll on small screens */}
       <div className="overflow-x-auto">
-        <table className="w-full text-sm border-collapse min-w-[700px]">
+        <div className="w-full overflow-x-auto">
+<table className="w-full text-sm border-collapse min-w-[700px] max-w-full">
           {/* Sticky header */}
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
@@ -283,6 +284,7 @@ export default function DataGrid({
             </AnimatePresence>
           </tbody>
         </table>
+</div>
       </div>
 
       {/* Pagination */}

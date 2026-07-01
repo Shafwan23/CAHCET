@@ -62,8 +62,8 @@ const DepartmentsOverviewPage = () => {
             {/* Background Mesh/Glow */}
             <div className="absolute inset-0 bg-primary-950 z-0" />
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full opacity-30 z-0">
-              <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-gold rounded-full mix-blend-screen filter blur-[120px] animate-pulse" />
-              <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+              <div className="absolute top-1/4 left-1/4 w-full sm:w-96 h-96 bg-accent-gold rounded-full mix-blend-screen filter blur-[120px] animate-pulse" />
+              <div className="absolute bottom-1/4 right-1/4 w-full sm:w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
             </div>
 
             <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">

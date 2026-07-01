@@ -185,7 +185,7 @@ const SyllabusEditor = () => {
                   </div>
                   
                   <div className="flex-1 space-y-3">
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                       <select value={item.department} onChange={e => updateItem(idx, 'department', e.target.value)} className="col-span-1 px-2 py-1.5 border border-slate-200 rounded-lg text-xs">
                         <option value="">Dept</option>
                         {Object.values(DEPARTMENTS).map(d => <option key={d.key} value={d.short}>{d.short}</option>)}

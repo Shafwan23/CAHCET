@@ -224,7 +224,7 @@ const HomeGalleryEditor = () => {
 
                 <div className="flex items-center justify-center border border-dashed border-slate-200 rounded-xl p-2 bg-white aspect-video relative overflow-hidden">
                   {img.url ? (
-                    <img src={img.url} alt={img.title} className="max-w-full max-h-full object-contain rounded" />
+                    <img loading="lazy" decoding="async" src={img.url} alt={img.title} className="max-w-full max-h-full object-contain rounded" />
                   ) : (
                     <span className="text-xs text-slate-400">Preview</span>
                   )}
@@ -268,11 +268,11 @@ const HomeGalleryEditor = () => {
               <h4 className="text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1">{form.subtitle || 'Visual Tour'}</h4>
               <h3 className="text-xl font-bold text-slate-800 mb-6">{form.title || 'Life at CAHCET'}</h3>
               
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {(form.images || []).slice(0, 4).map((img, i) => (
                   <div key={i} className="aspect-square bg-slate-200 rounded-xl overflow-hidden relative group">
                     {img.url ? (
-                      <img src={img.url} alt={img.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      <img loading="lazy" decoding="async" src={img.url} alt={img.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">Empty</div>
                     )}

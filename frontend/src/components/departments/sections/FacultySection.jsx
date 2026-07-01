@@ -175,7 +175,7 @@ const FacultySection = ({ data, departmentName }) => {
         </div>
 
         {/* Linear/Vercel style Search Bar */}
-        <div className="relative w-full md:w-96 shrink-0 group">
+        <div className="relative w-full md:w-full sm:w-96 shrink-0 group">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <Search className="h-4 w-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
           </div>

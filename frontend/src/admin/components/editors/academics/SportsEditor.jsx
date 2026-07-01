@@ -119,7 +119,7 @@ const SportsEditor = () => {
           </EditorCard>
 
           <EditorCard title="Live Statistics Counters" description="Numbers that animate when the page loads.">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <AdminInput label="Total Grounds" value={form.stats?.grounds || ''} onChange={e => changeStat('grounds', e.target.value)} placeholder="e.g. 5" />
               <AdminInput label="Active Players" value={form.stats?.players || ''} onChange={e => changeStat('players', e.target.value)} placeholder="e.g. 500+" />
               <AdminInput label="Tournaments Won" value={form.stats?.tournaments || ''} onChange={e => changeStat('tournaments', e.target.value)} placeholder="e.g. 20+" />
@@ -153,7 +153,7 @@ const SportsEditor = () => {
           <div className="flex flex-wrap gap-4">
             {(form.gallery || []).map((img, idx) => (
               <div key={idx} className="relative w-32 h-32 rounded-xl overflow-hidden border border-slate-200 group">
-                <img src={img} alt="Gallery" className="w-full h-full object-cover" />
+                <img loading="lazy" decoding="async" src={img} alt="Gallery" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <button onClick={() => removeGalleryImage(idx)} className="p-2 bg-amber-500 text-white rounded-full hover:bg-amber-600 transform scale-0 group-hover:scale-100 transition-transform"><Trash2 className="w-4 h-4" /></button>
                 </div>

@@ -134,7 +134,7 @@ const EnquiryModal = ({ isOpen, onClose }) => {
             <div className="bg-primary-900 p-8 text-white relative">
               <div className="flex items-center gap-4 mb-2">
                 <div className="w-12 h-12 rounded-2xl bg-white p-1 flex items-center justify-center">
-                  <img src={logoImg} alt="CAHCET Logo" className="w-10 h-10 object-contain" />
+                  <img loading="lazy" decoding="async" src={logoImg} alt="CAHCET Logo" className="w-10 h-10 object-contain" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-display font-bold">Admission Enquiry</h3>
