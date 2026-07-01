@@ -20,36 +20,36 @@ import { roleService } from '../../services/roleService';
    Navigation definitions
    ───────────────────────────────────────── */
 const OVERVIEW_ITEMS = [
-  { label: 'Dashboard',    icon: LayoutDashboard, path: '/admin/dashboard' },
-  { label: 'SEO Settings', icon: SearchIcon,      path: '/admin/dashboard/seo' },
+  { label: 'Dashboard',    icon: LayoutDashboard, path: '/admin' },
+  { label: 'SEO Settings', icon: SearchIcon,      path: '/admin/seo' },
 ];
 
 const INSTITUTION_ITEMS = [
-  { label: 'Courses', icon: BookOpen, path: '/admin/dashboard/courses' },
-  { label: 'Faculty', icon: Users, path: '/admin/dashboard/faculty' },
-  { label: 'Gallery', icon: Images, path: '/admin/dashboard/gallery' },
+  { label: 'Courses', icon: BookOpen, path: '/admin/courses' },
+  { label: 'Faculty', icon: Users, path: '/admin/faculty' },
+  { label: 'Gallery', icon: Images, path: '/admin/gallery' },
 ];
 
 const HOMEPAGE_ITEMS = [
-  { label: 'Full Homepage Editor',         icon: Home,         path: '/admin/dashboard/home' },
-  { label: 'Navbar',                       icon: AlignJustify, path: '/admin/dashboard/homepage/navbar' },
-  { label: 'Hero Section',                 icon: ImageIcon,    path: '/admin/dashboard/homepage/hero' },
-  { label: 'Welcome Message',              icon: Info,         path: '/admin/dashboard/homepage/welcome' },
-  { label: 'Animation Numbers Section',    icon: Binary,       path: '/admin/dashboard/homepage/stats' },
-  { label: 'Academic Department Section',  icon: BookOpen,     path: '/admin/dashboard/homepage/academic' },
-  { label: 'Placement Excellence Section', icon: TrendingUp,   path: '/admin/dashboard/homepage/placement-excellence' },
-  { label: 'Contact Section',              icon: Phone,        path: '/admin/dashboard/homepage/contact' },
-  { label: 'Footer',                       icon: Footprints,   path: '/admin/dashboard/homepage/footer' },
-  { label: 'Gallery Section',              icon: Images,       path: '/admin/dashboard/homepage/gallery' },
-  { label: 'Video Showcase',               icon: Video,        path: '/admin/dashboard/homepage/videos' },
-  { label: 'Admissions CTA',               icon: Megaphone,    path: '/admin/dashboard/homepage/cta' },
+  { label: 'Full Homepage Editor',         icon: Home,         path: '/admin/home' },
+  { label: 'Navbar',                       icon: AlignJustify, path: '/admin/homepage/navbar' },
+  { label: 'Hero Section',                 icon: ImageIcon,    path: '/admin/homepage/hero' },
+  { label: 'Welcome Message',              icon: Info,         path: '/admin/homepage/welcome' },
+  { label: 'Animation Numbers Section',    icon: Binary,       path: '/admin/homepage/stats' },
+  { label: 'Academic Department Section',  icon: BookOpen,     path: '/admin/homepage/academic' },
+  { label: 'Placement Excellence Section', icon: TrendingUp,   path: '/admin/homepage/placement-excellence' },
+  { label: 'Contact Section',              icon: Phone,        path: '/admin/homepage/contact' },
+  { label: 'Footer',                       icon: Footprints,   path: '/admin/homepage/footer' },
+  { label: 'Gallery Section',              icon: Images,       path: '/admin/homepage/gallery' },
+  { label: 'Video Showcase',               icon: Video,        path: '/admin/homepage/videos' },
+  { label: 'Admissions CTA',               icon: Megaphone,    path: '/admin/homepage/cta' },
 ];
 
 const UPDATES_ITEMS = [
-  { label: 'Latest Events',     icon: Calendar,   path: '/admin/dashboard/updates/events' },
-  { label: 'Announcements',     icon: Megaphone,  path: '/admin/dashboard/updates/announcements' },
-  { label: 'Newsletters',       icon: Newspaper,  path: '/admin/dashboard/updates/newsletters' },
-  { label: 'Placement Updates', icon: TrendingUp, path: '/admin/dashboard/updates/placements' },
+  { label: 'Latest Events',     icon: Calendar,   path: '/admin/updates/events' },
+  { label: 'Announcements',     icon: Megaphone,  path: '/admin/updates/announcements' },
+  { label: 'Newsletters',       icon: Newspaper,  path: '/admin/updates/newsletters' },
+  { label: 'Placement Updates', icon: TrendingUp, path: '/admin/updates/placements' },
 ];
 
 const DEPT_SECTIONS = [
@@ -63,60 +63,60 @@ const DEPT_SECTIONS = [
 ];
 
 const PLACEMENTS_ITEMS = [
-  { label: 'Recruiters',      icon: Briefcase, path: '/admin/dashboard/placements/recruiters' },
-  { label: 'Students Placed', icon: Star,      path: '/admin/dashboard/placements/students' },
+  { label: 'Recruiters',      icon: Briefcase, path: '/admin/placements/recruiters' },
+  { label: 'Students Placed', icon: Star,      path: '/admin/placements/students' },
 ];
 
 const ABOUT_ITEMS = [
-  { label: 'Full About Editor', icon: Info, path: '/admin/dashboard/about' },
-  { label: 'Institution', icon: Building2, path: '/admin/dashboard/about/institution' },
-  { label: "People's Messages", icon: UserCircle, path: '/admin/dashboard/about/peoples-messages' },
-  { label: 'Anti Ragging', icon: Shield, path: '/admin/dashboard/about/anti-ragging' },
-  { label: 'Values & Philosophy', icon: Heart, path: '/admin/dashboard/about/values' },
-  { label: 'Govt Approval', icon: CheckCircle, path: '/admin/dashboard/about/approval' },
-  { label: 'Governing Policy', icon: FileText, path: '/admin/dashboard/about/governing-policy' },
-  { label: 'Refund Policy', icon: Receipt, path: '/admin/dashboard/about/refund-policy' },
-  { label: 'Terms & Conditions', icon: Scroll, path: '/admin/dashboard/about/terms' },
-  { label: 'Privacy Policy', icon: Lock, path: '/admin/dashboard/about/privacy' },
+  { label: 'Full About Editor', icon: Info, path: '/admin/about' },
+  { label: 'Institution', icon: Building2, path: '/admin/about/institution' },
+  { label: "People's Messages", icon: UserCircle, path: '/admin/about/peoples-messages' },
+  { label: 'Anti Ragging', icon: Shield, path: '/admin/about/anti-ragging' },
+  { label: 'Values & Philosophy', icon: Heart, path: '/admin/about/values' },
+  { label: 'Govt Approval', icon: CheckCircle, path: '/admin/about/approval' },
+  { label: 'Governing Policy', icon: FileText, path: '/admin/about/governing-policy' },
+  { label: 'Refund Policy', icon: Receipt, path: '/admin/about/refund-policy' },
+  { label: 'Terms & Conditions', icon: Scroll, path: '/admin/about/terms' },
+  { label: 'Privacy Policy', icon: Lock, path: '/admin/about/privacy' },
 ];
 
 const ACADEMICS_ITEMS = [
-  { label: 'Full Academics Editor', icon: BookOpenCheck, path: '/admin/dashboard/academics' },
-  { label: 'Teaching Methodology', icon: BookOpen, path: '/admin/dashboard/academics/teaching-methodology' },
-  { label: 'Campus Facilities', icon: Building2, path: '/admin/dashboard/academics/facilities' },
-  { label: 'Sports', icon: Trophy, path: '/admin/dashboard/academics/sports' },
-  { label: 'Campus Life', icon: Heart, path: '/admin/dashboard/academics/campus-life' },
-  { label: 'Academic Calendar', icon: Calendar, path: '/admin/dashboard/academics/calendar' },
-  { label: 'List of Holidays', icon: Calendar, path: '/admin/dashboard/academics/holidays' },
-  { label: 'Syllabus', icon: FileText, path: '/admin/dashboard/academics/syllabus' },
+  { label: 'Full Academics Editor', icon: BookOpenCheck, path: '/admin/academics' },
+  { label: 'Teaching Methodology', icon: BookOpen, path: '/admin/academics/teaching-methodology' },
+  { label: 'Campus Facilities', icon: Building2, path: '/admin/academics/facilities' },
+  { label: 'Sports', icon: Trophy, path: '/admin/academics/sports' },
+  { label: 'Campus Life', icon: Heart, path: '/admin/academics/campus-life' },
+  { label: 'Academic Calendar', icon: Calendar, path: '/admin/academics/calendar' },
+  { label: 'List of Holidays', icon: Calendar, path: '/admin/academics/holidays' },
+  { label: 'Syllabus', icon: FileText, path: '/admin/academics/syllabus' },
 ];
 
 const ADMISSIONS_ITEMS = [
-  { label: 'Full Admissions Editor', icon: FileBadge, path: '/admin/dashboard/admissions' },
-  { label: 'Registration 2026', icon: Edit3, path: '/admin/dashboard/admissions/registration' },
-  { label: 'Procedure', icon: FileCheck, path: '/admin/dashboard/admissions/procedure' },
-  { label: 'Scholarships', icon: Award, path: '/admin/dashboard/admissions/scholarships' },
-  { label: 'Education Loan', icon: Landmark, path: '/admin/dashboard/admissions/loan' },
-  { label: 'Payments', icon: CreditCard, path: '/admin/dashboard/admissions/payments' },
+  { label: 'Full Admissions Editor', icon: FileBadge, path: '/admin/admissions' },
+  { label: 'Registration 2026', icon: Edit3, path: '/admin/admissions/registration' },
+  { label: 'Procedure', icon: FileCheck, path: '/admin/admissions/procedure' },
+  { label: 'Scholarships', icon: Award, path: '/admin/admissions/scholarships' },
+  { label: 'Education Loan', icon: Landmark, path: '/admin/admissions/loan' },
+  { label: 'Payments', icon: CreditCard, path: '/admin/admissions/payments' },
 ];
 
 const RESEARCH_ITEMS = [
-  { label: 'Research Center', icon: FlaskConical, path: '/admin/dashboard/research/main' },
+  { label: 'Research Center', icon: FlaskConical, path: '/admin/research/main' },
 ];
 
 const CONTACT_ITEMS = [
-  { label: 'Contact Us', icon: PhoneCall, path: '/admin/dashboard/contact/main' },
+  { label: 'Contact Us', icon: PhoneCall, path: '/admin/contact/main' },
 ];
 
 const ADMIN_ITEMS = [
-  { label: 'User Management',  icon: Settings,   path: '/admin/dashboard/users' },
-  { label: 'Activity Logs',    icon: Activity,   path: '/admin/dashboard/admin/activity' },
+  { label: 'User Management',  icon: Settings,   path: '/admin/users' },
+  { label: 'Activity Logs',    icon: Activity,   path: '/admin/admin/activity' },
 ];
 
 const CHATBOT_ITEMS = [
-  { label: 'Chatbot Settings', icon: Bot, path: '/admin/dashboard/chatbot/settings' },
-  { label: 'Welcome Onboarding', icon: Edit3, path: '/admin/dashboard/chatbot/welcome' },
-  { label: 'Admission Leads', icon: Users, path: '/admin/dashboard/chatbot/leads' },
+  { label: 'Chatbot Settings', icon: Bot, path: '/admin/chatbot/settings' },
+  { label: 'Welcome Onboarding', icon: Edit3, path: '/admin/chatbot/welcome' },
+  { label: 'Admission Leads', icon: Users, path: '/admin/chatbot/leads' },
 ];
 
 /* ─────────────────────────────────────────
@@ -130,7 +130,7 @@ const SidebarNavLink = ({ item, collapsed, onClose, indent = false }) => {
   return (
     <NavLink
       to={item.path}
-      end={item.path === '/admin/dashboard'}
+      end={item.path === '/admin'}
       onClick={onClose}
       className={({ isActive }) =>
         `flex items-center gap-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 relative
@@ -260,7 +260,7 @@ const DeptAccordion = ({ dept, collapsed, onClose }) => {
           >
             <div className="ml-4 pl-3 border-l border-white/5 mt-0.5 space-y-0.5 pb-1">
               {DEPT_SECTIONS.map(sec => {
-                const path = `/admin/dashboard/departments/${dept.key}/${sec.key}`;
+                const path = `/admin/departments/${dept.key}/${sec.key}`;
                 return (
                   <SidebarNavLink key={sec.key} item={{ ...sec, path }} collapsed={false} onClose={onClose} indent />
                 );
@@ -405,7 +405,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
               {!collapsed && <SectionHeading label="Departments" />}
               <div className="space-y-0.5">
                 <SidebarNavLink
-                  item={{ label: 'Departments Overview', icon: Building2, path: '/admin/dashboard/departments/overview' }}
+                  item={{ label: 'Departments Overview', icon: Building2, path: '/admin/departments/overview' }}
                   collapsed={collapsed}
                   onClose={() => { saveScroll(); onClose?.(); }}
                 />
@@ -537,7 +537,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
           {/* SETTINGS / PROFILE */}
           {!collapsed && <SectionHeading label="Account" />}
           <div className="space-y-0.5">
-            <SidebarNavLink item={{ label: 'Profile Settings', icon: UserCircle, path: '/admin/dashboard/admin/profile' }} collapsed={collapsed} onClose={() => { saveScroll(); onClose?.(); }} />
+            <SidebarNavLink item={{ label: 'Profile Settings', icon: UserCircle, path: '/admin/admin/profile' }} collapsed={collapsed} onClose={() => { saveScroll(); onClose?.(); }} />
             {isSuperAdmin && ADMIN_ITEMS.map(item => (
               <SidebarNavLink key={item.path} item={item} collapsed={collapsed} onClose={() => { saveScroll(); onClose?.(); }} />
             ))}

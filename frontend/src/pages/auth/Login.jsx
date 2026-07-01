@@ -14,7 +14,7 @@ export const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/admin/dashboard';
+  const from = location.state?.from?.pathname || '/admin';
 
   const handleSubmit = async (e) => {
     e.preventDefault();

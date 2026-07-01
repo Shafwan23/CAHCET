@@ -6,48 +6,48 @@
 // Available modules mapped to route prefixes
 export const MODULES = {
   // Homepage
-  homepage_navbar: '/admin/dashboard/homepage/navbar',
-  homepage_hero: '/admin/dashboard/homepage/hero',
-  homepage_stats: '/admin/dashboard/homepage/stats',
-  homepage_academic: '/admin/dashboard/homepage/academic',
-  homepage_placements: '/admin/dashboard/homepage/placement-excellence',
-  homepage_contact: '/admin/dashboard/homepage/contact',
-  homepage_footer: '/admin/dashboard/homepage/footer',
-  homepage_gallery: '/admin/dashboard/homepage/gallery',
-  homepage_videos: '/admin/dashboard/homepage/videos',
-  homepage_facilities: '/admin/dashboard/homepage/facilities',
+  homepage_navbar: '/admin/homepage/navbar',
+  homepage_hero: '/admin/homepage/hero',
+  homepage_stats: '/admin/homepage/stats',
+  homepage_academic: '/admin/homepage/academic',
+  homepage_placements: '/admin/homepage/placement-excellence',
+  homepage_contact: '/admin/homepage/contact',
+  homepage_footer: '/admin/homepage/footer',
+  homepage_gallery: '/admin/homepage/gallery',
+  homepage_videos: '/admin/homepage/videos',
+  homepage_facilities: '/admin/homepage/facilities',
 
   // Updates
-  updates_events: '/admin/dashboard/updates/events',
-  updates_announcements: '/admin/dashboard/updates/announcements',
-  updates_newsletters: '/admin/dashboard/updates/newsletters',
-  updates_placements: '/admin/dashboard/updates/placements',
+  updates_events: '/admin/updates/events',
+  updates_announcements: '/admin/updates/announcements',
+  updates_newsletters: '/admin/updates/newsletters',
+  updates_placements: '/admin/updates/placements',
 
   // Placements
-  placements_recruiters: '/admin/dashboard/placements/recruiters',
-  placements_students: '/admin/dashboard/placements/students',
+  placements_recruiters: '/admin/placements/recruiters',
+  placements_students: '/admin/placements/students',
 
   // About
-  about: '/admin/dashboard/about',
+  about: '/admin/about',
 
   // Academics
-  academics: '/admin/dashboard/academics',
+  academics: '/admin/academics',
 
   // Admissions
-  admissions: '/admin/dashboard/admissions',
+  admissions: '/admin/admissions',
 
   // Research & Contact
-  research: '/admin/dashboard/research',
-  contact: '/admin/dashboard/contact',
+  research: '/admin/research',
+  contact: '/admin/contact',
 
   // Admin
-  admin_users: '/admin/dashboard/users',
-  admin_profile: '/admin/dashboard/admin/profile',
-  admin_activity: '/admin/dashboard/admin/activity',
-  admin_settings: '/admin/dashboard/admin',
+  admin_users: '/admin/users',
+  admin_profile: '/admin/admin/profile',
+  admin_activity: '/admin/admin/activity',
+  admin_settings: '/admin/admin',
 
   // Departments (Wildcard base)
-  departments: '/admin/dashboard/departments',
+  departments: '/admin/departments',
 };
 
 export const permissionService = {

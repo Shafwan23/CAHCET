@@ -243,7 +243,7 @@ function App() {
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin/unauthorized" element={<Unauthorized />} />
           <Route
-            path="/admin/dashboard"
+            path="/admin"
             element={
               <ProtectedRoute>
                 <AdminDashboard />
@@ -331,7 +331,7 @@ function App() {
             <Route path="departments/:deptKey/:section" element={<DepartmentCMSEditor />} />
             <Route path="departments/:deptKey" element={<DepartmentCMSEditor />} />
           </Route>
-          <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+          </Route>
 
           {/* Catch all route - can redirect to home or 404 page */}
           <Route path="*" element={<Home />} />

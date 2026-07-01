@@ -45,7 +45,7 @@ const AdminLoginPage = () => {
   const { login, isAuthenticated, isLocked, lockMinutes, attempts, maxAttempts } = useAdminAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/admin/dashboard';
+  const from = location.state?.from?.pathname || '/admin';
 
   const [form, setForm] = useState({ username: '', password: '', remember: false });
   const [showPassword, setShowPassword] = useState(false);
@@ -92,11 +92,11 @@ const AdminLoginPage = () => {
       const user = await login(form.username, form.password, form.remember);
       setSuccess(true);
       setTimeout(() => {
-        let target = from === '/admin' ? '/admin/dashboard' : from;
+        let target = from === '/admin' ? '/admin' : from;
         if (user.role === 'dept_admin' && user.deptKey) {
-            target = `/admin/dashboard/departments/${user.deptKey}/overview`;
+            target = `/admin/departments/${user.deptKey}/overview`;
         } else if (user.role === 'faculty_editor' && user.deptKey) {
-            target = `/admin/dashboard/departments/${user.deptKey}/overview`;
+            target = `/admin/departments/${user.deptKey}/overview`;
         }
         navigate(target, { replace: true });
       }, 800);

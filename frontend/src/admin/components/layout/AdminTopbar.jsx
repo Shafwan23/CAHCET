@@ -5,73 +5,73 @@ import { Menu, Bell, ExternalLink, LogOut, User, Settings, ChevronDown, Search, 
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
 const BREADCRUMB_MAP = {
-  '/admin/dashboard': 'Dashboard',
-  '/admin/dashboard/seo': 'SEO Settings',
+  '/admin': 'Dashboard',
+  '/admin/seo': 'SEO Settings',
   
   // Homepage
-  '/admin/dashboard/homepage/navbar': 'Navbar Editor',
-  '/admin/dashboard/homepage/hero': 'Hero Section Editor',
-  '/admin/dashboard/homepage/welcome': 'Welcome Message Editor',
-  '/admin/dashboard/homepage/stats': 'Animation Numbers Editor',
-  '/admin/dashboard/homepage/academic': 'Academic Department Section Editor',
-  '/admin/dashboard/homepage/placement-excellence': 'Placement Excellence Section Editor',
-  '/admin/dashboard/homepage/contact': 'Contact Section Editor',
-  '/admin/dashboard/homepage/footer': 'Footer Editor',
-  '/admin/dashboard/homepage/gallery': 'Homepage Gallery Editor',
-  '/admin/dashboard/homepage/videos': 'Video Showcase Editor',
-  '/admin/dashboard/homepage/cta': 'CTA Section Editor',
-  '/admin/dashboard/homepage/facilities': 'Campus Facilities Editor',
-  '/admin/dashboard/departments/overview': 'Departments Overview Editor',
+  '/admin/homepage/navbar': 'Navbar Editor',
+  '/admin/homepage/hero': 'Hero Section Editor',
+  '/admin/homepage/welcome': 'Welcome Message Editor',
+  '/admin/homepage/stats': 'Animation Numbers Editor',
+  '/admin/homepage/academic': 'Academic Department Section Editor',
+  '/admin/homepage/placement-excellence': 'Placement Excellence Section Editor',
+  '/admin/homepage/contact': 'Contact Section Editor',
+  '/admin/homepage/footer': 'Footer Editor',
+  '/admin/homepage/gallery': 'Homepage Gallery Editor',
+  '/admin/homepage/videos': 'Video Showcase Editor',
+  '/admin/homepage/cta': 'CTA Section Editor',
+  '/admin/homepage/facilities': 'Campus Facilities Editor',
+  '/admin/departments/overview': 'Departments Overview Editor',
   
   // Updates
-  '/admin/dashboard/updates/events': 'Latest Events',
-  '/admin/dashboard/updates/placements': 'Placement Updates',
-  '/admin/dashboard/updates/announcements': 'Announcements',
-  '/admin/dashboard/updates/newsletters': 'Newsletters',
+  '/admin/updates/events': 'Latest Events',
+  '/admin/updates/placements': 'Placement Updates',
+  '/admin/updates/announcements': 'Announcements',
+  '/admin/updates/newsletters': 'Newsletters',
   
   // Placements
-  '/admin/dashboard/placements/recruiters': 'Recruiters Management',
-  '/admin/dashboard/placements/students': 'Students Placed',
+  '/admin/placements/recruiters': 'Recruiters Management',
+  '/admin/placements/students': 'Students Placed',
   
   // About
-  '/admin/dashboard/about/institution': 'Institution Info',
-  '/admin/dashboard/about/peoples-messages': "People's Messages",
-  '/admin/dashboard/about/anti-ragging': 'Anti Ragging Policy',
-  '/admin/dashboard/about/values': 'Values & Philosophy',
-  '/admin/dashboard/about/approval': 'Government Approval',
-  '/admin/dashboard/about/governing-policy': 'Governing Policy',
-  '/admin/dashboard/about/refund-policy': 'Refund Policy',
-  '/admin/dashboard/about/terms': 'Terms & Conditions',
-  '/admin/dashboard/about/privacy': 'Privacy Policy',
+  '/admin/about/institution': 'Institution Info',
+  '/admin/about/peoples-messages': "People's Messages",
+  '/admin/about/anti-ragging': 'Anti Ragging Policy',
+  '/admin/about/values': 'Values & Philosophy',
+  '/admin/about/approval': 'Government Approval',
+  '/admin/about/governing-policy': 'Governing Policy',
+  '/admin/about/refund-policy': 'Refund Policy',
+  '/admin/about/terms': 'Terms & Conditions',
+  '/admin/about/privacy': 'Privacy Policy',
 
   // Academics
-  '/admin/dashboard/academics/teaching-methodology': 'Teaching Methodology',
-  '/admin/dashboard/academics/facilities': 'Campus Facilities',
-  '/admin/dashboard/academics/sports': 'Sports',
-  '/admin/dashboard/academics/campus-life': 'Campus Life',
-  '/admin/dashboard/academics/calendar': 'Academic Calendar',
-  '/admin/dashboard/academics/holidays': 'List of Holidays',
-  '/admin/dashboard/academics/syllabus': 'Syllabus Archive',
+  '/admin/academics/teaching-methodology': 'Teaching Methodology',
+  '/admin/academics/facilities': 'Campus Facilities',
+  '/admin/academics/sports': 'Sports',
+  '/admin/academics/campus-life': 'Campus Life',
+  '/admin/academics/calendar': 'Academic Calendar',
+  '/admin/academics/holidays': 'List of Holidays',
+  '/admin/academics/syllabus': 'Syllabus Archive',
 
   // Admissions
-  '/admin/dashboard/admissions/registration': 'Registration 2026',
-  '/admin/dashboard/admissions/procedure': 'Admission Procedure',
-  '/admin/dashboard/admissions/scholarships': 'Scholarships & Awards',
-  '/admin/dashboard/admissions/loan': 'Education Loans',
-  '/admin/dashboard/admissions/payments': 'Fee Payments',
+  '/admin/admissions/registration': 'Registration 2026',
+  '/admin/admissions/procedure': 'Admission Procedure',
+  '/admin/admissions/scholarships': 'Scholarships & Awards',
+  '/admin/admissions/loan': 'Education Loans',
+  '/admin/admissions/payments': 'Fee Payments',
 
   // Research
-  '/admin/dashboard/research/main': 'Research Center',
+  '/admin/research/main': 'Research Center',
 
   // Contact
-  '/admin/dashboard/contact/main': 'Contact Us',
+  '/admin/contact/main': 'Contact Us',
   
   // Admin
-  '/admin/dashboard/admin/profile': 'Profile Settings',
-  '/admin/dashboard/admin/password': 'Change Password',
-  '/admin/dashboard/admin/activity': 'Activity Logs',
-  '/admin/dashboard/admin/notifications': 'Notifications',
-  '/admin/dashboard/users': 'User Management',
+  '/admin/admin/profile': 'Profile Settings',
+  '/admin/admin/password': 'Change Password',
+  '/admin/admin/activity': 'Activity Logs',
+  '/admin/admin/notifications': 'Notifications',
+  '/admin/users': 'User Management',
 };
 
 const DEPT_SECTION_LABELS = {

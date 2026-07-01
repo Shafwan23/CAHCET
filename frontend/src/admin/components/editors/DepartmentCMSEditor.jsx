@@ -41,7 +41,7 @@ const DepartmentCMSEditor = () => {
   const cms = useDepartmentCMS(deptKey);
 
   const canAccessSection = (secKey) => {
-    return canEditRoute(`/admin/dashboard/departments/${deptKey}/${secKey}`);
+    return canEditRoute(`/admin/departments/${deptKey}/${secKey}`);
   };
 
   const dept = DEPARTMENTS.find(d => d.key === deptKey);
@@ -54,7 +54,7 @@ const DepartmentCMSEditor = () => {
         <AlertTriangle className="w-12 h-12 text-amber-500" />
         <h2 className="text-xl font-bold text-slate-800">Access Denied</h2>
         <p className="text-slate-500 max-w-sm">You don't have permission to access the {dept?.fullName || deptKey.toUpperCase()} department.</p>
-        <button onClick={() => navigate('/admin/dashboard')} className="px-4 py-2 bg-amber-500 text-white rounded-xl text-sm font-semibold hover:bg-amber-600 transition-colors">
+        <button onClick={() => navigate('/admin')} className="px-4 py-2 bg-amber-500 text-white rounded-xl text-sm font-semibold hover:bg-amber-600 transition-colors">
           Back to Dashboard
         </button>
       </div>
@@ -147,7 +147,7 @@ const DepartmentCMSEditor = () => {
             return (
               <NavLink
                 key={sec.key}
-                to={`/admin/dashboard/departments/${deptKey}/${sec.key}`}
+                to={`/admin/departments/${deptKey}/${sec.key}`}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all
                   ${isActive
                     ? 'bg-amber-500/10 text-amber-600 border border-amber-200'
