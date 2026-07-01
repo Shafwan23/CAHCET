@@ -333,9 +333,9 @@ const DepartmentAdminDashboard = ({ data }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50/50 text-slate-600 font-inter">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-slate-50/50 text-slate-600 font-inter">
       {/* Sidebar Navigation */}
-      <div className="w-72 bg-white border-r border-slate-200 shadow-sm flex flex-col min-w-0 break-words h-screen sticky top-0">
+      <div className="w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shadow-sm flex flex-col min-w-0 break-words h-auto lg:h-screen lg:sticky top-0 z-40">
         <div className="p-6 border-b border-slate-200 shadow-sm">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50/50 border border-slate-200 shadow-sm text-[10px] font-bold tracking-widest uppercase text-blue-500 mb-4">
             <Building2 className="w-4 h-4" /> Dept Intelligence
@@ -345,7 +345,7 @@ const DepartmentAdminDashboard = ({ data }) => {
           </h1>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-4 space-y-1">
+        <div className="flex lg:flex-col overflow-x-auto lg:overflow-y-auto p-2 lg:p-4 gap-2 lg:gap-1 whitespace-nowrap scrollbar-hide">
           {TABS.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -354,7 +354,7 @@ const DepartmentAdminDashboard = ({ data }) => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
+                  "w-auto lg:w-full flex-shrink-0 flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
                   isActive 
                     ? "bg-blue-50 text-blue-600 border border-blue-100" 
                     : "text-slate-500 hover:bg-slate-50 hover:text-slate-700 border border-transparent"
