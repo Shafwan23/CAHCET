@@ -39,12 +39,24 @@ const CoursesEditor = () => {
 
   const fetchPage = async () => {
     try {
-      const res = await cmsService.getPage('institution');
+      let res;
+      try {
+        res = await cmsService.getPage('institution');
+      } catch (err) {
+        if (err.response?.status === 404) {
+          // Auto-create missing page
+          res = await cmsService.createPage({ title: 'Institution', slug: 'institution', _isSilentDraft: true });
+        } else {
+          throw err;
+        }
+      }
       setPageId(res.data?.id);
       const map = (res.data?.sections || []).reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
       setSectionsMap(map);
       if (map['institution.courses']) setItems(JSON.parse(map['institution.courses'].draftContent || map['institution.courses'].content || '[]'));
-    } catch (err) { } finally { setLoading(false); }
+    } catch (err) { 
+      console.error('Failed to load institution page', err);
+    } finally { setLoading(false); }
   };
   useEffect(() => { fetchPage(); }, []);
 
@@ -92,7 +104,7 @@ const CoursesEditor = () => {
               <div className="relative w-full max-w-sm"><Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400"/><input className="w-full pl-9 pr-4 py-2 border rounded-xl" placeholder="Search..." value={search} onChange={e=>setSearch(e.target.value)} /></div>
               <button onClick={() => setEditingItem({ id: '', title: '', description: '' })} className="flex items-center gap-2 px-5 py-2 bg-slate-900 text-white rounded-xl font-bold"><Plus className="w-4 h-4"/> Add New</button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-4 gap-6 relative">
               <AnimatePresence>{filtered.map(item => <ItemCard key={item.id} item={item} onEdit={setEditingItem} onDelete={deleteItem} Icon={Icon}/>)}</AnimatePresence>
             </div>
           </motion.div>
