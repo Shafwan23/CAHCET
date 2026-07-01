@@ -13,7 +13,16 @@ const AboutEditor = () => {
   useEffect(() => {
     const fetchPage = async () => {
       try {
-        const res = await cmsService.getPage('about');
+        let res;
+        try {
+          res = await cmsService.getPage('about');
+        } catch (err) {
+          if (err.response?.status === 404) {
+            res = await cmsService.createPage({ title: 'About Us', slug: 'about', _isSilentDraft: true });
+          } else {
+            throw err;
+          }
+        }
         const sections = res.data?.sections || [];
         const map = sections.reduce((acc, sec) => {
           acc[sec.sectionKey] = sec;

@@ -59,7 +59,16 @@ const RecruitersEditor = () => {
 
   const fetchPage = async () => {
     try {
-      const res = await cmsService.getPage('placements');
+      let res;
+      try {
+        res = await cmsService.getPage('placements');
+      } catch (err) {
+        if (err.response?.status === 404) {
+          res = await cmsService.createPage({ title: 'Placements', slug: 'placements', _isSilentDraft: true });
+        } else {
+          throw err;
+        }
+      }
       setPageId(res.data?.id);
       const sections = res.data?.sections || [];
       const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
@@ -67,11 +76,11 @@ const RecruitersEditor = () => {
 
       if (map['placements.recruiters']) {
         const dataStr = map['placements.recruiters'].draftContent || map['placements.recruiters'].content || '[]';
-        setItems(JSON.parse(dataStr));
+        setItems(JSON.parse(dataStr) || []);
       }
       if (map['placements.activities']) {
         const dataStr = map['placements.activities'].draftContent || map['placements.activities'].content || '[]';
-        setActivities(JSON.parse(dataStr));
+        setActivities(JSON.parse(dataStr) || []);
       }
     } catch (err) {
       toast({ type: 'error', title: 'Error', message: 'Failed to load Placements data.' });
