@@ -38,7 +38,8 @@ const DepartmentsOverviewEditor = () => {
           title: 'Departments Overview',
           slug: 'departments_overview',
           description: 'Engineering and Standalone Departments Directory Overview',
-          status: 'PUBLISHED'
+          status: 'PUBLISHED',
+          _isSilentDraft: true
         });
       }
 
