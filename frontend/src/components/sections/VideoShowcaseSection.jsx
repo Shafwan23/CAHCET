@@ -5,16 +5,16 @@ import { slideUp } from '../../animations/variants';
 
 const getEmbedUrl = (url) => {
   if (!url) return '';
-  if (url.includes('/embed/')) return url;
+  if (url.includes('/embed/')) return url.replace('www.youtube.com', 'www.youtube-nocookie.com');
   
   const watchMatch = url.match(/[?&]v=([^&]+)/);
   if (watchMatch && watchMatch[1]) {
-    return `https://www.youtube.com/embed/${watchMatch[1]}`;
+    return `https://www.youtube-nocookie.com/embed/${watchMatch[1]}`;
   }
 
   const shortMatch = url.match(/youtu\.be\/([^?]+)/);
   if (shortMatch && shortMatch[1]) {
-    return `https://www.youtube.com/embed/${shortMatch[1]}`;
+    return `https://www.youtube-nocookie.com/embed/${shortMatch[1]}`;
   }
 
   return url;
@@ -74,6 +74,7 @@ const VideoShowcaseSection = ({ data }) => {
                   src={getEmbedUrl(vid.url)}
                   title={vid.title}
                   frameBorder="0"
+                  loading="lazy"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
