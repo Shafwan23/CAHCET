@@ -12,8 +12,10 @@ export const useEditorStatus = (sectionsMap, sectionKey, currentForm) => {
       if (sec.draftContent && !sec.content) {
         status = 'DRAFT';
       } else {
-        const liveData = typeof sec.content === 'string' ? JSON.parse(sec.content || '{}') : (sec.content || {});
-        const draftData = typeof sec.draftContent === 'string' ? JSON.parse(sec.draftContent || '{}') : (sec.draftContent || {});
+        let liveData = {};
+        let draftData = {};
+        try { liveData = typeof sec.content === 'string' ? JSON.parse(sec.content || '{}') : (sec.content || {}); } catch { liveData = {}; }
+        try { draftData = typeof sec.draftContent === 'string' ? JSON.parse(sec.draftContent || '{}') : (sec.draftContent || {}); } catch { draftData = {}; }
         const diffs = diffJSON(liveData, draftData);
         
         if (diffs.length > 0) {

@@ -90,7 +90,7 @@ export default function ChatbotWelcomeEditor() {
         setSectionId(section.id);
         const contentToLoad = section.draftContent || section.content;
         if (contentToLoad) {
-          const parsed = JSON.parse(contentToLoad);
+          const parsed = JSON.parse(contentToLoad) || {};
           setChatbot(parsed);
           if (parsed.welcomeScreen) {
             setWelcomeScreen({ ...welcomeScreen, ...parsed.welcomeScreen });

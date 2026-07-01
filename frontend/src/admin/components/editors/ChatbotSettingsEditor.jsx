@@ -76,7 +76,7 @@ export default function ChatbotSettingsEditor() {
         setSectionId(section.id);
         const contentToLoad = section.draftContent || section.content;
         if (contentToLoad) {
-          setChatbot({ ...chatbot, ...JSON.parse(contentToLoad) });
+          setChatbot({ ...chatbot, ...(JSON.parse(contentToLoad) || {}) });
         }
       } catch (err) {
         toast({ type: 'error', title: 'Error', message: 'Failed to load chatbot settings.' });

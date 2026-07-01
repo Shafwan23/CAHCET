@@ -68,7 +68,7 @@ const PLACEMENTS_ITEMS = [
 ];
 
 const ABOUT_ITEMS = [
-  { label: 'Full About Editor', icon: Info, path: '/admin/about' },
+  { label: 'Full About Editor', icon: Info, path: '/admin/about', end: true },
   { label: 'Institution', icon: Building2, path: '/admin/about/institution' },
   { label: "People's Messages", icon: UserCircle, path: '/admin/about/peoples-messages' },
   { label: 'Anti Ragging', icon: Shield, path: '/admin/about/anti-ragging' },
@@ -81,7 +81,7 @@ const ABOUT_ITEMS = [
 ];
 
 const ACADEMICS_ITEMS = [
-  { label: 'Full Academics Editor', icon: BookOpenCheck, path: '/admin/academics' },
+  { label: 'Full Academics Editor', icon: BookOpenCheck, path: '/admin/academics', end: true },
   { label: 'Teaching Methodology', icon: BookOpen, path: '/admin/academics/teaching-methodology' },
   { label: 'Campus Facilities', icon: Building2, path: '/admin/academics/facilities' },
   { label: 'Sports', icon: Trophy, path: '/admin/academics/sports' },
@@ -92,7 +92,7 @@ const ACADEMICS_ITEMS = [
 ];
 
 const ADMISSIONS_ITEMS = [
-  { label: 'Full Admissions Editor', icon: FileBadge, path: '/admin/admissions' },
+  { label: 'Full Admissions Editor', icon: FileBadge, path: '/admin/admissions', end: true },
   { label: 'Registration 2026', icon: Edit3, path: '/admin/admissions/registration' },
   { label: 'Procedure', icon: FileCheck, path: '/admin/admissions/procedure' },
   { label: 'Scholarships', icon: Award, path: '/admin/admissions/scholarships' },
@@ -130,7 +130,7 @@ const SidebarNavLink = ({ item, collapsed, onClose, indent = false }) => {
   return (
     <NavLink
       to={item.path}
-      end={item.path === '/admin'}
+      end={item.end || item.path === '/admin'}
       onClick={onClose}
       className={({ isActive }) =>
         `flex items-center gap-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 relative
