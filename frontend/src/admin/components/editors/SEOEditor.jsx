@@ -69,10 +69,10 @@ const SEOEditor = () => {
   const previewDesc = form.description || 'Official website of CAHCET...';
   const ogTitle = form.ogTitle || previewTitle;
   const ogDesc = form.ogDescription || previewDesc;
-  const ogImage = form.ogImage || 'https://via.placeholder.com/1200x630/f8fafc/94a3b8?text=Default+Image';
+  const ogImage = form.ogImage || '';
   const twTitle = form.twitterTitle || ogTitle;
   const twDesc = form.twitterDescription || ogDesc;
-  const twImage = form.twitterImage || form.ogImage || 'https://via.placeholder.com/1200x630/f8fafc/94a3b8?text=Default+Image';
+  const twImage = form.twitterImage || form.ogImage || '';
 
   if (loading && !Object.keys(sectionsMap).length) return <div>Loading...</div>;
 
@@ -304,8 +304,12 @@ const SEOEditor = () => {
                 {/* Facebook/LinkedIn Preview */}
                 {previewTab === 'facebook' && (
                   <motion.div key="facebook" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="w-full max-w-sm bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden font-sans">
-                    <div className="w-full aspect-[1.91/1] bg-slate-200 border-b border-slate-200 relative overflow-hidden">
-                      <img loading="lazy" decoding="async" src={ogImage} alt="OG" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/1200x630/f8fafc/94a3b8?text=Image+Not+Found'; }} />
+                    <div className="w-full aspect-[1.91/1] bg-slate-200 border-b border-slate-200 relative overflow-hidden flex items-center justify-center">
+                      {ogImage ? (
+                        <img loading="lazy" decoding="async" src={ogImage} alt="OG" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }} />
+                      ) : (
+                        <span className="text-slate-400 text-sm font-medium">No Image Provided</span>
+                      )}
                     </div>
                     <div className="p-3 bg-slate-50/50">
                       <p className="text-[12px] text-slate-500 uppercase tracking-wide mb-1">cahcet.edu.in</p>
@@ -320,8 +324,12 @@ const SEOEditor = () => {
                   <motion.div key="twitter" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="w-full max-w-sm bg-white rounded-xl border border-slate-300 overflow-hidden font-sans">
                     {form.twitterCardType === 'summary_large_image' ? (
                       <>
-                        <div className="w-full aspect-[1.91/1] bg-slate-200 border-b border-slate-300 relative overflow-hidden">
-                          <img loading="lazy" decoding="async" src={twImage} alt="Twitter" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/1200x630/f8fafc/94a3b8?text=Image+Not+Found'; }} />
+                        <div className="w-full aspect-[1.91/1] bg-slate-200 border-b border-slate-300 relative overflow-hidden flex items-center justify-center">
+                          {twImage ? (
+                            <img loading="lazy" decoding="async" src={twImage} alt="Twitter" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }} />
+                          ) : (
+                            <span className="text-slate-400 text-sm font-medium">No Image Provided</span>
+                          )}
                         </div>
                         <div className="p-3">
                           <p className="text-[15px] text-slate-500 mb-0.5">cahcet.edu.in</p>
@@ -331,8 +339,12 @@ const SEOEditor = () => {
                       </>
                     ) : (
                       <div className="flex h-32">
-                        <div className="w-32 h-32 bg-slate-200 border-r border-slate-300 shrink-0">
-                          <img loading="lazy" decoding="async" src={twImage} alt="Twitter" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/150x150/f8fafc/94a3b8?text=Img'; }} />
+                        <div className="w-32 h-32 bg-slate-200 border-r border-slate-300 shrink-0 flex items-center justify-center">
+                          {twImage ? (
+                            <img loading="lazy" decoding="async" src={twImage} alt="Twitter" className="w-full h-full object-cover" onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }} />
+                          ) : (
+                            <span className="text-slate-400 text-xs font-medium text-center px-2">No Image</span>
+                          )}
                         </div>
                         <div className="p-3 flex flex-col justify-center min-w-0">
                           <p className="text-[15px] text-slate-500 mb-0.5 truncate">cahcet.edu.in</p>
