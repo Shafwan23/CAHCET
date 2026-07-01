@@ -1,5 +1,10 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+
+function generateRandomPassword(prefix) {
+  return process.env[`${prefix}_PASSWORD`] || (crypto.randomBytes(6).toString('hex') + '#Secure1!');
+}
 
 const prisma = new PrismaClient();
 
@@ -33,10 +38,10 @@ async function main() {
   }
   console.log(`✅ ${DEPARTMENTS.length} departments seeded successfully.`);
 
-  // 2. Generate secure default passwords
-  const superAdminPassword = 'Super@Admin#2026';
-  const placementAdminPassword = 'Placements#Secure!55';
-  const facultyEditorPassword = 'Faculty#Secure!44';
+  // 2. Generate secure default passwords (No longer hardcoded)
+  const superAdminPassword = generateRandomPassword('SUPER_ADMIN');
+  const placementAdminPassword = generateRandomPassword('PLACEMENT_ADMIN');
+  const facultyEditorPassword = generateRandomPassword('FACULTY_EDITOR');
 
   // 3. Hash passwords
   const superAdminHash = await bcrypt.hash(superAdminPassword, 10);
@@ -75,17 +80,9 @@ async function main() {
     }
   ];
 
-  // Add all 11 department admins
-  const deptPasswords = {
-    'CSE': 'Cse#SecureAdmin!99',
-    'ECE': 'Ece#SecureAdmin!88',
-    'AIML': 'Aiml#SecureAdmin!77',
-    'MCA': 'Mca#SecureAdmin!66',
-  };
-
   for (const dept of DEPARTMENTS) {
     const code = dept.code;
-    const pwd = deptPasswords[code] || `${code.charAt(0).toUpperCase() + code.slice(1).toLowerCase()}#SecureAdmin!11`;
+    const pwd = generateRandomPassword(`DEPT_${code}`);
     const hash = await bcrypt.hash(pwd, 10);
     usersToSeed.push({
       username: `${code.toLowerCase()}_admin`,
