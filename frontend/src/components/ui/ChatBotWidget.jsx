@@ -412,6 +412,9 @@ const ChatBotWidget = () => {
             <div className={cn("p-4 relative z-10 shadow-[0_-4px_20px_rgba(0,0,0,0.02)]", themeClasses.inputArea)}>
               <div className={cn("flex items-end gap-2 rounded-[1.25rem] p-1.5 transition-all border", themeClasses.inputBox)}>
                 <textarea
+                  id="chatbotInput"
+                  name="chatbotInput"
+                  aria-label="Chatbot input"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
