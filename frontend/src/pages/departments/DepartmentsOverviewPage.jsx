@@ -22,18 +22,18 @@ const DepartmentsOverviewPage = () => {
     window.scrollTo(0, 0);
     const fetchCMS = async () => {
       try {
-        const res = await cmsService.getPage('departments_overview');
+        const res = await cmsService.getPage('departments-overview');
         const sections = res.data?.sections || [];
         const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
 
-        if (map['departments_overview.hero']) {
-          setHero(JSON.parse(map['departments_overview.hero'].content));
+        if (map['departments-overview.hero']) {
+          setHero(JSON.parse(map['departments-overview.hero'].content));
         }
-        if (map['departments_overview.engineering']) {
-          setEngineering(JSON.parse(map['departments_overview.engineering'].content));
+        if (map['departments-overview.engineering']) {
+          setEngineering(JSON.parse(map['departments-overview.engineering'].content));
         }
-        if (map['departments_overview.standalone']) {
-          setStandalone(JSON.parse(map['departments_overview.standalone'].content));
+        if (map['departments-overview.standalone']) {
+          setStandalone(JSON.parse(map['departments-overview.standalone'].content));
         }
       } catch (err) {
         console.error('Failed to load departments overview CMS', err);

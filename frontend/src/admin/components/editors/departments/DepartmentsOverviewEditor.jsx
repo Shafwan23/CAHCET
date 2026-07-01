@@ -32,11 +32,11 @@ const DepartmentsOverviewEditor = () => {
     try {
       let res;
       try {
-        res = await cmsService.getPage('departments_overview');
+        res = await cmsService.getPage('departments-overview');
       } catch {
         res = await cmsService.createPage({
           title: 'Departments Overview',
-          slug: 'departments_overview',
+          slug: 'departments-overview',
           description: 'Engineering and Standalone Departments Directory Overview',
           status: 'PUBLISHED',
           _isSilentDraft: true
@@ -48,14 +48,14 @@ const DepartmentsOverviewEditor = () => {
       const map = sections.reduce((acc, sec) => { acc[sec.sectionKey] = sec; return acc; }, {});
       setSectionsMap(map);
 
-      if (map['departments_overview.hero']) {
-        setFormHero(JSON.parse(map['departments_overview.hero'].draftContent || map['departments_overview.hero'].content || '{}'));
+      if (map['departments-overview.hero']) {
+        setFormHero(JSON.parse(map['departments-overview.hero'].draftContent || map['departments-overview.hero'].content || '{}'));
       }
-      if (map['departments_overview.engineering']) {
-        setFormEngineering(JSON.parse(map['departments_overview.engineering'].draftContent || map['departments_overview.engineering'].content || '[]'));
+      if (map['departments-overview.engineering']) {
+        setFormEngineering(JSON.parse(map['departments-overview.engineering'].draftContent || map['departments-overview.engineering'].content || '[]'));
       }
-      if (map['departments_overview.standalone']) {
-        setFormStandalone(JSON.parse(map['departments_overview.standalone'].draftContent || map['departments_overview.standalone'].content || '[]'));
+      if (map['departments-overview.standalone']) {
+        setFormStandalone(JSON.parse(map['departments-overview.standalone'].draftContent || map['departments-overview.standalone'].content || '[]'));
       }
     } catch (err) {
       toast({ type: 'error', title: 'Error', message: 'Failed to load page data.' });
@@ -74,9 +74,9 @@ const DepartmentsOverviewEditor = () => {
       const updates = [];
 
       const sectionsToSave = [
-        { key: 'departments_overview.hero', title: 'Hero Text', data: formHero },
-        { key: 'departments_overview.engineering', title: 'Engineering Timeline', data: formEngineering },
-        { key: 'departments_overview.standalone', title: 'Standalone Courses Timeline', data: formStandalone }
+        { key: 'departments-overview.hero', title: 'Hero Text', data: formHero },
+        { key: 'departments-overview.engineering', title: 'Engineering Timeline', data: formEngineering },
+        { key: 'departments-overview.standalone', title: 'Standalone Courses Timeline', data: formStandalone }
       ];
 
       for (const item of sectionsToSave) {
@@ -111,7 +111,7 @@ const DepartmentsOverviewEditor = () => {
     // Create a composite dummy section for preview to show everything
     const compositeSection = {
        id: 'composite',
-       sectionKey: 'departments_overview.composite',
+       sectionKey: 'departments-overview.composite',
        draftContent: JSON.stringify({ hero: formHero, engineering: formEngineering, standalone: formStandalone }),
        _publishAll: true // custom flag we can intercept if needed, or just rely on multiple publish calls
     };
@@ -122,9 +122,9 @@ const DepartmentsOverviewEditor = () => {
      try {
        setLoading(true);
        const promises = [];
-       if (sectionsMap['departments_overview.hero']) promises.push(cmsService.publishSection(sectionsMap['departments_overview.hero'].id));
-       if (sectionsMap['departments_overview.engineering']) promises.push(cmsService.publishSection(sectionsMap['departments_overview.engineering'].id));
-       if (sectionsMap['departments_overview.standalone']) promises.push(cmsService.publishSection(sectionsMap['departments_overview.standalone'].id));
+       if (sectionsMap['departments-overview.hero']) promises.push(cmsService.publishSection(sectionsMap['departments-overview.hero'].id));
+       if (sectionsMap['departments-overview.engineering']) promises.push(cmsService.publishSection(sectionsMap['departments-overview.engineering'].id));
+       if (sectionsMap['departments-overview.standalone']) promises.push(cmsService.publishSection(sectionsMap['departments-overview.standalone'].id));
        
        await Promise.all(promises);
        toast({ type: 'success', title: 'Live', message: 'Departments overview pushed to production.' });
@@ -158,7 +158,7 @@ const DepartmentsOverviewEditor = () => {
     const file = e.target.files?.[0]; if (!file) return;
     setUploading(true);
     try {
-      const rec = await fileService.upload(file, 'departments_overview', type);
+      const rec = await fileService.upload(file, 'departments-overview', type);
       updateItem(type, index, 'image', rec.url);
       toast({ type: 'success', title: 'Uploaded!', message: 'Image uploaded successfully.' });
     } catch {
@@ -202,7 +202,7 @@ const DepartmentsOverviewEditor = () => {
   };
 
   // We check status based on hero since they usually move together
-  const { status, lastModified, validationIssues } = useEditorStatus(sectionsMap, 'departments_overview.hero', formHero);
+  const { status, lastModified, validationIssues } = useEditorStatus(sectionsMap, 'departments-overview.hero', formHero);
 
   if (loading && !Object.keys(sectionsMap).length) return <div>Loading...</div>;
 
