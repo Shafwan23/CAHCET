@@ -127,8 +127,10 @@ const ContactSection = ({ data }) => {
               
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="grid gap-2">
-                  <label className="text-sm font-bold text-primary-900 uppercase tracking-wider">Full Name</label>
+                  <label htmlFor="contactName" className="text-sm font-bold text-primary-900 uppercase tracking-wider">Full Name</label>
                   <input 
+                    id="contactName"
+                    name="contactName"
                     required 
                     type="text" 
                     value={formState.name}
@@ -138,8 +140,10 @@ const ContactSection = ({ data }) => {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <label className="text-sm font-bold text-primary-900 uppercase tracking-wider">Email Address</label>
+                  <label htmlFor="contactEmail" className="text-sm font-bold text-primary-900 uppercase tracking-wider">Email Address</label>
                   <input 
+                    id="contactEmail"
+                    name="contactEmail"
                     required 
                     type="email" 
                     value={formState.email}
@@ -150,8 +154,10 @@ const ContactSection = ({ data }) => {
                 </div>
               </div>
               <div className="grid gap-2">
-                <label className="text-sm font-bold text-primary-900 uppercase tracking-wider">Subject</label>
+                <label htmlFor="contactSubject" className="text-sm font-bold text-primary-900 uppercase tracking-wider">Subject</label>
                 <select 
+                  id="contactSubject"
+                  name="contactSubject"
                   value={formState.subject}
                   onChange={e => setFormState(p => ({...p, subject: e.target.value}))}
                   className="bg-white border border-primary-100 rounded-xl px-4 py-3 outline-none focus:border-accent-gold transition-colors"
@@ -163,8 +169,10 @@ const ContactSection = ({ data }) => {
                 </select>
               </div>
               <div className="grid gap-2">
-                <label className="text-sm font-bold text-primary-900 uppercase tracking-wider">Message</label>
+                <label htmlFor="contactMessage" className="text-sm font-bold text-primary-900 uppercase tracking-wider">Message</label>
                 <textarea 
+                  id="contactMessage"
+                  name="contactMessage"
                   required 
                   rows="4" 
                   value={formState.message}

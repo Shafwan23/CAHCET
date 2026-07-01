@@ -81,13 +81,17 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-bold mb-6 border-b border-white/10 pb-2 inline-block">Newsletter</h4>
             <p className="text-primary-300 mb-6 text-sm">Subscribe to stay updated with the latest campus news and events.</p>
-            <form className="flex flex-col gap-3">
+            <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
+              <label htmlFor="newsletterEmail" className="sr-only">Newsletter Email</label>
               <input
+                id="newsletterEmail"
+                name="newsletterEmail"
                 type="email"
                 placeholder="Your email"
+                aria-label="Newsletter email subscription"
                 className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-accent-gold transition-colors text-white"
               />
-              <button className="btn-primary w-full">Subscribe</button>
+              <button type="submit" className="btn-primary w-full">Subscribe</button>
             </form>
           </div>
         </div>

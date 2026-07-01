@@ -255,6 +255,7 @@ const ContactPage = () => {
                       {/* First Name */}
                       <div className="relative group">
                         <input
+                          id="firstName"
                           type="text"
                           name="firstName"
                           value={formData.firstName}
@@ -262,13 +263,14 @@ const ContactPage = () => {
                           className="w-full bg-white border-2 border-slate-100 hover:border-primary-200 focus:border-primary-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300 text-slate-800 font-medium placeholder-transparent peer focus:ring-4 focus:ring-primary-500/10 focus:shadow-md"
                           placeholder="First Name"
                         />
-                        <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
+                        <label htmlFor="firstName" className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                           First Name
                         </label>
                       </div>
                       {/* Last Name */}
                       <div className="relative group">
                         <input
+                          id="lastName"
                           type="text"
                           name="lastName"
                           value={formData.lastName}
@@ -276,7 +278,7 @@ const ContactPage = () => {
                           className="w-full bg-white border-2 border-slate-100 hover:border-primary-200 focus:border-primary-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300 text-slate-800 font-medium placeholder-transparent peer focus:ring-4 focus:ring-primary-500/10 focus:shadow-md"
                           placeholder="Last Name"
                         />
-                        <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
+                        <label htmlFor="lastName" className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                           Last Name
                         </label>
                       </div>
@@ -285,6 +287,7 @@ const ContactPage = () => {
                     {/* Email */}
                     <div className="relative group">
                       <input
+                        id="emailAddress"
                         type="email"
                         name="email"
                         value={formData.email}
@@ -295,7 +298,7 @@ const ContactPage = () => {
                         )}
                         placeholder="Email Address"
                       />
-                      <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
+                      <label htmlFor="emailAddress" className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                         Email Address *
                       </label>
                       <AnimatePresence>
@@ -315,6 +318,7 @@ const ContactPage = () => {
                     {/* Subject */}
                     <div className="relative group">
                       <input
+                        id="subjectInput"
                         type="text"
                         name="subject"
                         value={formData.subject}
@@ -322,7 +326,7 @@ const ContactPage = () => {
                         className="w-full bg-white border-2 border-slate-100 hover:border-primary-200 focus:border-primary-500 rounded-2xl px-5 py-4 outline-none transition-all duration-300 text-slate-800 font-medium placeholder-transparent peer focus:ring-4 focus:ring-primary-500/10 focus:shadow-md"
                         placeholder="Subject"
                       />
-                      <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
+                      <label htmlFor="subjectInput" className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                         Subject
                       </label>
                     </div>
@@ -330,6 +334,7 @@ const ContactPage = () => {
                     {/* Message */}
                     <div className="relative group">
                       <textarea
+                        id="messageInput"
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
@@ -340,7 +345,7 @@ const ContactPage = () => {
                         )}
                         placeholder="Your Message"
                       />
-                      <label className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
+                      <label htmlFor="messageInput" className="absolute left-5 top-4 text-slate-400 text-sm font-medium transition-all duration-300 pointer-events-none peer-focus:-top-3 peer-focus:left-4 peer-focus:text-xs peer-focus:text-primary-600 peer-focus:bg-white peer-focus:px-2 peer-not-placeholder-shown:-top-3 peer-not-placeholder-shown:left-4 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-primary-600 peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 rounded-full">
                         Your Message *
                       </label>
                       <AnimatePresence>
