@@ -75,13 +75,6 @@ export const validateContent = (draftContent, sectionKey) => {
     }
   });
 
-  // Recursive check for arrays (e.g., stats, gallery)
-  if (Array.isArray(parsed)) {
-    if (parsed.length === 0) {
-      issues.push({ type: 'error', message: 'Section contains an empty list.' });
-    }
-  }
-
   return issues;
 };
 
