@@ -331,7 +331,6 @@ function App() {
             <Route path="departments/:deptKey/:section" element={<DepartmentCMSEditor />} />
             <Route path="departments/:deptKey" element={<DepartmentCMSEditor />} />
           </Route>
-          </Route>
 
           {/* Catch all route - can redirect to home or 404 page */}
           <Route path="*" element={<Home />} />
