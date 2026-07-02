@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const isDev = import.meta.env.MODE === 'development';
-let API_URL = import.meta.env.VITE_APPLICANT_API_URL;
+let API_URL = import.meta.env.VITE_APPLICANT_API_URL || import.meta.env.VITE_API_URL;
 
 if (!API_URL) {
   if (isDev) {
@@ -9,14 +9,24 @@ if (!API_URL) {
   } else {
     API_URL = `${window.location.origin}/api/v1/applicant`;
   }
-} else if (!API_URL.endsWith('/api/v1/applicant')) {
-  API_URL = `${API_URL.replace(/\/$/, '')}/api/v1/applicant`;
+} else {
+  // Ensure we append /applicant to the base API URL
+  const base = API_URL.replace(/\/$/, '');
+  if (base.endsWith('/api/v1')) {
+    API_URL = `${base}/applicant`;
+  } else if (!base.endsWith('/applicant')) {
+    API_URL = `${base}/api/v1/applicant`;
+  } else {
+    API_URL = base;
+  }
 }
 
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true
 });
+
+console.log('[DEBUG] Applicant API URL resolved to:', API_URL);
 
 api.interceptors.response.use(
   (response) => response,
@@ -39,25 +49,39 @@ api.interceptors.response.use(
 );
 
 const register = async (applicantData) => {
-  const response = await api.post('/register', applicantData);
-  if (!response.data || response.data.success !== true) {
-    throw new Error(response.data?.message || 'Registration failed');
+  try {
+    const response = await api.post('/register', applicantData);
+    if (!response.data || typeof response.data !== 'object') {
+      throw new Error('Server returned invalid data format');
+    }
+    if (response.data.success !== true) {
+      throw new Error(response.data.message || 'Registration failed');
+    }
+    if (response.data.applicant) {
+      localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
+    }
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.message || err.message || 'Registration failed');
   }
-  if (response.data.applicant) {
-    localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
-  }
-  return response.data;
 };
 
 const login = async (email, password, rememberMe) => {
-  const response = await api.post('/login', { email, password, rememberMe });
-  if (!response.data || response.data.success !== true) {
-    throw new Error(response.data?.message || 'Invalid server response');
+  try {
+    const response = await api.post('/login', { email, password, rememberMe });
+    if (!response.data || typeof response.data !== 'object') {
+      throw new Error('Server returned HTML instead of API response');
+    }
+    if (response.data.success !== true) {
+      throw new Error(response.data.message || 'Login failed');
+    }
+    if (response.data.applicant) {
+      localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
+    }
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.message || err.message || 'Invalid server response');
   }
-  if (response.data.applicant) {
-    localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
-  }
-  return response.data;
 };
 
 const logout = async () => {
@@ -68,14 +92,21 @@ const logout = async () => {
 };
 
 const getMe = async () => {
-  const response = await api.get('/me');
-  if (!response.data || response.data.success !== true) {
-    throw new Error(response.data?.message || 'Authentication session lost');
+  try {
+    const response = await api.get('/me');
+    if (!response.data || typeof response.data !== 'object') {
+      throw new Error('Server returned invalid session structure');
+    }
+    if (response.data.success !== true) {
+      throw new Error(response.data.message || 'Authentication session lost');
+    }
+    if (response.data.applicant) {
+      localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
+    }
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response?.data?.message || err.message || 'Authentication session lost');
   }
-  if (response.data.applicant) {
-    localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
-  }
-  return response.data;
 };
 
 const forgotPassword = async (email) => {
