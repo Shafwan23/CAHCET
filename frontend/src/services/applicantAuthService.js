@@ -4,8 +4,11 @@ const isDev = import.meta.env.MODE === 'development';
 let API_URL = import.meta.env.VITE_APPLICANT_API_URL;
 
 if (!API_URL) {
-  // Always use relative path in dev to guarantee Vite proxy is used
-  API_URL = '/api/v1/applicant';
+  if (isDev) {
+    API_URL = '/api/v1/applicant';
+  } else {
+    API_URL = `${window.location.origin}/api/v1/applicant`;
+  }
 } else if (!API_URL.endsWith('/api/v1/applicant')) {
   API_URL = `${API_URL.replace(/\/$/, '')}/api/v1/applicant`;
 }
