@@ -107,7 +107,7 @@ const ApplicationListView = () => {
           className="bg-accent-gold hover:bg-accent-gold-dark text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
-          <span>Start Another Application</span>
+          <span>{applications.length === 0 ? 'Start Application' : 'Start Another Application'}</span>
         </button>
       </div>
 
@@ -126,7 +126,7 @@ const ApplicationListView = () => {
             onClick={handleStartNew}
             className="bg-primary-950 hover:bg-primary-900 text-white font-bold py-3 px-8 rounded-xl transition-all"
           >
-            Start Another Application
+            Start Application
           </button>
         </div>
       ) : (
