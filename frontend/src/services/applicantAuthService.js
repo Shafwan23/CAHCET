@@ -37,6 +37,9 @@ api.interceptors.response.use(
 
 const register = async (applicantData) => {
   const response = await api.post('/register', applicantData);
+  if (!response.data || response.data.success !== true) {
+    throw new Error(response.data?.message || 'Registration failed');
+  }
   if (response.data.applicant) {
     localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
   }
@@ -45,6 +48,9 @@ const register = async (applicantData) => {
 
 const login = async (email, password, rememberMe) => {
   const response = await api.post('/login', { email, password, rememberMe });
+  if (!response.data || response.data.success !== true) {
+    throw new Error(response.data?.message || 'Invalid server response');
+  }
   if (response.data.applicant) {
     localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
   }
@@ -60,6 +66,9 @@ const logout = async () => {
 
 const getMe = async () => {
   const response = await api.get('/me');
+  if (!response.data || response.data.success !== true) {
+    throw new Error(response.data?.message || 'Authentication session lost');
+  }
   if (response.data.applicant) {
     localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
   }
