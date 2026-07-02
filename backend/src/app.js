@@ -58,6 +58,7 @@ const testRoutes = require('./routes/testRoutes');
 const cmsRoutes = require('./routes/cmsRoutes');
 
 const contactRoutes = require('./routes/contactRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 // Routes will be mounted here
 app.use('/api/v1/auth', authRoutes);
@@ -65,6 +66,7 @@ app.use('/api/v1/applicant', applicantRoutes);
 app.use('/api/v1/test', testRoutes);
 app.use('/api/v1/cms', cmsRoutes);
 app.use('/api/v1/contact', contactRoutes);
+app.use('/api/v1/users', userRoutes);
 
 // Handle 404
 app.use(notFoundMiddleware);

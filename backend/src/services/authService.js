@@ -3,14 +3,18 @@ const prisma = require('../config/database');
 const { generateToken } = require('../utils/jwt');
 
 const login = async (usernameOrEmail, password) => {
-  // Find user by username OR email
+  // Find user by username OR email, exclude soft-deleted
   const user = await prisma.user.findFirst({
     where: {
       OR: [
         { username: usernameOrEmail },
         { email: usernameOrEmail }
-      ]
-    }
+      ],
+      isDeleted: false,
+    },
+    include: {
+      department: { select: { id: true, name: true, code: true } },
+    },
   });
 
   if (!user) {
@@ -18,6 +22,10 @@ const login = async (usernameOrEmail, password) => {
   }
 
   // Check status
+  if (user.status === 'LOCKED') {
+    throw new Error('Account is locked. Please contact your administrator.');
+  }
+
   if (user.status !== 'ACTIVE') {
     throw new Error(`Account is ${user.status.toLowerCase()}`);
   }
@@ -36,7 +44,7 @@ const login = async (usernameOrEmail, password) => {
   });
 
   // Return sanitized user (exclude passwordHash)
-  const { passwordHash, ...sanitizedUser } = user;
+  const { passwordHash, failedLoginCount, lockedAt, lockedReason, deletedById, deletedAt, isDeleted, ...sanitizedUser } = user;
 
   return {
     user: sanitizedUser,
@@ -46,14 +54,17 @@ const login = async (usernameOrEmail, password) => {
 
 const getUserById = async (id) => {
   const user = await prisma.user.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      department: { select: { id: true, name: true, code: true } },
+    },
   });
 
-  if (!user) {
+  if (!user || user.isDeleted) {
     return null;
   }
 
-  const { passwordHash, ...sanitizedUser } = user;
+  const { passwordHash, failedLoginCount, lockedAt, lockedReason, deletedById, deletedAt, isDeleted, ...sanitizedUser } = user;
   return sanitizedUser;
 };
 

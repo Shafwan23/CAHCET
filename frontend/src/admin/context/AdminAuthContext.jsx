@@ -6,6 +6,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { authService } from '../../services/authService';
 import { auditService, AUDIT_ACTIONS } from '../services/auditService';
 import { permissionService } from '../services/permissionService';
+import { userManagementService } from '../services/userManagementService';
 
 const AdminAuthContext = createContext(null);
 
@@ -101,6 +102,33 @@ export const AdminAuthProvider = ({ children }) => {
 
   const isSuperAdmin = session?.role === 'SUPER_ADMIN';
 
+  // Real user management functions using backend API
+  const getAllUsers = useCallback(async () => {
+    try {
+      const res = await userManagementService.getUsers();
+      return res.users || [];
+    } catch (err) {
+      console.error('getAllUsers failed:', err);
+      return [];
+    }
+  }, []);
+
+  const createUser = useCallback(async (userData, password) => {
+    return userManagementService.createUser({ ...userData, password });
+  }, []);
+
+  const updateUser = useCallback(async (id, data) => {
+    return userManagementService.updateUser(id, data);
+  }, []);
+
+  const deleteUser = useCallback(async (id) => {
+    return userManagementService.deleteUser(id);
+  }, []);
+
+  const adminResetPassword = useCallback(async (id, password) => {
+    return userManagementService.resetPassword(id, password);
+  }, []);
+
   const value = {
     // Session data
     session,
@@ -129,12 +157,12 @@ export const AdminAuthProvider = ({ children }) => {
     logout,
     updatePassword,
 
-    // User management (Mocked until backend implements it)
-    getAllUsers: async () => [],
-    createUser: async () => {},
-    updateUser: async () => {},
-    deleteUser: async () => {},
-    adminResetPassword: async () => {},
+    // User management (now using real backend API)
+    getAllUsers,
+    createUser,
+    updateUser,
+    deleteUser,
+    adminResetPassword,
   };
 
   if (loading) return null;

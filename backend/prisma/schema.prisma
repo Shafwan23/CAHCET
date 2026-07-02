@@ -7,9 +7,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// ─── Generic Role System ───
+// Department-specific access is controlled via departmentId, not role names.
 enum Role {
   SUPER_ADMIN
+  ADMIN
   DEPARTMENT_ADMIN
+  PLACEMENT_ADMIN
+  ADMISSION_ADMIN
+  RESEARCH_ADMIN
+  EDITOR
+  CONTRIBUTOR
+  VIEWER
+  // Legacy roles kept for backward compatibility
   FACULTY_EDITOR
   PLACEMENT_CELL
 }
@@ -17,6 +27,7 @@ enum Role {
 enum UserStatus {
   ACTIVE
   INACTIVE
+  LOCKED
   SUSPENDED
 }
 
@@ -35,24 +46,148 @@ model Department {
 }
 
 model User {
-  id           String     @id @default(uuid())
-  name         String
-  username     String     @unique
-  email        String     @unique
-  passwordHash String
-  role         Role
-  departmentId String?
-  status       UserStatus @default(ACTIVE)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id            String     @id @default(uuid())
+  name          String
+  username      String     @unique
+  email         String     @unique
+  passwordHash  String
+  role          Role
+  departmentId  String?
+  status        UserStatus @default(ACTIVE)
+  phone         String?
+  employeeId    String?
+  avatar        String?
+  notes         String?
 
-  department   Department? @relation(fields: [departmentId], references: [id])
+  // Tracking fields
+  lastLogin       DateTime?
+  lastActivity    DateTime?
+  lastProfileUpdate DateTime?
+  loginCount      Int        @default(0)
+  failedLoginCount Int       @default(0)
+  lockedAt        DateTime?
+  lockedReason    String?
+
+  // Feature flags
+  mfaEnabled      Boolean    @default(false)
+  forcePasswordChange Boolean @default(false)
+
+  // Soft delete
+  isDeleted       Boolean    @default(false)
+  deletedAt       DateTime?
+  deletedById     String?
+
+  // Creator tracking
+  createdById     String?
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  department      Department? @relation(fields: [departmentId], references: [id])
+
+  // Self-relations
+  createdBy       User?       @relation("CreatedByUser", fields: [createdById], references: [id])
+  createdUsers    User[]      @relation("CreatedByUser")
+  deletedBy       User?       @relation("DeletedByUser", fields: [deletedById], references: [id])
+  deletedUsers    User[]      @relation("DeletedByUser")
+
+  // Related records
+  loginHistory    LoginHistory[]
+  sessions        UserSession[]
+  permissions     UserPermission[]
+  auditLogsTarget AuditLog[]  @relation("AuditTarget")
+  auditLogsActor  AuditLog[]  @relation("AuditPerformer")
 
   @@index([role])
   @@index([departmentId])
   @@index([username])
   @@index([email])
+  @@index([isDeleted])
+  @@index([status, isDeleted])
 }
+
+// ─── Login History ───
+model LoginHistory {
+  id          String   @id @default(uuid())
+  userId      String
+  action      String   @default("LOGIN") // LOGIN, LOGOUT, FAILED_LOGIN
+  browser     String?
+  os          String?
+  ipAddress   String?
+  device      String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([action])
+}
+
+// ─── Active Session Management ───
+model UserSession {
+  id          String   @id @default(uuid())
+  userId      String
+  token       String   @unique
+  browser     String?
+  os          String?
+  ipAddress   String?
+  device      String?
+  userAgent   String?
+  isActive    Boolean  @default(true)
+  lastSeen    DateTime @default(now())
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([isActive])
+}
+
+// ─── Audit Log ───
+model AuditLog {
+  id            String   @id @default(uuid())
+  action        String   // CREATED_USER, UPDATED_USER, ROLE_CHANGED, PASSWORD_RESET, ACCOUNT_LOCKED, etc.
+  targetType    String?  // USER, PERMISSION, SYSTEM, CMS
+  targetId      String?
+  targetUserId  String?
+  performedById String
+  details       Json?    // Structured JSON: { before: {...}, after: {...}, reason: "..." }
+  ipAddress     String?
+  createdAt     DateTime @default(now())
+
+  targetUser    User?    @relation("AuditTarget", fields: [targetUserId], references: [id])
+  performedBy   User     @relation("AuditPerformer", fields: [performedById], references: [id])
+
+  @@index([performedById])
+  @@index([targetUserId])
+  @@index([action])
+  @@index([createdAt])
+  @@index([targetType])
+}
+
+// ─── Permission Matrix ───
+// Permissions are assigned independently of roles for future flexibility.
+model UserPermission {
+  id          String   @id @default(uuid())
+  userId      String
+  resource    String   // homepage, departments, admissions, placements, research, updates, users, system
+  action      String   // view, edit, draft, publish, delete, create, modify_roles, reset_password, access
+  granted     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, resource, action])
+  @@index([userId])
+  @@index([resource])
+}
+
+// ─── Existing CMS Models (Unchanged) ───
 
 enum ContentStatus {
   DRAFT
