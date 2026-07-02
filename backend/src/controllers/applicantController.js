@@ -37,27 +37,25 @@ const setAuthCookies = (res, accessToken, refreshToken, rememberMe = false) => {
   const isProd = process.env.NODE_ENV === 'production';
   const accessMaxAge = 15 * 60 * 1000; // 15 minutes
 
-  // Access Token is always short-lived
-  res.cookie('accessToken', accessToken, {
+  // Access Token Options
+  const accessTokenOptions = {
     httpOnly: true,
     secure: isProd,
-    sameSite: 'lax',
+    sameSite: isProd ? 'none' : 'lax',
     maxAge: accessMaxAge
-  });
+  };
 
-  // Refresh Token Configuration
+  res.cookie('accessToken', accessToken, accessTokenOptions);
+
+  // Refresh Token Options
   const refreshTokenOptions = {
     httpOnly: true,
     secure: isProd,
-    sameSite: 'lax'
+    sameSite: isProd ? 'none' : 'lax'
   };
 
   if (rememberMe) {
-    // Standard university best practice: 7 days for "Remember Me"
     refreshTokenOptions.maxAge = 7 * 24 * 60 * 60 * 1000;
-  } else {
-    // If not checked, no maxAge makes it a "Session Cookie"
-    // It will automatically be deleted by the browser when the browser is closed.
   }
 
   res.cookie('refreshToken', refreshToken, refreshTokenOptions);
