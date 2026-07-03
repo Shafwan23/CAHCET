@@ -93,11 +93,11 @@ const login = async (email, password, rememberMe) => {
 };
 
 const logout = async () => {
+  localStorage.removeItem('applicant');
+  localStorage.removeItem('applicantToken');
   try {
     await api.post('/logout');
   } catch (err) {}
-  localStorage.removeItem('applicant');
-  localStorage.removeItem('applicantToken');
 };
 
 const getMe = async () => {

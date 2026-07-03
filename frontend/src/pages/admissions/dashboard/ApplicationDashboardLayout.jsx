@@ -66,8 +66,8 @@ const ApplicationDashboardLayout = () => {
     }
   };
 
-  const handleLogout = () => {
-    applicantAuthService.logout();
+  const handleLogout = async () => {
+    await applicantAuthService.logout();
     navigate('/admissions/login');
   };
 

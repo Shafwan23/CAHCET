@@ -312,7 +312,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) =>
 
   useEffect(() => { restoreScroll(); }, [restoreScroll]);
 
-  const handleLogout = () => { logout(); navigate('/admin/login'); };
+  const handleLogout = async () => { await logout(); navigate('/admin/login'); };
 
   // Visibility Rules based on exact requirements:
   // - SUPER_ADMIN: sees everything
