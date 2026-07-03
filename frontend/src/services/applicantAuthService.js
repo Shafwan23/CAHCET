@@ -28,21 +28,23 @@ const api = axios.create({
 
 console.log('[DEBUG] Applicant API URL resolved to:', API_URL);
 
+// Request Interceptor: Attach bearer token from localStorage
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('applicantToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => Promise.reject(error));
+
+// Response Interceptor: Handle auth failures
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry && !originalRequest.url.includes('/login') && !originalRequest.url.includes('/refresh')) {
-      originalRequest._retry = true;
-      try {
-        await axios.post(`${API_URL}/refresh`, {}, { withCredentials: true });
-        return api(originalRequest);
-      } catch (refreshError) {
-        // Refresh failed, logout user
-        localStorage.removeItem('applicant');
-        window.location.href = '/admissions/login';
-        return Promise.reject(refreshError);
-      }
+    if (error.response?.status === 401) {
+      localStorage.removeItem('applicant');
+      localStorage.removeItem('applicantToken');
+      window.location.href = '/admissions/login';
     }
     return Promise.reject(error);
   }
@@ -56,6 +58,9 @@ const register = async (applicantData) => {
     }
     if (response.data.success !== true) {
       throw new Error(response.data.message || 'Registration failed');
+    }
+    if (response.data.token) {
+      localStorage.setItem('applicantToken', response.data.token);
     }
     if (response.data.applicant) {
       localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
@@ -75,6 +80,9 @@ const login = async (email, password, rememberMe) => {
     if (response.data.success !== true) {
       throw new Error(response.data.message || 'Login failed');
     }
+    if (response.data.token) {
+      localStorage.setItem('applicantToken', response.data.token);
+    }
     if (response.data.applicant) {
       localStorage.setItem('applicant', JSON.stringify(response.data.applicant));
     }
@@ -89,6 +97,7 @@ const logout = async () => {
     await api.post('/logout');
   } catch (err) {}
   localStorage.removeItem('applicant');
+  localStorage.removeItem('applicantToken');
 };
 
 const getMe = async () => {

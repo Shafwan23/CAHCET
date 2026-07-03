@@ -11,6 +11,7 @@ if (import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.endsWith('/api
 // Create an Axios instance
 const apiClient = axios.create({
   baseURL: API_URL,
+  withCredentials: true
 });
 
 // Interceptor to attach the token
